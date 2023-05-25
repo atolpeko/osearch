@@ -36,7 +36,8 @@ import org.mockito.MockitoAnnotations;
 @Tag("category.UnitTest")
 class CrawlerImplTest {
     private BackgroundExecutor executor;
-    private BlockingDeque<URL> urls;
+    private BlockingDeque<String> urlsToGet;
+    private BlockingDeque<URL> urlsToSave;
 
     @Mock
     PageProcessor pageProcessor;
@@ -50,16 +51,18 @@ class CrawlerImplTest {
         when(pageProcessor.process(NESTED_URL_3)).thenReturn(nestedUrl3());
 
         executor = new BackgroundExecutorImpl();
-        urls = new LinkedBlockingDeque<>();
+        urlsToGet = new LinkedBlockingDeque<>();
+        urlsToSave = new LinkedBlockingDeque<>();
     }
 
     @Test
     void shouldFindUrls() {
-        var crawlers = getCrawlers(urls, INITIAL_URL, pageProcessor);
-        executor.execute(crawlers);
-        await().atMost(3, TimeUnit.SECONDS)
-                .until(() -> !executor.isRunning());
+        urlsToGet.add(INITIAL_URL);
 
-        assertEquals(RESULT_URLS_COUNT, urls.size());
+        var crawlers = getCrawlers(urlsToGet, urlsToSave, pageProcessor);
+        executor.execute(crawlers);
+        await().pollDelay(3, TimeUnit.SECONDS).until(() -> true);
+
+        assertEquals(RESULT_URLS_COUNT, urlsToSave.size());
     }
 }

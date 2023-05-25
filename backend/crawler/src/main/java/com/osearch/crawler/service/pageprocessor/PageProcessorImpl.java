@@ -11,11 +11,13 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Log4j2
 public class PageProcessorImpl implements PageProcessor {
     private static final Pattern EXTERNAL_URL_PATTERN;
     private static final Pattern NOT_HTML_PATTERN;
@@ -35,7 +37,10 @@ public class PageProcessorImpl implements PageProcessor {
     public URL process(String url) {
         var page = restService.get(url);
         var nestedUrls = findUrls(page);
+        log.debug("Found {} nested URLs from {}", nestedUrls.size(), url);
         nestedUrls = filter(url, nestedUrls);
+        log.debug("{} nested URLs from {} left after filtering", nestedUrls.size(), url);
+
         return URL.builder()
                 .value(url)
                 .urlHash(hasher.hash(url))

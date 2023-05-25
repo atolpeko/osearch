@@ -2,6 +2,7 @@ package com.osearch.crawler.service.crawler;
 
 import com.osearch.crawler.service.entity.URL;
 import com.osearch.crawler.service.pageprocessor.PageProcessor;
+import com.osearch.crawler.util.exception.ValueException;
 
 import java.util.concurrent.BlockingDeque;
 
@@ -14,42 +15,48 @@ import lombok.extern.log4j.Log4j2;
 @Builder
 public class CrawlerImpl implements Crawler {
     private final int id;
-    private String initialUrl;
-    private final BlockingDeque<URL> urls;
+    private final BlockingDeque<URL> urlsToSave;
+    private final BlockingDeque<String> urlsToGet;
 
     private final PageProcessor pageProcessor;
 
     @Override
     public void run() {
-        while (!Thread.currentThread().isInterrupted() && initialUrl != null) {
+        log.info("Running crawler with ID {}", id);
+        while (!Thread.currentThread().isInterrupted()) {
             try {
-                log.info("Running crawler with ID {}. Initial URL: {}", id, initialUrl);
-                findURLs(initialUrl);
-                initialUrl = null;
+                var url = urlsToGet.take();
+                processUrl(url);
+                log.info("URL {} crawled. {} left", url, getUrlsLeft());
             } catch (InterruptedException e) {
-                log.info("Crawler {} interrupted", id);
+                log.debug("Crawler {} interrupted", id);
                 Thread.currentThread().interrupt();
                 break;
+            } catch (ValueException e) {
+                log.error("Error getting URL {}: {}. Skipping", e, e.getMessage(), e);
             }
         }
 
-        log.info("Crawler {} has processed all found URLs", id);
+        log.info("Stopping crawler {}", id);
     }
 
-    private void findURLs(String hostUrl) throws InterruptedException {
+    private void processUrl(String hostUrl) throws InterruptedException {
         try {
-            log.info("Getting URL {}", hostUrl);
+            log.debug("Getting URL {}", hostUrl);
             var url = pageProcessor.process(hostUrl);
-            urls.put(url);
 
-            log.debug("Got {} new URLs from {}", url.getNestedUrls().size(), hostUrl);
+            urlsToSave.put(url);
             for (var nestedUrl : url.getNestedUrls()) {
-                findURLs(nestedUrl);
+                urlsToGet.put(nestedUrl);
             }
-        } catch (InterruptedException e) {
-            throw e;
         } catch (Exception e) {
-            log.error("Error getting URL {}: {}. Skipping", hostUrl, e.getMessage());
+            throw new ValueException(hostUrl, e.getMessage(), e);
+        }
+    }
+
+    private int getUrlsLeft() {
+        synchronized (urlsToGet) {
+            return urlsToGet.size();
         }
     }
 }

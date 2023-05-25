@@ -6,6 +6,7 @@ import com.osearch.crawler.inout.repository.URLRepository;
 import com.osearch.crawler.inout.repository.dto.URLDto;
 import com.osearch.crawler.inout.repository.mapper.RepositoryURLMapper;
 import com.osearch.crawler.service.entity.URL;
+import com.osearch.crawler.util.exception.ValueException;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingDeque;
@@ -29,31 +30,36 @@ public class ProcessorImpl implements Processor {
 
     @Override
     public void run() {
-        log.debug("Running processor with ID {}", id);
+        log.info("Running processor with ID {}", id);
         while (!Thread.currentThread().isInterrupted()) {
-            URL url = null;
             try {
-                url = urls.take();
+                var url = urls.take();
+                log.debug("Processing URL {}", url.getValue());
                 processUrl(url);
             } catch (InterruptedException e) {
-                log.error("Processor {} interrupted", id);
+                log.debug("Processor {} interrupted", id);
                 Thread.currentThread().interrupt();
                 break;
-            } catch (Exception e) {
-                log.error("Error processing URL {}: {}", url, e.getMessage());
+            } catch (ValueException e) {
+                log.error("Error processing URL {}: {}", e.getValue(), e.getMessage());
             }
         }
+
+        log.debug("Stopping processor {}", id);
     }
 
     private void processUrl(URL url) {
-        if (!urlIsProcessed(url)) {
-            messageUrl(url);
-            saveUrl(url);
-            log.info("URL {} processed. URLs left for processing: {}",
-                    url.getValue(), getSize());
-        } else {
-            log.debug("URL {} is already processed. URLs left for processing: {}",
-                    url.getValue(), getSize());
+        try {
+            if (!urlIsProcessed(url)) {
+                messageUrl(url);
+                saveUrl(url);
+                log.info("URL {} processed. {} left", url.getValue(), getUrlsLeft());
+            } else {
+                log.debug("URL {} is already processed. URLs left for processing: {}",
+                        url.getValue(), getUrlsLeft());
+            }
+        } catch (Exception e) {
+            throw new ValueException(url, e.getMessage(), e);
         }
     }
 
@@ -72,12 +78,12 @@ public class ProcessorImpl implements Processor {
         return false;
     }
 
-    private void messageUrl(URL url) {
+    private synchronized void messageUrl(URL url) {
         var dto = messageURLMapper.toDto(url);
         messageProducer.send(dto);
     }
 
-    private void saveUrl(URL url) {
+    private synchronized void saveUrl(URL url) {
         URLDto dto;
         var savedOptional = repository.findByUrlHash(url.getUrlHash());
         if (savedOptional.isPresent()) {
@@ -88,11 +94,11 @@ public class ProcessorImpl implements Processor {
             dto = repositoryURLMapper.toDto(url);
         }
 
-        log.debug("Saving {}", dto);
+        log.debug("Saving {}", url.getValue());
         repository.save(dto);
     }
 
-    private int getSize() {
+    private int getUrlsLeft() {
         synchronized (urls) {
             return urls.size();
         }

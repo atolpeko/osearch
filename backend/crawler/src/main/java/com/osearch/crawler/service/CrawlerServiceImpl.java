@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.function.BiFunction;
 import java.util.function.IntFunction;
 import java.util.stream.IntStream;
 import java.util.stream.Collectors;
@@ -41,7 +40,8 @@ public class CrawlerServiceImpl implements CrawlerService {
     private final RepositoryURLMapper repositoryURLMapper;
     private final MessageURLMapper messageURLMapper;
 
-    private final BlockingDeque<URL> urls = new LinkedBlockingDeque<>();
+    private final BlockingDeque<String> urlsToGet = new LinkedBlockingDeque<>();
+    private final BlockingDeque<URL> urlsToSave = new LinkedBlockingDeque<>();
 
     @Override
     public synchronized void start(List<String> initialUrls) {
@@ -51,7 +51,8 @@ public class CrawlerServiceImpl implements CrawlerService {
 
         log.info("Starting crawler service with initial URLs {}",
                 Arrays.toString(initialUrls.toArray()));
-        var tasks = getTasks(initialUrls);
+        urlsToGet.addAll(initialUrls);
+        var tasks = getTasks();
         executor.execute(tasks);
     }
 
@@ -60,43 +61,30 @@ public class CrawlerServiceImpl implements CrawlerService {
         return executor.isRunning();
     }
 
-    private List<Runnable> getTasks(List<String> initialUrls) {
+    private List<Runnable> getTasks() {
         return Stream.concat(
-                getCrawlers(urls, initialUrls, ServiceProperties.getCrawlerThreadsCount()),
-                getProcessors(urls, ServiceProperties.getProcessorThreadsCount())
+                getCrawlers(ServiceProperties.getCrawlerThreadsCount()),
+                getProcessors(ServiceProperties.getProcessorThreadsCount())
         ).collect(Collectors.toList());
     }
 
-    private Stream<Runnable> getCrawlers(
-            BlockingDeque<URL> urls,
-            List<String> initialUrls,
-            int count
-    ) {
-        BiFunction<Integer, String, Crawler> crawler = (id, url) ->
+    private Stream<Runnable> getCrawlers(int count) {
+        IntFunction<Crawler> crawler = id ->
                 CrawlerImpl.builder()
                         .id(id)
-                        .initialUrl(url)
-                        .urls(urls)
+                        .urlsToGet(urlsToGet)
+                        .urlsToSave(urlsToSave)
                         .pageProcessor(pageProcessor)
                         .build();
-        IntFunction<Crawler> mapper = i -> {
-            if (initialUrls.size() >= count) {
-                return crawler.apply(i, initialUrls.get(i));
-            } else {
-                var size = initialUrls.size();
-                return (i < size) ? crawler.apply(i, initialUrls.get(i))
-                        : crawler.apply(i, initialUrls.get(size - 1));
-            }
-        };
 
-        return IntStream.range(0, count).mapToObj(mapper);
+        return IntStream.range(0, count).mapToObj(crawler);
     }
 
-    private Stream<Runnable> getProcessors(BlockingDeque<URL> urls, int count) {
+    private Stream<Runnable> getProcessors(int count) {
         IntFunction<Processor> processor = id ->
                 ProcessorImpl.builder()
                         .id(id)
-                        .urls(urls)
+                        .urls(urlsToSave)
                         .messageProducer(messageProducer)
                         .repository(repository)
                         .messageURLMapper(messageURLMapper)
@@ -114,7 +102,8 @@ public class CrawlerServiceImpl implements CrawlerService {
 
         log.info("Stopping crawler service");
         executor.stop();
-        urls.clear();
+        urlsToSave.clear();
+        urlsToGet.clear();
     }
 
     @Override

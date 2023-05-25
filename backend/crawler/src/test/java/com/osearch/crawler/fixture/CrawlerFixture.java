@@ -63,25 +63,25 @@ public class CrawlerFixture {
     }
 
     public static List<Crawler> getCrawlers(
-            BlockingDeque<URL> urls,
-            String initialUrl,
+            BlockingDeque<String> urlsToGet,
+            BlockingDeque<URL> urlsToSave,
             PageProcessor pageProcessor
     ) {
         return IntStream.range(0, CRAWLERS_COUNT)
-                .mapToObj(i -> getCrawler(i, urls, initialUrl, pageProcessor))
+                .mapToObj(i -> getCrawler(i, urlsToGet, urlsToSave, pageProcessor))
                 .collect(Collectors.toList());
     }
 
     private static CrawlerImpl getCrawler(
             int id,
-            BlockingDeque<URL> urls,
-            String initialUrl,
+            BlockingDeque<String> urlsToGet,
+            BlockingDeque<URL> urlsToSave,
             PageProcessor pageProcessor
     ) {
         return CrawlerImpl.builder()
                 .id(id)
-                .urls(urls)
-                .initialUrl(initialUrl)
+                .urlsToGet(urlsToGet)
+                .urlsToSave(urlsToSave)
                 .pageProcessor(pageProcessor)
                 .build();
     }
