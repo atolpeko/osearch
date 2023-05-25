@@ -33,7 +33,8 @@ public class CrawlerImpl implements Crawler {
                 Thread.currentThread().interrupt();
                 break;
             } catch (ValueException e) {
-                log.error("Error getting URL {}: {}. Skipping", e, e.getMessage(), e);
+                log.error("Error getting URL {}: {}. Skipping",
+                        e.getValue(), e.getMessage(), e);
             }
         }
 

@@ -30,7 +30,8 @@ public class URLMessageSenderImpl extends BaseMessageProducer implements URLMess
     public synchronized void send(URLDto dto) {
         int messages = KafkaProperties.getBulkMessagesCount();
         if (urlDtos.size() < messages) {
-            log.debug("Preparing bulk send. {} messages left", messages - urlDtos.size());
+            log.debug("Preparing bulk send. {} messages left",
+                    messages - urlDtos.size() - 1);
             urlDtos.add(dto);
         } else {
             log.debug("Bulk send. {} messages", urlDtos.size());
