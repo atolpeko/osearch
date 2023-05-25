@@ -1,0 +1,32 @@
+server:
+  port: 5960
+spring:
+  data:
+    mongodb:
+      database: urls
+      embedded: true
+    kafka:
+      consumer:
+        auto-offset-reset: earliest
+kafka:
+  url: localhost:9092
+  urlTopic: crawler-urls
+  requestTopic: crawler-request
+  responseTopic: crawler-response
+  group-id: crawler-group
+logging:
+  level:
+    com.osearch.crawler: DEBUG
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+service:
+  crawlerThreadsCount: 5
+  processorThreadsCount: 5
+swagger:
+  title: Crawler API [DEBUG PROFILE]
+  description: The API allows you to start / stop this crawler service
+  version: "0.0.1"
+  controllersPackage: com.osearch.crawler.inout.web

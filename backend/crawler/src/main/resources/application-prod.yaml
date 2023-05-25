@@ -1,0 +1,22 @@
+server:
+  port: 8080
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+logging:
+  level:
+    com.osearch.crawler: INFO
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+service:
+  crawlerThreadsCount: 5
+  processorThreadsCount: 5
+swagger:
+  title: Crawler API
+  description: The API allows you to start / stop this crawler service
+  version: "0.0.1"
+  controllersPackage: com.osearch.crawler.inout.web
