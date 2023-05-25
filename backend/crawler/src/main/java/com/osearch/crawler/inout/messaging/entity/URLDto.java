@@ -7,9 +7,4 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class URLDto {
     private final String value;
-
-    @Override
-    public String toString() {
-        return "{ url: " + value + " }";
-    }
 }

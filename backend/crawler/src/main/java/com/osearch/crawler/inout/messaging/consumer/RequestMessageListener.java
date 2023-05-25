@@ -27,11 +27,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 @Log4j2
 public class RequestMessageListener {
+    private final ObjectMapper objectMapper;
     private final RequestValidator validator;
     private final ResponseMessageSender responseMessageSender;
     private final CrawlerService crawlerService;
-
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @KafkaListener(
             topics = "#{kafkaProperties.getRequestTopic()}",

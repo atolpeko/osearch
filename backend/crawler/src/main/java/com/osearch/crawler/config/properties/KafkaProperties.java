@@ -24,6 +24,9 @@ public class KafkaProperties {
     @Getter
     private static String responseTopic;
 
+    @Getter
+    private static Integer bulkMessagesCount;
+
     void setUrl(String url) {
         KafkaProperties.url = url;
     }
@@ -42,5 +45,9 @@ public class KafkaProperties {
 
     void setResponseTopic(String responseTopic) {
         KafkaProperties.responseTopic = responseTopic;
+    }
+
+    void setBulkMessagesCount(Integer bulkMessagesCount) {
+        KafkaProperties.bulkMessagesCount = bulkMessagesCount;
     }
 }

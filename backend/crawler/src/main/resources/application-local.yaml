@@ -15,6 +15,7 @@ kafka:
   requestTopic: crawler-request
   responseTopic: crawler-response
   group-id: crawler-group
+  bulkMessagesCount: 30
 logging:
   level:
     com.osearch.crawler: INFO

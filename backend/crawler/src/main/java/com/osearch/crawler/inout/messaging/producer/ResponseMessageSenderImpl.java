@@ -1,5 +1,7 @@
 package com.osearch.crawler.inout.messaging.producer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.osearch.crawler.config.properties.KafkaProperties;
 import com.osearch.crawler.inout.messaging.entity.Response;
 
@@ -15,8 +17,11 @@ public class ResponseMessageSenderImpl
         extends BaseMessageProducer implements ResponseMessageSender {
 
     @Autowired
-    public ResponseMessageSenderImpl(KafkaTemplate<String, String> kafkaTemplate) {
-        super(kafkaTemplate);
+    public ResponseMessageSenderImpl(
+            KafkaTemplate<String, String> kafkaTemplate,
+            ObjectMapper mapper
+    ) {
+        super(kafkaTemplate, mapper);
     }
 
     public void send(Response response) {

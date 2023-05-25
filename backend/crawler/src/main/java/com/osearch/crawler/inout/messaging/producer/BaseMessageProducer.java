@@ -1,5 +1,7 @@
 package com.osearch.crawler.inout.messaging.producer;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -9,10 +11,16 @@ import org.springframework.kafka.core.KafkaTemplate;
 @Log4j2
 public abstract class BaseMessageProducer {
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
     protected void produce(String topic, Object object) {
-        var data = object.toString();
-        log.debug("Sending to kafka topic {}: {}", topic, data);
-        kafkaTemplate.send(topic, data);
+        try {
+            var data = objectMapper.writeValueAsString(object);
+            log.debug("Sending to kafka topic {}: {}", topic, data);
+            kafkaTemplate.send(topic, data);
+        } catch (Exception e) {
+            log.error("Cannot send message to kafka topic {}: {}",
+                    topic, e.getMessage());
+        }
     }
 }
