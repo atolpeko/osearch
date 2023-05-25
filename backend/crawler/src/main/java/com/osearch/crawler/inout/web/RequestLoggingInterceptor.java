@@ -31,7 +31,7 @@ public class RequestLoggingInterceptor implements HandlerInterceptor {
     ) {
         var elapsedTime = System.currentTimeMillis() - startTimeHolder.get();
         var url = request.getRequestURL();
-        log.info("{} request for {} took {} ms", request.getMethod(),  url, elapsedTime);
+        log.debug("{} request for {} took {} ms", request.getMethod(),  url, elapsedTime);
 
         startTimeHolder.remove();
     }
