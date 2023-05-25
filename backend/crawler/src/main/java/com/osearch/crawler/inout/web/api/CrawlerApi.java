@@ -48,7 +48,6 @@ public interface CrawlerApi {
     void stop();
 
     @GetMapping("/running")
-    @ApiOperation(value = "Stop crawler")
     @ApiModelProperty(notes = "True if crawler is running, false otherwise")
     boolean isRunning();
 }
