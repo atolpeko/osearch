@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,16 +17,25 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class PageProcessorImpl implements PageProcessor {
-    private static final Pattern EXTERNAL_URL_PATTERN =
-            Pattern.compile("((http|https)://[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)");
+    private static final Pattern EXTERNAL_URL_PATTERN;
+    private static final Pattern NOT_HTML_PATTERN;
 
     private final RestService restService;
     private final Hasher hasher;
+
+    static {
+        var urlRegex = "((http|https)://[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+        var noHtmlRegex = ".*\\.(txt|json|csv|pdf|xml|mp3|mp4|avi|mov|zip|rar|exe|jpg|jpeg|gif|png|svg)$";
+
+        EXTERNAL_URL_PATTERN = Pattern.compile(urlRegex);
+        NOT_HTML_PATTERN = Pattern.compile(noHtmlRegex);
+    }
 
     @Override
     public URL process(String url) {
         var page = restService.get(url);
         var nestedUrls = findUrls(page);
+        nestedUrls = filter(url, nestedUrls);
         return URL.builder()
                 .value(url)
                 .urlHash(hasher.hash(url))
@@ -44,5 +54,12 @@ public class PageProcessorImpl implements PageProcessor {
         }
 
         return urls;
+    }
+
+    private List<String> filter(String initialUrl, List<String> urls) {
+        return urls.stream()
+                .filter(url -> !url.equals(initialUrl))
+                .filter(NOT_HTML_PATTERN.asPredicate().negate())
+                .collect(Collectors.toList());
     }
 }
