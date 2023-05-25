@@ -116,4 +116,9 @@ public class CrawlerServiceImpl implements CrawlerService {
         executor.stop();
         urls.clear();
     }
+
+    @Override
+    public long urlsProcessed() {
+        return repository.count();
+    }
 }

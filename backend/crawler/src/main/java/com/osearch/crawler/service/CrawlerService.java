@@ -32,4 +32,9 @@ public interface CrawlerService {
      * @return true if crawler service is running, false otherwise
      */
     boolean isRunning();
+
+    /**
+     * @return the number of processed URLs
+     */
+    long urlsProcessed();
 }

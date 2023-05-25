@@ -3,6 +3,7 @@ package com.osearch.crawler.inout.web.api;
 import com.osearch.crawler.inout.web.entity.StartRequest;
 
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -12,6 +13,7 @@ import javax.validation.Valid;
 
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,4 +46,9 @@ public interface CrawlerApi {
             @ApiResponse(code = 420, message = "Crawler was not running")
     })
     void stop();
+
+    @GetMapping("/running")
+    @ApiOperation(value = "Stop crawler")
+    @ApiModelProperty(notes = "True if crawler is running, false otherwise")
+    boolean isRunning();
 }

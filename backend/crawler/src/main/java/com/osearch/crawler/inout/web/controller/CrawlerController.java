@@ -23,4 +23,9 @@ public class CrawlerController implements CrawlerApi {
     public void stop() {
         crawlerService.stop();
     }
+
+    @Override
+    public boolean isRunning() {
+        return crawlerService.isRunning();
+    }
 }
