@@ -1,17 +1,17 @@
 package com.osearch.crawler.inout.repository.dto;
 
 import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+
+import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
-@Entity
-@Table(name = "Crawler URLs")
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
+
+@Document(collection = "crawler-urls")
 @Data
 @AllArgsConstructor
 @Builder
@@ -20,12 +20,12 @@ public class URLDto {
     @Id
     private String id;
 
-    @Column(unique = true, nullable = false)
+    @NotBlank(message = "URL hash is required")
     private final String urlHash;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Page hash is required")
     private String pageHash;
 
-    @Column(nullable = false)
+    @NotBlank(message = "Found at is required")
     private LocalDateTime foundAt;
 }
