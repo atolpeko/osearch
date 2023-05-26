@@ -1,6 +1,5 @@
 package com.osearch.crawler.service;
 
-import com.osearch.crawler.config.properties.RestProperties;
 import com.osearch.crawler.config.properties.ServiceProperties;
 import com.osearch.crawler.inout.messaging.producer.URLMessageSender;
 import com.osearch.crawler.inout.messaging.mapper.MessageURLMapper;
@@ -42,7 +41,6 @@ public class CrawlerServiceImpl implements CrawlerService {
     private final MessageURLMapper messageURLMapper;
 
     private final ServiceProperties serviceProperties;
-    private final RestProperties restProperties;
 
     private final BlockingDeque<String> urlsToGet = new LinkedBlockingDeque<>();
     private final BlockingDeque<URL> urlsToSave = new LinkedBlockingDeque<>();
