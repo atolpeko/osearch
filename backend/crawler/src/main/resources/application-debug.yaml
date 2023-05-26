@@ -13,8 +13,8 @@ kafka:
   urlTopic: crawler-urls
   requestTopic: crawler-request
   responseTopic: crawler-response
-  group-id: crawler-group
-  bulkMessagesCount: 30
+  groupId: crawler-group
+  bulkMessagesCount: 10
 logging:
   level:
     com.osearch.crawler: DEBUG
@@ -26,6 +26,11 @@ management:
 service:
   crawlerThreadsCount: 1
   processorThreadsCount: 1
+  urlsToKeep: 2000
+rest:
+  timeout: 10000
+  maxRedirects: 5
+  userAgent: Crawler
 swagger:
   title: Crawler API [DEBUG PROFILE]
   description: The API allows you to start / stop this crawler service

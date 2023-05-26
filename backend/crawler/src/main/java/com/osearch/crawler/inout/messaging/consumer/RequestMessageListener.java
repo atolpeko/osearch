@@ -3,6 +3,7 @@ package com.osearch.crawler.inout.messaging.consumer;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.osearch.crawler.config.properties.KafkaProperties;
 import com.osearch.crawler.inout.messaging.entity.Request;
 import com.osearch.crawler.inout.messaging.entity.Request.Operation;
@@ -11,7 +12,6 @@ import com.osearch.crawler.inout.messaging.entity.Response.Status;
 import com.osearch.crawler.inout.messaging.producer.ResponseMessageSender;
 import com.osearch.crawler.inout.messaging.validator.RequestValidator;
 import com.osearch.crawler.service.CrawlerService;
-
 import com.osearch.crawler.service.exception.CrawlerAlreadyRunningException;
 import com.osearch.crawler.service.exception.CrawlerNotRunningException;
 
@@ -32,6 +32,8 @@ public class RequestMessageListener {
     private final ResponseMessageSender responseMessageSender;
     private final CrawlerService crawlerService;
 
+    private final KafkaProperties properties;
+
     @KafkaListener(
             topics = "#{kafkaProperties.getRequestTopic()}",
             groupId = "#{kafkaProperties.getGroupId()}"
@@ -39,7 +41,7 @@ public class RequestMessageListener {
     public void listen(String message) {
         try {
             log.info("Receiving a message from topic {}: {} ",
-                    KafkaProperties.getRequestTopic(), message);
+                    properties.getRequestTopic(), message);
             var request = toRequest(message);
             process(request);
         } catch (JsonMappingException e) {

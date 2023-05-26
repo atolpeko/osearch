@@ -1,15 +1,17 @@
-package com.osearch.crawler.inout.web;
+package com.osearch.crawler.inout.web.util;
 
 import lombok.extern.log4j.Log4j2;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+@Component
 @Log4j2
-public class RequestLoggingInterceptor implements HandlerInterceptor {
+public class InRequestLoggingInterceptor implements HandlerInterceptor {
     private static final ThreadLocal<Long> startTimeHolder = new ThreadLocal<>();
 
     @Override

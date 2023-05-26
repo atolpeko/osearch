@@ -14,8 +14,8 @@ kafka:
   urlTopic: crawler-urls
   requestTopic: crawler-request
   responseTopic: crawler-response
-  group-id: crawler-group
-  bulkMessagesCount: 30
+  groupId: crawler-group
+  bulkMessagesCount: 50
 logging:
   level:
     com.osearch.crawler: INFO
@@ -25,8 +25,13 @@ management:
       probes:
         enabled: true
 service:
-  crawlerThreadsCount: 5
-  processorThreadsCount: 5
+  crawlerThreadsCount: 6
+  processorThreadsCount: 6
+  urlsToKeep: 20000
+rest:
+  timeout: 10000
+  maxRedirects: 5
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36
 swagger:
   title: Crawler API [LOCAL PROFILE]
   description: The API allows you to start / stop this crawler service

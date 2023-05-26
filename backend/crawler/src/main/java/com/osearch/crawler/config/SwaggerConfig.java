@@ -4,6 +4,7 @@ import com.osearch.crawler.config.properties.SwaggerProperties;
 
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,11 +21,14 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @RequiredArgsConstructor
 public class SwaggerConfig {
 
+    @Autowired
+    private SwaggerProperties swaggerProperties;
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(SwaggerProperties.getControllersPackage()))
+                .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getControllersPackage()))
                 .paths(PathSelectors.any())
                 .build()
                 .apiInfo(apiInfo());
@@ -32,9 +36,9 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title(SwaggerProperties.getTitle())
-                .description(SwaggerProperties.getDescription())
-                .version(SwaggerProperties.getVersion())
+                .title(swaggerProperties.getTitle())
+                .description(swaggerProperties.getDescription())
+                .version(swaggerProperties.getVersion())
                 .build();
     }
 }

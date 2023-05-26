@@ -2,52 +2,28 @@ package com.osearch.crawler.config.properties;
 
 import lombok.Getter;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "kafka")
+@Getter
 public class KafkaProperties {
 
-    @Getter
-    private static String url;
+    @Value("${kafka.url}")
+    private String url;
 
-    @Getter
-    private static String groupId;
+    @Value("${kafka.groupId}")
+    private String groupId;
 
-    @Getter
-    private static String urlTopic;
+    @Value("${kafka.urlTopic}")
+    private String urlTopic;
 
-    @Getter
-    private static String requestTopic;
+    @Value("${kafka.requestTopic}")
+    private String requestTopic;
 
-    @Getter
-    private static String responseTopic;
+    @Value("${kafka.responseTopic}")
+    private String responseTopic;
 
-    @Getter
-    private static Integer bulkMessagesCount;
-
-    void setUrl(String url) {
-        KafkaProperties.url = url;
-    }
-
-    void setGroupId(String groupId) {
-        KafkaProperties.groupId = groupId;
-    }
-
-    void setUrlTopic(String urlTopic) {
-        KafkaProperties.urlTopic = urlTopic;
-    }
-
-    void setRequestTopic(String requestTopic) {
-        KafkaProperties.requestTopic = requestTopic;
-    }
-
-    void setResponseTopic(String responseTopic) {
-        KafkaProperties.responseTopic = responseTopic;
-    }
-
-    void setBulkMessagesCount(Integer bulkMessagesCount) {
-        KafkaProperties.bulkMessagesCount = bulkMessagesCount;
-    }
+    @Value("${kafka.bulkMessagesCount}")
+    private Integer bulkMessagesCount;
 }

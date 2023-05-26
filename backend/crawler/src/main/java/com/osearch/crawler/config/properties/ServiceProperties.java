@@ -2,24 +2,19 @@ package com.osearch.crawler.config.properties;
 
 import lombok.Getter;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "service")
+@Getter
 public class ServiceProperties {
 
-    @Getter
-    private static Integer crawlerThreadsCount;
+    @Value("${service.crawlerThreadsCount}")
+    private Integer crawlerThreadsCount;
 
-    @Getter
-    private static Integer processorThreadsCount;
+    @Value("${service.processorThreadsCount}")
+    private Integer processorThreadsCount;
 
-    void setCrawlerThreadsCount(Integer crawlerThreadsCount) {
-        ServiceProperties.crawlerThreadsCount = crawlerThreadsCount;
-    }
-
-    void setProcessorThreadsCount(Integer processorThreadsCount) {
-        ServiceProperties.processorThreadsCount = processorThreadsCount;
-    }
+    @Value("${service.urlsToKeep}")
+    private Integer urlsToKeep;
 }

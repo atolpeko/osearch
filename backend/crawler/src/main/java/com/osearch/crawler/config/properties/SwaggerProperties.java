@@ -2,38 +2,22 @@ package com.osearch.crawler.config.properties;
 
 import lombok.Getter;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = "swagger")
+@Getter
 public class SwaggerProperties {
 
-    @Getter
-    private static String title;
+    @Value("${swagger.title}")
+    private String title;
 
-    @Getter
-    private static String description;
+    @Value("${swagger.description}")
+    private String description;
 
-    @Getter
-    private static String version;
+    @Value("${swagger.version}")
+    private String version;
 
-    @Getter
-    private static String controllersPackage;
-
-    void setTitle(String title) {
-        SwaggerProperties.title = title;
-    }
-
-    void setDescription(String description) {
-        SwaggerProperties.description = description;
-    }
-
-    void setVersion(String version) {
-        SwaggerProperties.version = version;
-    }
-
-    void setControllersPackage(String controllersPackage) {
-        SwaggerProperties.controllersPackage = controllersPackage;
-    }
+    @Value("${swagger.controllersPackage}")
+    private String controllersPackage;
 }

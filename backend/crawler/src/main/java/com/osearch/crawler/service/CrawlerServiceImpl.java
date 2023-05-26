@@ -1,5 +1,6 @@
 package com.osearch.crawler.service;
 
+import com.osearch.crawler.config.properties.RestProperties;
 import com.osearch.crawler.config.properties.ServiceProperties;
 import com.osearch.crawler.inout.messaging.producer.URLMessageSender;
 import com.osearch.crawler.inout.messaging.mapper.MessageURLMapper;
@@ -40,6 +41,9 @@ public class CrawlerServiceImpl implements CrawlerService {
     private final RepositoryURLMapper repositoryURLMapper;
     private final MessageURLMapper messageURLMapper;
 
+    private final ServiceProperties serviceProperties;
+    private final RestProperties restProperties;
+
     private final BlockingDeque<String> urlsToGet = new LinkedBlockingDeque<>();
     private final BlockingDeque<URL> urlsToSave = new LinkedBlockingDeque<>();
 
@@ -62,25 +66,25 @@ public class CrawlerServiceImpl implements CrawlerService {
     }
 
     private List<Runnable> getTasks() {
-        return Stream.concat(
-                getCrawlers(ServiceProperties.getCrawlerThreadsCount()),
-                getProcessors(ServiceProperties.getProcessorThreadsCount())
-        ).collect(Collectors.toList());
+        return Stream.concat(getCrawlers(), getProcessors())
+                .collect(Collectors.toList());
     }
 
-    private Stream<Runnable> getCrawlers(int count) {
+    private Stream<Runnable> getCrawlers() {
         IntFunction<Crawler> crawler = id ->
                 CrawlerImpl.builder()
                         .id(id)
+                        .urlsToKeep(serviceProperties.getUrlsToKeep())
                         .urlsToGet(urlsToGet)
                         .urlsToSave(urlsToSave)
                         .pageProcessor(pageProcessor)
                         .build();
 
-        return IntStream.range(0, count).mapToObj(crawler);
+        return IntStream.range(0, serviceProperties.getCrawlerThreadsCount())
+                .mapToObj(crawler);
     }
 
-    private Stream<Runnable> getProcessors(int count) {
+    private Stream<Runnable> getProcessors() {
         IntFunction<Processor> processor = id ->
                 ProcessorImpl.builder()
                         .id(id)
@@ -91,7 +95,8 @@ public class CrawlerServiceImpl implements CrawlerService {
                         .repositoryURLMapper(repositoryURLMapper)
                         .build();
 
-        return IntStream.range(0, count).mapToObj(processor);
+        return IntStream.range(0, serviceProperties.getProcessorThreadsCount())
+                .mapToObj(processor);
     }
 
     @Override

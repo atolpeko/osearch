@@ -1,7 +1,9 @@
 package com.osearch.crawler.service.rest;
 
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
+import com.osearch.crawler.service.rest.exception.RestServiceException;
+import com.osearch.crawler.service.rest.exception.RestForbiddenException;
+import com.osearch.crawler.service.rest.exception.RestToManyRequestsException;
+import com.osearch.crawler.service.rest.exception.RestInvalidResponseException;
 
 /**
  * Used to request an url and get an HTML page content.
@@ -15,8 +17,10 @@ public interface RestService {
      *
      * @return HTML page content
      *
-     * @throws ResourceAccessException  if response is not HTML or response body is empty
-     * @throws RestClientException      if any http request error happens
+     * @throws RestForbiddenException        if request was forbidden
+     * @throws RestToManyRequestsException   if client have done to many requests
+     * @throws RestInvalidResponseException  if response is not HTML or response body is empty
+     * @throws RestServiceException          if any http request error happens
      */
     String get(String url);
 }

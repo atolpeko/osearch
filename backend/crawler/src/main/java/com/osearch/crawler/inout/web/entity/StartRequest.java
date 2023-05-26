@@ -17,7 +17,12 @@ public class StartRequest {
 
     @ApiModelProperty(
             value = "Initial URLs to look for",
-            example = "[https://en.wikipedia.org/wiki/Wikipedia, https://www.reddit.com]"
+            example = "[ https://www.foxnews.com,"
+                    + " https://www.bbc.com,"
+                    + " https://edition.cnn.com,"
+                    + " https://www.aljazeera.com,"
+                    + " https://www.goal.com/es,"
+                    + " https://www.reddit.com ]"
     )
     @NotEmpty(message = "List of URLs should not be empty")
     @ValidURLList

@@ -15,16 +15,19 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class ResponseMessageSenderImpl
         extends BaseMessageProducer implements ResponseMessageSender {
+    private final KafkaProperties properties;
 
     @Autowired
     public ResponseMessageSenderImpl(
             KafkaTemplate<String, String> kafkaTemplate,
-            ObjectMapper mapper
+            ObjectMapper mapper,
+            KafkaProperties properties
     ) {
         super(kafkaTemplate, mapper);
+        this.properties = properties;
     }
 
     public void send(Response response) {
-        produce(KafkaProperties.getResponseTopic(), response);
+        produce(properties.getResponseTopic(), response);
     }
 }

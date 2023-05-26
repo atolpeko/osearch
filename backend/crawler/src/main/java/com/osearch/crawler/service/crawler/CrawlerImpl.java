@@ -2,8 +2,10 @@ package com.osearch.crawler.service.crawler;
 
 import com.osearch.crawler.service.entity.URL;
 import com.osearch.crawler.service.pageprocessor.PageProcessor;
-import com.osearch.crawler.util.exception.ValueException;
+import com.osearch.crawler.service.rest.exception.RestForbiddenException;
+import com.osearch.crawler.service.rest.exception.RestToManyRequestsException;
 
+import java.util.List;
 import java.util.concurrent.BlockingDeque;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +17,8 @@ import lombok.extern.log4j.Log4j2;
 @Builder
 public class CrawlerImpl implements Crawler {
     private final int id;
+    private final int urlsToKeep;
+
     private final BlockingDeque<URL> urlsToSave;
     private final BlockingDeque<String> urlsToGet;
 
@@ -32,26 +36,38 @@ public class CrawlerImpl implements Crawler {
                 log.debug("Crawler {} interrupted", id);
                 Thread.currentThread().interrupt();
                 break;
-            } catch (ValueException e) {
-                log.error("Error getting URL {}: {}. Skipping",
-                        e.getValue(), e.getMessage(), e);
             }
         }
 
-        log.info("Stopping crawler {}", id);
+        log.debug("Stopping crawler {}", id);
     }
 
     private void processUrl(String hostUrl) throws InterruptedException {
         try {
             log.debug("Getting URL {}", hostUrl);
             var url = pageProcessor.process(hostUrl);
-
             urlsToSave.put(url);
-            for (var nestedUrl : url.getNestedUrls()) {
-                urlsToGet.put(nestedUrl);
-            }
+            processNestedUrls(url.getNestedUrls());
+        } catch (RestForbiddenException | RestToManyRequestsException e) {
+            log.error("Error getting URL {}: Saving for later: {}", hostUrl, e.getMessage());
+            urlsToGet.put(hostUrl);
+        } catch (InterruptedException e) {
+            throw e;
         } catch (Exception e) {
-            throw new ValueException(hostUrl, e.getMessage(), e);
+            log.error("Error getting URL {}. Skipping: {}", hostUrl, e.getMessage());
+        }
+    }
+
+    private void processNestedUrls(List<String> urls) throws InterruptedException {
+        var urlsNumber = getUrlsLeft();
+        if (urlsNumber >= urlsToKeep) {
+            log.debug("Not saving nested URLs as the number of URLs"
+                    + " to process is to large: {}", urlsNumber);
+            return;
+        }
+
+        for (var url : urls) {
+            urlsToGet.put(url);
         }
     }
 

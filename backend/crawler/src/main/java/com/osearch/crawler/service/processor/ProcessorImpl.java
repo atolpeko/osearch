@@ -6,7 +6,6 @@ import com.osearch.crawler.inout.repository.URLRepository;
 import com.osearch.crawler.inout.repository.dto.URLDto;
 import com.osearch.crawler.inout.repository.mapper.RepositoryURLMapper;
 import com.osearch.crawler.service.entity.URL;
-import com.osearch.crawler.util.exception.ValueException;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.BlockingDeque;
@@ -40,8 +39,6 @@ public class ProcessorImpl implements Processor {
                 log.debug("Processor {} interrupted", id);
                 Thread.currentThread().interrupt();
                 break;
-            } catch (ValueException e) {
-                log.error("Error processing URL {}: {}", e.getValue(), e.getMessage());
             }
         }
 
@@ -59,7 +56,7 @@ public class ProcessorImpl implements Processor {
                         url.getValue(), getUrlsLeft());
             }
         } catch (Exception e) {
-            throw new ValueException(url, e.getMessage(), e);
+            log.error("Error processing URL {}: {}", url, e.getMessage());
         }
     }
 

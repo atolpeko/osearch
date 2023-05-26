@@ -80,6 +80,7 @@ public class CrawlerFixture {
     ) {
         return CrawlerImpl.builder()
                 .id(id)
+                .urlsToKeep(100)
                 .urlsToGet(urlsToGet)
                 .urlsToSave(urlsToSave)
                 .pageProcessor(pageProcessor)

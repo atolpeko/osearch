@@ -1,4 +1,4 @@
-package com.osearch.crawler.inout.web;
+package com.osearch.crawler.inout.web.util;
 
 import com.osearch.crawler.service.exception.CrawlerServiceException;
 

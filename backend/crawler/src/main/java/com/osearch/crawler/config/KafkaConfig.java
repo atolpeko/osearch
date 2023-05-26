@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -21,6 +22,9 @@ import org.springframework.kafka.test.EmbeddedKafkaBroker;
 @RequiredArgsConstructor
 public class KafkaConfig {
 
+    @Autowired
+    private KafkaProperties kafkaProperties;
+
     @Bean
     @Profile({"local", "prod"})
     public KafkaTemplate<String, String> kafkaTemplate() {
@@ -31,7 +35,7 @@ public class KafkaConfig {
     @Profile({"local", "prod"})
     public ProducerFactory<String, String> producerFactory() {
         var configProps = new HashMap<String, Object>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, KafkaProperties.getUrl());
+        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getUrl());
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
 
@@ -41,8 +45,8 @@ public class KafkaConfig {
     @Bean
     @Profile({"debug", "test"})
     public EmbeddedKafkaBroker embeddedKafkaBroker() {
-        return new EmbeddedKafkaBroker(1, true, KafkaProperties.getUrlTopic(),
-                KafkaProperties.getRequestTopic(), KafkaProperties.getResponseTopic());
+        return new EmbeddedKafkaBroker(1, true, kafkaProperties.getUrlTopic(),
+                kafkaProperties.getRequestTopic(), kafkaProperties.getResponseTopic());
     }
 
     @Bean

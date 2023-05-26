@@ -4,7 +4,7 @@ spring:
   kafka:
     consumer:
       auto-offset-reset: latest
-  bulkMessagesCount: 30
+  bulkMessagesCount: 50
 logging:
   level:
     com.osearch.crawler: INFO
@@ -14,8 +14,13 @@ management:
       probes:
         enabled: true
 service:
-  crawlerThreadsCount: 5
-  processorThreadsCount: 5
+  crawlerThreadsCount: 6
+  processorThreadsCount: 6
+rest:
+  urlsToKeep: 20000
+  timeout: 10000
+  maxRedirects: 5
+  userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.1234.567 Safari/537.36
 swagger:
   title: Crawler API
   description: The API allows you to start / stop this crawler service
