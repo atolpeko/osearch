@@ -56,7 +56,7 @@ public class ProcessorImpl implements Processor {
                         url.getValue(), getUrlsLeft());
             }
         } catch (Exception e) {
-            log.error("Error processing URL {}: {}", url, e.getMessage());
+            log.error("Error processing URL {}: {}", url.getValue(), e.getMessage());
         }
     }
 
