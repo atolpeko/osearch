@@ -1,19 +1,19 @@
 server:
-  port: 5960
+  port: 0
 spring:
   data:
     mongodb:
-      database: urls
+      database: database
       embedded: true
     kafka:
       consumer:
         auto-offset-reset: earliest
 kafka:
-  url: localhost:9092
-  urlTopic: crawler-urls
-  requestTopic: crawler-request
-  responseTopic: crawler-response
-  groupId: crawler-group
+  url: url
+  urlTopic: topic1
+  requestTopic: topic2
+  responseTopic: topic3
+  groupId: group
   bulkMessagesCount: 30
 logging:
   level:

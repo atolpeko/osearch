@@ -3,11 +3,12 @@ server:
 spring:
   data:
     mongodb:
-      database: urls
-      embedded: true
-    kafka:
-      consumer:
-        auto-offset-reset: earliest
+      host: localhost
+      port: 27017
+      database: crawler-db
+  kafka:
+    consumer:
+      auto-offset-reset: latest
 kafka:
   url: localhost:9092
   urlTopic: crawler-urls

@@ -5,7 +5,7 @@ spring:
     mongodb:
       host: localhost
       port: 27017
-      database: urls
+      database: crawler-db
   kafka:
     consumer:
       auto-offset-reset: latest
@@ -19,6 +19,8 @@ kafka:
 logging:
   level:
     com.osearch.crawler: INFO
+    org.apache.kafka: INFO
+    org.apache.kafka.clients.consumer.ConsumerConfig: OFF
 management:
   endpoint:
     health:

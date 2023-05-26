@@ -8,6 +8,8 @@ spring:
 logging:
   level:
     com.osearch.crawler: INFO
+    org.apache.kafka: INFO
+    org.apache.kafka.clients.consumer.ConsumerConfig: OFF
 management:
   endpoint:
     health:
