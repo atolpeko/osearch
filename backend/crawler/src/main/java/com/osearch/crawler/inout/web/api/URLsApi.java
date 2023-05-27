@@ -1,5 +1,7 @@
 package com.osearch.crawler.inout.web.api;
 
+import com.osearch.crawler.inout.web.entity.UrlsCountResponse;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
@@ -14,5 +16,5 @@ public interface URLsApi {
 
     @GetMapping("/count")
     @ApiOperation(value = "Get processed URLs count")
-    Long count();
+    UrlsCountResponse count();
 }

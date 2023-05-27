@@ -3,16 +3,18 @@ server:
 spring:
   data:
     mongodb:
+      host: localhost
+      port: 60906
       database: database
       embedded: true
-    kafka:
-      consumer:
-        auto-offset-reset: earliest
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
 kafka:
   url: url
-  urlTopic: topic1
-  requestTopic: topic2
-  responseTopic: topic3
+  urlTopic: url
+  requestTopic: request
+  responseTopic: response
   groupId: group
   bulkMessagesCount: 30
 logging:
@@ -26,7 +28,7 @@ management:
 service:
   crawlerThreadsCount: 1
   processorThreadsCount: 1
-  urlsToKeep: 20000
+  urlsToKeep: 2000
 rest:
   timeout: 10000
   maxRedirects: 5

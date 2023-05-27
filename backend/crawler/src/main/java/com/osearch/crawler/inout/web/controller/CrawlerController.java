@@ -1,6 +1,7 @@
 package com.osearch.crawler.inout.web.controller;
 
 import com.osearch.crawler.inout.web.api.CrawlerApi;
+import com.osearch.crawler.inout.web.entity.IsRunningResponse;
 import com.osearch.crawler.inout.web.entity.StartRequest;
 import com.osearch.crawler.service.CrawlerService;
 
@@ -25,7 +26,8 @@ public class CrawlerController implements CrawlerApi {
     }
 
     @Override
-    public boolean isRunning() {
-        return crawlerService.isRunning();
+    public IsRunningResponse isRunning() {
+        var isRunning = crawlerService.isRunning();
+        return new IsRunningResponse(isRunning);
     }
 }

@@ -1,5 +1,6 @@
 package com.osearch.crawler.inout.web.api;
 
+import com.osearch.crawler.inout.web.entity.IsRunningResponse;
 import com.osearch.crawler.inout.web.entity.StartRequest;
 
 import io.swagger.annotations.Api;
@@ -49,5 +50,5 @@ public interface CrawlerApi {
 
     @GetMapping("/running")
     @ApiModelProperty(notes = "True if crawler is running, false otherwise")
-    boolean isRunning();
+    IsRunningResponse isRunning();
 }
