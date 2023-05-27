@@ -4,6 +4,7 @@ import com.osearch.crawler.inout.repository.dto.URLDto;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import java.util.Optional;
  * Used to work with URLDto objects stored in mongo.
  */
 @Repository
+@Transactional
 public interface URLRepository extends MongoRepository<URLDto, String> {
 
     /**
