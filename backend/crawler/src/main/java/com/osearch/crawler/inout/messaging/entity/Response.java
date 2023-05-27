@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 @Builder
 public class Response {
-
     public enum Status { SUCCESSFUL, ERROR }
 
     private LocalDateTime requestDateTime;

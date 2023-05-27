@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 
 import com.osearch.crawler.service.hasher.Hasher;
 import com.osearch.crawler.service.rest.RestService;
+import com.osearch.crawler.service.rest.exception.RestServiceException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -21,7 +22,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.web.client.ResourceAccessException;
 
 @Tag("category.UnitTest")
 class PageProcessorImplTest {
@@ -52,8 +52,8 @@ class PageProcessorImplTest {
     }
 
     @Test
-    void shouldThrowResourceAccessExceptionWhenRestServiceFails() {;
-        when(restService.get(URL_STRING)).thenThrow(ResourceAccessException.class);
-        assertThrows(ResourceAccessException.class, () -> target.process(URL_STRING));
+    void shouldThrowRestServiceExceptionWhenRestServiceFails() {;
+        when(restService.get(URL_STRING)).thenThrow(RestServiceException.class);
+        assertThrows(RestServiceException.class, () -> target.process(URL_STRING));
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.osearch.crawler.config.properties.KafkaProperties;
 import com.osearch.crawler.inout.messaging.entity.URLDto;
+import com.osearch.crawler.inout.messaging.entity.URLPackDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,14 +32,15 @@ public class URLMessageSenderImpl extends BaseMessageProducer implements URLMess
 
     @Override
     public synchronized void send(URLDto dto) {
-        int messages = properties.getBulkMessagesCount();
+        urlDtos.add(dto);
+
+        int messages = properties.getBulkMessagesCount() ;
         if (urlDtos.size() < messages) {
-            log.debug("Preparing bulk send. {} messages left",
-                    messages - urlDtos.size() - 1);
-            urlDtos.add(dto);
+            log.debug("Preparing bulk send. {} URLs left",
+                    messages - urlDtos.size());
         } else {
-            log.debug("Bulk send. {} messages", urlDtos.size());
-            produce(properties.getUrlTopic(), urlDtos);
+            log.debug("Bulk send. {} URLs", urlDtos.size());
+            produce(properties.getUrlTopic(), new URLPackDto(urlDtos));
             urlDtos.clear();
         }
     }

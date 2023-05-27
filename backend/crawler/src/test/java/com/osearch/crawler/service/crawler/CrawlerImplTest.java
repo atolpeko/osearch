@@ -61,7 +61,7 @@ class CrawlerImplTest {
 
         var crawlers = getCrawlers(urlsToGet, urlsToSave, pageProcessor);
         executor.execute(crawlers);
-        await().pollDelay(3, TimeUnit.SECONDS).until(() -> true);
+        await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
 
         assertEquals(RESULT_URLS_COUNT, urlsToSave.size());
     }

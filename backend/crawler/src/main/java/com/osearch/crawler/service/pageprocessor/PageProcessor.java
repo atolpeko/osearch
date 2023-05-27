@@ -1,9 +1,10 @@
 package com.osearch.crawler.service.pageprocessor;
 
 import com.osearch.crawler.service.entity.URL;
-
-import org.springframework.web.client.ResourceAccessException;
-import org.springframework.web.client.RestClientException;
+import com.osearch.crawler.service.rest.exception.RestForbiddenException;
+import com.osearch.crawler.service.rest.exception.RestInvalidResponseException;
+import com.osearch.crawler.service.rest.exception.RestServiceException;
+import com.osearch.crawler.service.rest.exception.RestToManyRequestsException;
 
 /**
  * Used to assemble a URL object from string url.
@@ -17,8 +18,10 @@ public interface PageProcessor {
      *
      * @return URL object
      *
-     *  @throws ResourceAccessException  if response body is not HTML or body is empty
-     *  @throws RestClientException      if any http request error happens
+     * @throws RestForbiddenException        if request was forbidden
+     * @throws RestToManyRequestsException   if client have done to many requests
+     * @throws RestInvalidResponseException  if response is not HTML or response body is empty
+     * @throws RestServiceException          if any http request error happens
      */
     URL process(String url);
 }

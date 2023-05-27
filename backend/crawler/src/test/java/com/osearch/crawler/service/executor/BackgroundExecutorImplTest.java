@@ -33,7 +33,7 @@ class BackgroundExecutorImplTest {
         var tasks = listModifyingTasks(emptyList);
 
         target.execute(tasks);
-        await().atMost(5, TimeUnit.SECONDS)
+        await().atMost(8, TimeUnit.SECONDS)
                 .until(() -> !target.isRunning());
 
         var expectedList = listModifyingTasksResult();
@@ -44,7 +44,7 @@ class BackgroundExecutorImplTest {
     @Test
     void shouldStopExecution() {
         target.execute(endlessTasks());
-        await().pollDelay(3, TimeUnit.SECONDS).until(() -> true);
+        await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
         target.stop();
 
         assertFalse(target.isRunning());

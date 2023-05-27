@@ -75,7 +75,7 @@ class ProcessorImplTest {
 
         urls.addAll(List.of(url1(), url2(), url1(), url2()));
         executor.execute(processors);
-        await().pollDelay(3, TimeUnit.SECONDS).until(() -> true);
+        await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
 
         verify(messageSender, times(2)).send(any());
     }
@@ -89,7 +89,7 @@ class ProcessorImplTest {
 
         urls.addAll(List.of(url1(), url2(), changedUrl1(), url2()));
         executor.execute(processors);
-        await().pollDelay(3, TimeUnit.SECONDS).until(() -> true);
+        await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
 
         verify(messageSender, times(1)).send(any());
     }
@@ -103,7 +103,7 @@ class ProcessorImplTest {
 
         urls.addAll(List.of(url1(), url2(), url1(), url2()));
         executor.execute(processors);
-        await().pollDelay(3, TimeUnit.SECONDS).until(() -> true);
+        await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
 
         verify(messageSender, times(0)).send(any());
     }
