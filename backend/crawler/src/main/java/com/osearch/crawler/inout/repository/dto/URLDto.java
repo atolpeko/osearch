@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
@@ -21,6 +22,7 @@ public class URLDto {
     private String id;
 
     @NotBlank(message = "URL hash is required")
+    @Indexed(name = "url_hash_unique", unique = true)
     private final String urlHash;
 
     @NotBlank(message = "Page hash is required")
