@@ -1,10 +1,8 @@
 package com.osearch.crawler.inout.messaging.producer;
 
-import static com.osearch.crawler.fixture.UrlMessageSenderFixture.BULK_COUNT;
 import static com.osearch.crawler.fixture.UrlMessageSenderFixture.TOPIC;
 import static com.osearch.crawler.fixture.UrlMessageSenderFixture.url;
-import static com.osearch.crawler.fixture.UrlMessageSenderFixture.urlPack;
-import static com.osearch.crawler.fixture.UrlMessageSenderFixture.urlPackJson;
+import static com.osearch.crawler.fixture.UrlMessageSenderFixture.urlJson;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -44,22 +42,12 @@ class URLMessageSenderImplTest {
     void setUp() throws JsonProcessingException {
         MockitoAnnotations.initMocks(this);
         when(properties.getUrlTopic()).thenReturn(TOPIC);
-        when(properties.getBulkMessagesCount()).thenReturn(BULK_COUNT);
-        when(objectMapper.writeValueAsString(urlPack())).thenReturn(urlPackJson());
+        when(objectMapper.writeValueAsString(url())).thenReturn(urlJson());
     }
 
     @Test
-    void shouldSendBulk() {
-        for (var i = 0; i < BULK_COUNT; i++) {
-            target.send(url(i));
-        }
-
-        verify(kafkaTemplate, times(1)).send(TOPIC, urlPackJson());
-    }
-
-    @Test
-    void shouldNotSendWhenBulkIsNotReady() {
-        target.send(url(0));
-        verify(kafkaTemplate, times(0)).send(TOPIC, urlPackJson());
+    void shouldSendUrl() {
+        target.send(url());
+        verify(kafkaTemplate, times(1)).send(TOPIC, urlJson());
     }
 }

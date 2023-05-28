@@ -1,27 +1,27 @@
-package com.osearch.crawler.service.pageprocessor;
+package com.osearch.crawler.service.http;
 
-import com.osearch.crawler.service.entity.URL;
-import com.osearch.crawler.service.http.exception.HttpForbiddenException;
-import com.osearch.crawler.service.http.exception.HttpInvalidResponseException;
+import com.osearch.crawler.service.http.entity.Response;
 import com.osearch.crawler.service.http.exception.HttpServiceException;
+import com.osearch.crawler.service.http.exception.HttpForbiddenException;
 import com.osearch.crawler.service.http.exception.HttpToManyRequestsException;
+import com.osearch.crawler.service.http.exception.HttpInvalidResponseException;
 
 /**
- * Used to assemble a URL object from string url.
+ * Used to request an url and get Response object.
  */
-public interface PageProcessor {
+public interface HttpService {
 
     /**
-     * Requests a page, reads its content and returns a URL object.
+     * Request an url and get Response object.
      *
-     * @param url  url to read
+     * @param url  url to request
      *
-     * @return URL object
+     * @return Response object
      *
      * @throws HttpForbiddenException        if request was forbidden
      * @throws HttpToManyRequestsException   if client have done to many requests
      * @throws HttpInvalidResponseException  if response is not HTML or response body is empty
      * @throws HttpServiceException          if any http request error happens
      */
-    URL process(String url);
+    Response get(String url);
 }

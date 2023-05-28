@@ -16,7 +16,7 @@ kafka:
   requestTopic: request
   responseTopic: response
   groupId: group
-  bulkMessagesCount: 30
+  maxMessageSize: 10485760
 logging:
   level:
     com.osearch.crawler: DEBUG

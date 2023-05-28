@@ -1,22 +1,23 @@
-package com.osearch.crawler.service.rest;
+package com.osearch.crawler.service.http;
 
-import static com.osearch.crawler.fixture.RestServiceFixture.HTML;
-import static com.osearch.crawler.fixture.RestServiceFixture.JSON;
-import static com.osearch.crawler.fixture.RestServiceFixture.MAX_REDIRECTS;
-import static com.osearch.crawler.fixture.RestServiceFixture.REDIRECT_URI;
-import static com.osearch.crawler.fixture.RestServiceFixture.REDIRECT_URL;
-import static com.osearch.crawler.fixture.RestServiceFixture.URL;
+import static com.osearch.crawler.fixture.HttpServiceFixture.HTML;
+import static com.osearch.crawler.fixture.HttpServiceFixture.JSON;
+import static com.osearch.crawler.fixture.HttpServiceFixture.MAX_REDIRECTS;
+import static com.osearch.crawler.fixture.HttpServiceFixture.REDIRECT_URI;
+import static com.osearch.crawler.fixture.HttpServiceFixture.REDIRECT_URL;
+import static com.osearch.crawler.fixture.HttpServiceFixture.URL;
 
+import static com.osearch.crawler.fixture.HttpServiceFixture.response;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.mockito.Mockito.when;
 
 import com.osearch.crawler.config.properties.RestProperties;
-import com.osearch.crawler.service.rest.exception.RestForbiddenException;
-import com.osearch.crawler.service.rest.exception.RestInvalidResponseException;
-import com.osearch.crawler.service.rest.exception.RestServiceException;
-import com.osearch.crawler.service.rest.exception.RestToManyRequestsException;
+import com.osearch.crawler.service.http.exception.HttpForbiddenException;
+import com.osearch.crawler.service.http.exception.HttpInvalidResponseException;
+import com.osearch.crawler.service.http.exception.HttpServiceException;
+import com.osearch.crawler.service.http.exception.HttpToManyRequestsException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -34,10 +35,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Tag("category.UnitTest")
-class RestServiceImplTest {
+class HttpServiceImplTest {
 
     @InjectMocks
-    RestServiceImpl target;
+    HttpServiceImpl target;
 
     @Mock
     RestTemplate restTemplate;
@@ -59,18 +60,18 @@ class RestServiceImplTest {
     }
 
     @Test
-    void shouldGetDocumentWhenUrlReturnsHtml() {
+    void shouldReturnResponseWhenUrlReturnsHtml() {
         when(restTemplate.getForEntity(URL, String.class)).thenReturn(response);
         when(response.getStatusCode()).thenReturn(HttpStatus.OK);
         when(response.getBody()).thenReturn(HTML);
         when(headers.getContentType()).thenReturn(MediaType.TEXT_HTML);
 
-        var page = target.get(URL);
-        assertEquals(HTML, page);
+        var response = target.get(URL);
+        assertEquals(response(), response);
     }
 
     @Test
-    void shouldGetDocumentWhenUrlReturnsRedirectThatReturnsHtml() {
+    void shouldReturnResponseWhenUrlReturnsRedirectThatReturnsHtml() {
         when(restTemplate.getForEntity(URL, String.class)).thenReturn(response);
         when(restTemplate.getForEntity(REDIRECT_URL, String.class)).thenReturn(response);
         when(response.getStatusCode())
@@ -80,53 +81,53 @@ class RestServiceImplTest {
         when(headers.getLocation()).thenReturn(REDIRECT_URI);
         when(headers.getContentType()).thenReturn(MediaType.TEXT_HTML);
 
-        var page = target.get(URL);
-        assertEquals(HTML, page);
+        var response = target.get(URL);
+        assertEquals(response(), response);
     }
 
     @Test
-    void shouldThrowRestInvalidResponseExceptionWhenResponseIsNotHtml() {
+    void shouldThrowHttpInvalidResponseExceptionWhenResponseIsNotHtml() {
         when(restTemplate.getForEntity(URL, String.class)).thenReturn(response);
         when(response.getStatusCode()).thenReturn(HttpStatus.OK);
         when(response.getBody()).thenReturn(JSON);
         when(headers.getContentType()).thenReturn(MediaType.APPLICATION_JSON);
 
-        assertThrows(RestInvalidResponseException.class, () -> target.get(URL));
+        assertThrows(HttpInvalidResponseException.class, () -> target.get(URL));
     }
 
     @Test
-    void shouldThrowRestInvalidResponseExceptionWhenBodyIsEmpty() {
+    void shouldThrowHttpInvalidResponseExceptionWhenBodyIsEmpty() {
         when(restTemplate.getForEntity(URL, String.class)).thenReturn(response);
         when(response.getStatusCode()).thenReturn(HttpStatus.OK);
         when(response.getBody()).thenReturn(null);
         when(headers.getContentType()).thenReturn(MediaType.TEXT_HTML);
 
-        assertThrows(RestInvalidResponseException.class, () -> target.get(URL));
+        assertThrows(HttpInvalidResponseException.class, () -> target.get(URL));
     }
 
     @Test
-    void shouldThrowRestForbiddenExceptionWhenResponseIsForbidden() {
+    void shouldThrowHttpForbiddenExceptionWhenResponseIsForbidden() {
         when(restTemplate.getForEntity(URL, String.class))
                 .thenThrow(new HttpClientErrorException(HttpStatus.FORBIDDEN));
 
-        assertThrows(RestForbiddenException.class, () -> target.get(URL));
+        assertThrows(HttpForbiddenException.class, () -> target.get(URL));
     }
 
     @Test
-    void shouldThrowRestToManyRequestsExceptionWhenResponseIsToManyRequest() {
+    void shouldThrowHttpToManyRequestsExceptionWhenResponseIsToManyRequest() {
         when(restTemplate.getForEntity(URL, String.class))
                 .thenThrow(new HttpClientErrorException(HttpStatus.TOO_MANY_REQUESTS));
 
-        assertThrows(RestToManyRequestsException.class, () -> target.get(URL));
+        assertThrows(HttpToManyRequestsException.class, () -> target.get(URL));
     }
 
     @Test
-    void shouldThrowRestServiceExceptionWhenUrlReturnsToManyRedirects() {
+    void shouldThrowHttpServiceExceptionWhenUrlReturnsToManyRedirects() {
         when(restTemplate.getForEntity(URL, String.class)).thenReturn(response);
         when(restTemplate.getForEntity(REDIRECT_URL, String.class)).thenReturn(response);
         when(response.getStatusCode()).thenReturn(HttpStatus.MULTIPLE_CHOICES);
         when(headers.getLocation()).thenReturn(REDIRECT_URI);
 
-        assertThrows(RestServiceException.class, () -> target.get(URL));
+        assertThrows(HttpServiceException.class, () -> target.get(URL));
     }
 }

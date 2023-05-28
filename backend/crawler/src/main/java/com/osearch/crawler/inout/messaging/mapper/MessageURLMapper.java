@@ -9,10 +9,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface MessageURLMapper {
 
+    @Mapping(target = "loadTime", expression = "java(url.getLoadTime().toMillis())")
     URLDto toDto(URL url);
-
-    @Mapping(target = "urlHash", ignore = true)
-    @Mapping(target = "pageHash", ignore = true)
-    @Mapping(target = "nestedUrls", ignore = true)
-    URL toEntity(URLDto urlDto);
 }
