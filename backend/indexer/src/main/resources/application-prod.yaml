@@ -1,0 +1,16 @@
+server:
+  port: 5970
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+service:
+  threadsCount: 1
+logging:
+  level:
+    com.osearch.indexer: INFO
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true

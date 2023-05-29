@@ -1,0 +1,26 @@
+server:
+  port: 5970
+spring:
+  data:
+    neo4j:
+      uri: bolt://localhost:7687
+      username: neo4j
+      password: localneo
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+kafka:
+  url: localhost:9092
+  urlTopic: crawler-urls
+  requestTopic: index-change
+  groupId: indexer-group
+service:
+  threadsCount: 1
+logging:
+  level:
+    com.osearch.indexer: INFO
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
