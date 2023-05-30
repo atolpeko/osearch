@@ -10,5 +10,6 @@ import org.mapstruct.Mapping;
 public interface MessageURLMapper {
 
     @Mapping(target = "loadTime", expression = "java(url.getLoadTime().toMillis())")
+    @Mapping(target = "url", source = "value")
     URLDto toDto(URL url);
 }

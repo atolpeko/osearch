@@ -13,6 +13,7 @@ public interface RepositoryURLMapper {
     URLDto toDto(URL url);
 
     @Mapping(target = "value", ignore = true)
+    @Mapping(target = "content", ignore = true)
     @Mapping(target = "loadTime", ignore = true)
     @Mapping(target = "nestedUrls", ignore = true)
     URL toEntity(URLDto urlDto);
