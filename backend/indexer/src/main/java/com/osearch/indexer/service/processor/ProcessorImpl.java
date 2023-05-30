@@ -93,12 +93,6 @@ public class ProcessorImpl implements Processor {
                     page.getRefersTo();
             refersTo.add(referredPage);
             page.setRefersTo(refersTo);
-
-            var referredBy = referredPage.getReferredBy() == null ?
-                    new HashSet<PageDto>() :
-                    referredPage.getReferredBy();
-            referredBy.add(page);
-            referredPage.setReferredBy(referredBy);
         }
     }
 

@@ -20,8 +20,8 @@ import org.springframework.data.neo4j.core.schema.Relationship.Direction;
 @Data
 @Builder
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"refersTo", "referredBy"})
-@ToString(exclude = {"refersTo", "referredBy"})
+@EqualsAndHashCode(exclude = "refersTo")
+@ToString(exclude = "refersTo")
 public class PageDto {
 
     @Id
@@ -35,9 +35,6 @@ public class PageDto {
 
     @Relationship(type = "REFERS_TO", direction = Direction.OUTGOING)
     private Set<PageDto> refersTo;
-
-    @Relationship(type = "REFERRED_BY", direction = Direction.INCOMING)
-    private Set<PageDto> referredBy;
 
     @Relationship(type = "HAS", direction = Direction.OUTGOING)
     private Set<KeywordDto> keywords;
@@ -55,7 +52,6 @@ public class PageDto {
         this.loadTime = other.loadTime;
         this.isIndexed = other.isIndexed;
         this.refersTo = new HashSet<>(other.refersTo);
-        this.referredBy = new HashSet<>(other.referredBy);
         this.keywords = new HashSet<>(other.keywords);
         this.metaTags = new HashSet<>(other.metaTags);
     }
@@ -86,9 +82,6 @@ public class PageDto {
         }
         if (page.getRefersTo() != null) {
             merged.setRefersTo(page.getRefersTo());
-        }
-        if (page.getReferredBy() != null) {
-            merged.setReferredBy(page.getReferredBy());
         }
         if (page.getKeywords() != null) {
             merged.setKeywords(page.getKeywords());
