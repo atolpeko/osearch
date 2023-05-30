@@ -6,6 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.osearch.indexer.config.properties.KafkaProperties;
 import com.osearch.indexer.inout.messaging.entity.NewUrlRequest;
+import com.osearch.indexer.inout.messaging.mapper.IndexRequestMapper;
+import com.osearch.indexer.service.IndexerService;
 
 import javax.validation.Validator;
 
@@ -21,6 +23,8 @@ import org.springframework.stereotype.Component;
 public class RequestMessageListener {
     private final ObjectMapper objectMapper;
     private final Validator validator;
+    private final IndexRequestMapper mapper;
+    private final IndexerService indexerService;
 
     private final KafkaProperties properties;
 
@@ -55,6 +59,7 @@ public class RequestMessageListener {
     }
 
     private void process(NewUrlRequest request) {
-        // service call
+        var indexRequest = mapper.toServiceRequest(request);
+        indexerService.process(indexRequest);
     }
 }
