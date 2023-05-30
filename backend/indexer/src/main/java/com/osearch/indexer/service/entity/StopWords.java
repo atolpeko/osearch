@@ -1,5 +1,6 @@
 package com.osearch.indexer.service.entity;
 
+import java.util.Collections;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,6 @@ public class StopWords {
     private final Map<Locale, Set<String>> words;
 
     public Set<String> getForLocale(Locale locale) {
-        return words.get(locale);
+        return words.getOrDefault(locale, Collections.emptySet());
     }
 }
