@@ -34,16 +34,15 @@ public class RequestMessageListener {
     )
     public void listen(String message) {
         try {
-            log.debug("Receiving a message from topic {}: {} ",
-                    properties.getRequestTopic(), message);
+            log.debug("Receiving a message from topic {}: ", properties.getRequestTopic());
             var request = toRequest(message);
             process(request);
         } catch (JsonMappingException e) {
-            log.error("{} doesn't match the structure of NewUrlRequest", message);
+            log.error("Message doesn't match the structure of NewUrlRequest");
         } catch (JsonProcessingException e) {
-            log.error("{} is not a valid JSON", message);
+            log.error("Message is not a valid JSON");
         } catch (IllegalArgumentException e) {
-            log.debug("{} is not a valid NewUrlRequest", message);
+            log.debug("Message is not a valid NewUrlRequest");
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage());
         }
