@@ -2,7 +2,7 @@ package com.osearch.crawler.service.pageprocessor;
 
 import com.osearch.crawler.service.entity.URL;
 import com.osearch.crawler.service.hasher.Hasher;
-import com.osearch.crawler.service.rest.RestService;
+import com.osearch.crawler.service.http.HttpService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,12 +22,12 @@ public class PageProcessorImpl implements PageProcessor {
     private static final Pattern EXTERNAL_URL_PATTERN;
     private static final Pattern NOT_HTML_PATTERN;
 
-    private final RestService restService;
+    private final HttpService httpService;
     private final Hasher hasher;
 
     static {
         var urlRegex = "((http|https)://[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
-        var noHtmlRegex = ".*\\.(txt|json|csv|pdf|xml|mp3|mp4|avi|mov|zip|rar|exe|jpg|jpeg|gif|png|svg)$";
+        var noHtmlRegex = ".*\\.(js|txt|json|csv|pdf|xml|mp3|mp4|avi|mov|zip|rar|exe|jpg|jpeg|gif|png|svg)$";
 
         EXTERNAL_URL_PATTERN = Pattern.compile(urlRegex);
         NOT_HTML_PATTERN = Pattern.compile(noHtmlRegex);
@@ -35,16 +35,18 @@ public class PageProcessorImpl implements PageProcessor {
 
     @Override
     public URL process(String url) {
-        var page = restService.get(url);
-        var nestedUrls = findUrls(page);
+        var response = httpService.get(url);
+        var nestedUrls = findUrls(response.getContent());
         log.debug("Found {} nested URLs from {}", nestedUrls.size(), url);
         nestedUrls = filter(url, nestedUrls);
         log.debug("{} nested URLs from {} left after filtering", nestedUrls.size(), url);
 
         return URL.builder()
                 .value(url)
+                .content(response.getContent())
                 .urlHash(hasher.hash(url))
-                .pageHash(hasher.hash(page))
+                .pageHash(hasher.hash(response.getContent()))
+                .loadTime(response.getLoadTime())
                 .nestedUrls(nestedUrls)
                 .foundAt(LocalDateTime.now())
                 .build();

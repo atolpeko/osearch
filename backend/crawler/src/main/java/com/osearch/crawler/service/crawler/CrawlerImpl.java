@@ -2,8 +2,8 @@ package com.osearch.crawler.service.crawler;
 
 import com.osearch.crawler.service.entity.URL;
 import com.osearch.crawler.service.pageprocessor.PageProcessor;
-import com.osearch.crawler.service.rest.exception.RestForbiddenException;
-import com.osearch.crawler.service.rest.exception.RestToManyRequestsException;
+import com.osearch.crawler.service.http.exception.HttpForbiddenException;
+import com.osearch.crawler.service.http.exception.HttpToManyRequestsException;
 
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
@@ -48,7 +48,7 @@ public class CrawlerImpl implements Crawler {
             var url = pageProcessor.process(hostUrl);
             urlsToSave.put(url);
             processNestedUrls(url.getNestedUrls());
-        } catch (RestForbiddenException | RestToManyRequestsException e) {
+        } catch (HttpForbiddenException | HttpToManyRequestsException e) {
             log.error("Error getting URL {}: Saving for later: {}", hostUrl, e.getMessage());
             urlsToGet.put(hostUrl);
         } catch (InterruptedException e) {

@@ -15,8 +15,8 @@ public abstract class BaseMessageProducer {
 
     protected void produce(String topic, Object object) {
         try {
+            log.debug("Sending to kafka topic {}: {}", topic, object.toString());
             var data = objectMapper.writeValueAsString(object);
-            log.debug("Sending to kafka topic {}: {}", topic, data);
             kafkaTemplate.send(topic, data);
         } catch (Exception e) {
             log.error("Cannot send message to kafka topic {}: {}",

@@ -2,6 +2,9 @@ package com.osearch.crawler.fixture;
 
 import com.osearch.crawler.service.entity.URL;
 
+import com.osearch.crawler.service.http.entity.Response;
+
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,6 +12,7 @@ public class PageProcessorFixture {
     public static final String URL_STRING = "https://stackoverflow.com/questions/";
     public static final String URL_HASH = "304c42801cd263892249f4d473f4ee72";
     public static final String PAGE_HASH = "300d41ba4d0f3468bf95e319db2c0a85";
+    public static final Duration LOAD_TIME = Duration.ofMillis(1000);
 
     public static final String NESTED_URL_1 = "https://stackoverflow.com/questions/resource.html";
     public static final String NESTED_URL_2 = "http://stackoverflow.com/questions/resource.htm";
@@ -84,7 +88,17 @@ public class PageProcessorFixture {
                 .urlHash(URL_HASH)
                 .pageHash(PAGE_HASH)
                 .nestedUrls(nestedUrls)
+                .content(PAGE)
+                .loadTime(LOAD_TIME)
                 .foundAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static Response response() {
+        return Response.builder()
+                .url(URL_STRING)
+                .content(PAGE)
+                .loadTime(LOAD_TIME)
                 .build();
     }
 }

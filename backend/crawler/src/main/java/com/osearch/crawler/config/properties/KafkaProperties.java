@@ -24,6 +24,6 @@ public class KafkaProperties {
     @Value("${kafka.responseTopic}")
     private String responseTopic;
 
-    @Value("${kafka.bulkMessagesCount}")
-    private Integer bulkMessagesCount;
+    @Value("${kafka.maxMessageSize}")
+    private Integer maxMessageSize;
 }

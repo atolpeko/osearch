@@ -1,10 +1,14 @@
-package com.osearch.crawler.service.rest;
+package com.osearch.crawler.service.http;
 
 import com.osearch.crawler.config.properties.RestProperties;
-import com.osearch.crawler.service.rest.exception.RestForbiddenException;
-import com.osearch.crawler.service.rest.exception.RestInvalidResponseException;
-import com.osearch.crawler.service.rest.exception.RestServiceException;
-import com.osearch.crawler.service.rest.exception.RestToManyRequestsException;
+import com.osearch.crawler.service.http.entity.Response;
+import com.osearch.crawler.service.http.exception.HttpForbiddenException;
+import com.osearch.crawler.service.http.exception.HttpInvalidResponseException;
+import com.osearch.crawler.service.http.exception.HttpServiceException;
+import com.osearch.crawler.service.http.exception.HttpToManyRequestsException;
+
+import java.time.Duration;
+import java.time.Instant;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,35 +23,38 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @Log4j2
 @RequiredArgsConstructor
-public class RestServiceImpl implements RestService {
+public class HttpServiceImpl implements HttpService {
     private final RestTemplate restTemplate;
     private final RestProperties properties;
 
     @Override
-    public String get(String url) {
+    public Response get(String url) {
         try {
+            var start = Instant.now();
             var response = httpGet(url, 0);
+            var loadTime = Duration.between(start, Instant.now());
+
             validateResponse(response);
-            return response.getBody();
+            return new Response(url, response.getBody(), loadTime);
         } catch (HttpClientErrorException e) {
             var code = e.getStatusCode();
             if (code.equals(HttpStatus.FORBIDDEN)) {
-                throw new RestForbiddenException(e.getMessage(), e);
+                throw new HttpForbiddenException(e.getMessage(), e);
             } else if (code.equals(HttpStatus.TOO_MANY_REQUESTS)) {
-                throw new RestToManyRequestsException(e.getMessage(), e);
+                throw new HttpToManyRequestsException(e.getMessage(), e);
             } else {
-                throw new RestServiceException(e.getMessage(), e);
+                throw new HttpServiceException(e.getMessage(), e);
             }
-        } catch (RestServiceException e) {
+        } catch (HttpServiceException e) {
             throw e;
         } catch (Exception e) {
-            throw new RestServiceException(e.getMessage(), e);
+            throw new HttpServiceException(e.getMessage(), e);
         }
     }
 
     private ResponseEntity<String> httpGet(String url, int redirectCount) {
         if (redirectCount >= properties.getMaxRedirects()) {
-            throw new RestInvalidResponseException("Too many redirects: " + redirectCount);
+            throw new HttpInvalidResponseException("Too many redirects: " + redirectCount);
         }
 
         var response = executeRequest(url);
@@ -70,9 +77,9 @@ public class RestServiceImpl implements RestService {
 
     private void validateResponse(ResponseEntity<String> response) {
         if (!isHtmlResponse(response)) {
-            throw new RestInvalidResponseException("Not a HTML page");
+            throw new HttpInvalidResponseException("Not a HTML page");
         } else if (response.getBody() == null) {
-            throw new RestInvalidResponseException("Null response body");
+            throw new HttpInvalidResponseException("Null response body");
         }
     }
 

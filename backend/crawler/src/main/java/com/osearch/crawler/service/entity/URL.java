@@ -1,5 +1,6 @@
 package com.osearch.crawler.service.entity;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,6 +17,8 @@ public class URL {
     private String value;
     private String urlHash;
     private String pageHash;
+    private String content;
+    private Duration loadTime;
     private LocalDateTime foundAt;
     private List<String> nestedUrls;
 }
