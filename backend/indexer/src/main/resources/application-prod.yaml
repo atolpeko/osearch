@@ -5,7 +5,7 @@ spring:
     consumer:
       auto-offset-reset: latest
 service:
-  threadsCount: 1
+  threadsCount: 6
 logging:
   level:
     com.osearch.indexer: INFO
