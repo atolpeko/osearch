@@ -3,6 +3,8 @@ package com.osearch.indexer.inout.repository.dto;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Set;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,19 +30,23 @@ public class PageDto {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String url;
+
+    @NotBlank
     private String title;
+
+    @NotNull
     private Duration loadTime;
+
+    @NotNull
     private Boolean isIndexed;
 
     @Relationship(type = "REFERS_TO", direction = Direction.OUTGOING)
     private Set<PageDto> refersTo;
 
-    @Relationship(type = "HAS", direction = Direction.OUTGOING)
-    private Set<KeywordDto> keywords;
-
-    @Relationship(type = "META", direction = Direction.OUTGOING)
-    private Set<HTMLElementDto> metaTags;
+    @Relationship(type = "HAS",  direction = Direction.OUTGOING)
+    private Set<KeywordRelationDto> keywordRelations;
 
     public PageDto() {
     }
@@ -52,8 +58,7 @@ public class PageDto {
         this.loadTime = other.loadTime;
         this.isIndexed = other.isIndexed;
         this.refersTo = new HashSet<>(other.refersTo);
-        this.keywords = new HashSet<>(other.keywords);
-        this.metaTags = new HashSet<>(other.metaTags);
+        this.keywordRelations = new HashSet<>(other.keywordRelations);
     }
 
     /**
@@ -83,11 +88,8 @@ public class PageDto {
         if (page.getRefersTo() != null) {
             merged.setRefersTo(page.getRefersTo());
         }
-        if (page.getKeywords() != null) {
-            merged.setKeywords(page.getKeywords());
-        }
-        if (page.getMetaTags() != null) {
-            merged.setMetaTags(page.getMetaTags());
+        if (page.getKeywordRelations() != null) {
+            merged.setKeywordRelations(page.getKeywordRelations());
         }
 
         return merged;

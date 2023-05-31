@@ -1,5 +1,7 @@
 package com.osearch.indexer.inout.repository.dto;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +20,6 @@ public class KeywordDto {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String value;
-    private Long occurrences;
 }

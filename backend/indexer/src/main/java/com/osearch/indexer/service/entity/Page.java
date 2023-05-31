@@ -22,5 +22,4 @@ public class Page {
     private Set<Page> refersTo;
     private Set<Page> referredBy;
     private Set<Keyword> keywords;
-    private Set<HTMLElement> metaTags;
 }

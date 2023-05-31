@@ -4,7 +4,9 @@ import com.osearch.indexer.config.properties.ServiceProperties;
 import com.osearch.indexer.inout.messaging.producer.IndexChangedMessageSender;
 import com.osearch.indexer.inout.repository.KeywordRepository;
 import com.osearch.indexer.inout.repository.PageRepository;
+import com.osearch.indexer.inout.repository.mapper.KeywordMapper;
 import com.osearch.indexer.inout.repository.mapper.PageMapper;
+import com.osearch.indexer.inout.repository.transaction.TransactionExecutor;
 import com.osearch.indexer.service.analyzer.ContentAnalyzer;
 import com.osearch.indexer.service.entity.IndexRequest;
 import com.osearch.indexer.service.executor.BackgroundExecutor;
@@ -29,11 +31,14 @@ import org.springframework.stereotype.Service;
 public class IndexerServiceImpl implements IndexerService {
     private final BackgroundExecutor executor;
     private final IndexChangedMessageSender messageSender;
-    private final PageRepository pageRepository;
-    private final KeywordRepository keywordRepository;
-    private final PageMapper mapper;
     private final ContentAnalyzer contentAnalyzer;
     private final ServiceProperties properties;
+
+    private final TransactionExecutor transactionExecutor;
+    private final PageRepository pageRepository;
+    private final KeywordRepository keywordRepository;
+    private final PageMapper pageMapper;
+    private final KeywordMapper keywordMapper;
 
     private final BlockingDeque<IndexRequest> requestsToProcess = new LinkedBlockingDeque<>();
 
@@ -60,10 +65,12 @@ public class IndexerServiceImpl implements IndexerService {
                         .id(id)
                         .requests(requestsToProcess)
                         .messageSender(messageSender)
+                        .analyzer(contentAnalyzer)
+                        .transactionExecutor(transactionExecutor)
                         .pageRepository(pageRepository)
                         .keywordRepository(keywordRepository)
-                        .mapper(mapper)
-                        .analyzer(contentAnalyzer)
+                        .pageMapper(pageMapper)
+                        .keywordMapper(keywordMapper)
                         .build();
 
         return IntStream.range(0, properties.getThreadsCount())

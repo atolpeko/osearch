@@ -27,19 +27,14 @@ class ContentAnalyzerImplTest {
     void shouldAnalyze() {
         var page = target.analyze(request());
         var keywords = page.getKeywords();
-        var meta = page.getMetaTags();
         page.setKeywords(null);
-        page.setMetaTags(null);
 
         var expected = page();
         var expectedKeywords = expected.getKeywords();
-        var expectedMeta = expected.getMetaTags();
         expected.setKeywords(null);
-        expected.setMetaTags(null);
 
         assertEquals(expected, page);
         assertSetsIgnoringOrder(expectedKeywords, keywords);
-        assertSetsIgnoringOrder(expectedMeta, meta);
     }
 
     <T> void assertSetsIgnoringOrder(Set<T> expected, Set<T> actual) {

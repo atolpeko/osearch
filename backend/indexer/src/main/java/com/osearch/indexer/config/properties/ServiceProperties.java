@@ -11,4 +11,7 @@ public class ServiceProperties {
 
     @Value("${service.threadsCount}")
     private Integer threadsCount;
+
+    @Value("${service.waitBeforeRequests}")
+    private Integer waitBeforeRequests;
 }

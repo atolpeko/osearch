@@ -1,6 +1,5 @@
 package com.osearch.indexer.fixture;
 
-import com.osearch.indexer.service.entity.HTMLElement;
 import com.osearch.indexer.service.entity.IndexRequest;
 import com.osearch.indexer.service.entity.Keyword;
 import com.osearch.indexer.service.entity.Page;
@@ -43,15 +42,6 @@ public class ContentAnalyzerFixture {
     }
 
     public static Page page() {
-        var meta = new HashSet<>(
-                Set.of(
-                        new HTMLElement("description", "A travel blog sharing adventures around the world."),
-                        new HTMLElement("keywords", "travel, adventure, blog, world, destinations"),
-                        new HTMLElement("author", "John Doe"),
-                        new HTMLElement("viewport", "width=device-width, initial-scale=1.0")
-                )
-        );
-
         var keywords = new HashSet<>(
                 Set.of(
                         new Keyword("vibes",  1),
@@ -77,7 +67,6 @@ public class ContentAnalyzerFixture {
                 .url(URL)
                 .title("My Travel Blog")
                 .keywords(keywords)
-                .metaTags(meta)
                 .loadTime(Duration.ofMillis(LOAD_TIME))
                 .build();
     }

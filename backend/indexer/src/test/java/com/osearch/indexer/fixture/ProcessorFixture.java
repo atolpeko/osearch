@@ -1,9 +1,8 @@
 package com.osearch.indexer.fixture;
 
-import com.osearch.indexer.inout.repository.dto.HTMLElementDto;
 import com.osearch.indexer.inout.repository.dto.KeywordDto;
+import com.osearch.indexer.inout.repository.dto.KeywordRelationDto;
 import com.osearch.indexer.inout.repository.dto.PageDto;
-import com.osearch.indexer.service.entity.HTMLElement;
 import com.osearch.indexer.service.entity.IndexRequest;
 import com.osearch.indexer.service.entity.Keyword;
 import com.osearch.indexer.service.entity.Page;
@@ -11,8 +10,8 @@ import com.osearch.indexer.service.entity.Page;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 public class ProcessorFixture {
@@ -40,7 +39,6 @@ public class ProcessorFixture {
                 .url(URL)
                 .title(TITLE)
                 .loadTime(Duration.ofMillis(LOAD_TIME))
-                .metaTags(meta())
                 .keywords(keywords())
                 .build();
     }
@@ -51,20 +49,31 @@ public class ProcessorFixture {
                 .collect(Collectors.toSet());
     }
 
-    public static Set<HTMLElement> meta() {
-        return IntStream.range(0, 10)
-                .mapToObj(i -> new HTMLElement("key" + i, "value" + i))
-                .collect(Collectors.toSet());
-    }
-
     public static PageDto pageDto() {
         return PageDto.builder()
                 .url(URL)
                 .loadTime(Duration.ofMillis(LOAD_TIME))
                 .title(TITLE)
-                .metaTags(metaDto())
-                .keywords(keywordDtos())
+                .keywordRelations(keywordRelations())
                 .build();
+    }
+
+    public static Set<KeywordRelationDto> keywordRelations() {
+        Function<KeywordDto, KeywordRelationDto> mapper = keyword ->
+                KeywordRelationDto.builder()
+                        .keyword(keyword)
+                        .occurrences(1L)
+                        .build();
+
+        return keywordDtos().stream()
+                .map(mapper)
+                .collect(Collectors.toSet());
+    }
+
+    public static Set<KeywordDto> keywordDtos() {
+        return LongStream.range(0 ,10)
+                .mapToObj(i -> KeywordDto.builder().value("KEY_" + i).build())
+                .collect(Collectors.toSet());
     }
 
     public static PageDto savedPageDto() {
@@ -73,21 +82,8 @@ public class ProcessorFixture {
                 .url(URL)
                 .loadTime(Duration.ofMillis(LOAD_TIME))
                 .title(TITLE)
-                .metaTags(metaDto())
-                .keywords(keywordDtos())
+                .keywordRelations(keywordRelations())
                 .build();
-    }
-
-    public static Set<KeywordDto> keywordDtos() {
-        return LongStream.range(0 ,10)
-                .mapToObj(i -> KeywordDto.builder().value("KEY_" + i).occurrences(i).build())
-                .collect(Collectors.toSet());
-    }
-
-    public static Set<HTMLElementDto> metaDto() {
-        return IntStream.range(0, 10)
-                .mapToObj(i -> HTMLElementDto.builder().key("KEY_" + i).value("VALUE_I").build())
-                .collect(Collectors.toSet());
     }
 
     public static Page nestedPage1() {

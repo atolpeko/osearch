@@ -1,6 +1,5 @@
 package com.osearch.indexer.service.analyzer;
 
-import com.osearch.indexer.service.entity.HTMLElement;
 import com.osearch.indexer.service.entity.IndexRequest;
 import com.osearch.indexer.service.entity.Keyword;
 import com.osearch.indexer.service.entity.Page;
@@ -22,6 +21,7 @@ import lombok.extern.log4j.Log4j2;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import org.jsoup.nodes.Element;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -34,15 +34,13 @@ public class ContentAnalyzerImpl implements ContentAnalyzer {
     public Page analyze(IndexRequest request) {
         log.debug("Analyzing request with URL: {}", request.getUrl());
         var document = Jsoup.parse(request.getContent());
-        var meta = getMeta(document);
         var locale = getLocale(document);
 
         return Page.builder()
                 .url(request.getUrl())
                 .loadTime(Duration.ofMillis(request.getLoadTime()))
                 .title(getPageTitle(document))
-                .metaTags(meta)
-                .keywords(getKeywords(document, locale, meta))
+                .keywords(getKeywords(document, locale))
                 .build();
     }
 
@@ -71,22 +69,8 @@ public class ContentAnalyzerImpl implements ContentAnalyzer {
         return Locale.ENGLISH;
     }
 
-    private Set<HTMLElement> getMeta(Document document) {
-        var meta = new HashSet<HTMLElement>();
-        var metaTags = document.select("meta");
-        for (var tag : metaTags) {
-            var name = tag.attr("name");
-            var content = tag.attr("content");
-            meta.add(new HTMLElement(name, content));
-        }
-
-        meta.removeIf(tag -> tag.getKey().isEmpty());
-        meta.removeIf(tag -> tag.getValue().isEmpty());
-        return meta;
-    }
-
-    public Set<Keyword> getKeywords(Document document, Locale locale, Set<HTMLElement> meta) {
-        var text = document.text() + metaToString(meta);
+    public Set<Keyword> getKeywords(Document document, Locale locale) {
+        var text = document.text() + metaToString(getMeta(document));
         var keywords = findKeywords(text, locale);
 
         return keywords.stream()
@@ -95,6 +79,11 @@ public class ContentAnalyzerImpl implements ContentAnalyzer {
                 .stream()
                 .map(entry -> new Keyword(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toSet());
+    }
+
+    private Set<Element> getMeta(Document document) {
+        var metaTags = document.select("meta");
+        return new HashSet<>(metaTags);
     }
 
     private List<String> findKeywords(String text, Locale locale) {
@@ -118,13 +107,14 @@ public class ContentAnalyzerImpl implements ContentAnalyzer {
         return keywords;
     }
 
-    private String metaToString(Set<HTMLElement> meta) {
-         return " " + meta.stream()
-                 .filter(metaElement -> metaElement.getKey().equals("keywords") ||
-                         metaElement.getKey().equals("description"))
-                 .map(HTMLElement::getValue)
-                 .map(str -> str + " ")
-                 .collect(Collectors.joining());
+    private String metaToString(Set<Element> meta) {
+        return  " " + meta.stream()
+                .filter(metaElement -> metaElement.attr("name").equals("keywords") ||
+                        metaElement.attr("name").equals("description"))
+                .map(metaElement -> metaElement.attr("content"))
+                .filter(str -> !str.isEmpty())
+                .map(str -> str + " ")
+                .collect(Collectors.joining());
     }
 
     private boolean isNotStopWord(String keyword, Locale locale) {

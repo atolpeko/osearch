@@ -6,14 +6,11 @@ import com.osearch.indexer.service.entity.Page;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(
-        componentModel = "spring",
-        uses = { KeywordMapper.class, HTMLElementMapper.class }
-)
+@Mapper(componentModel = "spring")
 public interface PageMapper {
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "isIndexed", ignore = true)
+    @Mapping(target = "keywordRelations", ignore = true)
     PageDto toDto(Page page);
-
-    Page toEntity(PageDto dto);
 }

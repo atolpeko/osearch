@@ -3,7 +3,7 @@ server:
 spring:
   data:
     neo4j:
-      uri: bolt://localhost:7687
+      uri: bolt://localhost:7687/pageindex
       username: neo4j
       password: localneo
   kafka:
@@ -16,6 +16,7 @@ kafka:
   groupId: indexer-group
 service:
   threadsCount: 1
+  waitBeforeRequests: 3000
 logging:
   level:
     com.osearch.indexer: DEBUG
