@@ -12,14 +12,13 @@ import lombok.ToString;
 @Data
 @Builder
 @AllArgsConstructor
-@EqualsAndHashCode(exclude = {"refersTo", "referredBy"})
-@ToString(exclude = {"refersTo", "referredBy"})
+@EqualsAndHashCode(exclude = "refersTo")
+@ToString(exclude = "refersTo")
 public class Page {
     private String url;
     private String title;
     private Duration loadTime;
     private boolean isIndexed;
     private Set<Page> refersTo;
-    private Set<Page> referredBy;
     private Set<Keyword> keywords;
 }
