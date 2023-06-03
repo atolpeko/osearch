@@ -93,7 +93,8 @@ public class ProcessorImpl implements Processor {
         var existingDto = pageRepository.findByUrl(url);
         if (existingDto.isPresent()) {
             var saved = existingDto.get();
-            return saved.merge(dto);
+            saved.merge(dto);
+            return saved;
         } else {
             dto.setIsIndexed(false);
             return dto;
