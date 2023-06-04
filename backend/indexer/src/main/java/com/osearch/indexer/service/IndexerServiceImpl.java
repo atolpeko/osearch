@@ -48,13 +48,13 @@ public class IndexerServiceImpl implements IndexerService {
     public void process(IndexRequest request) {
         try {
             var start = Instant.now();
-            log.debug("Processing request with URL {}", request.getUrl());
+            log.info("Processing request with URL {}", request.getUrl());
             processRequest(request);
 
             var timeElapsed = Duration.between(start, Instant.now()).toSeconds();
-            log.debug("Page with URL {} processed in {} sec.", request.getUrl(), timeElapsed);
+            log.info("Page with URL {} processed in {} sec.", request.getUrl(), timeElapsed);
         } catch (InterruptedException e) {
-            log.error("Index service interrupted");
+            log.error("Index service interrupted: {}", e.getMessage());
             Thread.currentThread().interrupt();
         } catch (Exception e) {
             log.error("Page {} indexing error: {}", request.getUrl(), e.getMessage());

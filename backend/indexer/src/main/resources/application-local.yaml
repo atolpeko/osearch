@@ -18,6 +18,7 @@ service:
   waitBeforeRequests: 3000
 logging:
   level:
+    org.springframework.data.neo4j.cypher: ERROR
     com.osearch.indexer: INFO
 management:
   endpoint:

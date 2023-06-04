@@ -34,7 +34,7 @@ public class RequestMessageListener {
     )
     public void listen(String message) {
         try {
-            log.debug("Receiving a message from topic {}", kafkaProperties.getRequestTopic());
+            log.info("Receiving a message from topic {}", kafkaProperties.getRequestTopic());
             var request = toRequest(message);
             process(request);
         } catch (JsonMappingException e) {
