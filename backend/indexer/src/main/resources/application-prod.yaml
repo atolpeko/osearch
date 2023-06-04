@@ -5,7 +5,6 @@ spring:
     consumer:
       auto-offset-reset: latest
 service:
-  threadsCount: 6
   waitBeforeRequests: 3000
 logging:
   level:

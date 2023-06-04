@@ -76,7 +76,7 @@ public class ContentAnalyzerImpl implements ContentAnalyzer {
         return keywords.stream()
                 .collect(Collectors.groupingBy(k -> k, Collectors.counting()))
                 .entrySet()
-                .stream()
+                .parallelStream()
                 .map(entry -> new Keyword(entry.getKey(), entry.getValue()))
                 .collect(Collectors.toSet());
     }

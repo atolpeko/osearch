@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.osearch.indexer.config.properties.KafkaProperties;
-import com.osearch.indexer.config.properties.ServiceProperties;
 import com.osearch.indexer.inout.messaging.entity.NewUrlRequest;
 import com.osearch.indexer.inout.messaging.mapper.IndexRequestMapper;
 import com.osearch.indexer.service.IndexerService;
@@ -28,7 +27,6 @@ public class RequestMessageListener {
     private final IndexerService indexerService;
 
     private final KafkaProperties kafkaProperties;
-    private final ServiceProperties serviceProperties;
 
     @KafkaListener(
             topics = "#{kafkaProperties.getUrlTopic()}",
@@ -39,19 +37,12 @@ public class RequestMessageListener {
             log.debug("Receiving a message from topic {}", kafkaProperties.getRequestTopic());
             var request = toRequest(message);
             process(request);
-
-            log.debug("Waiting {} ms. before accepting next request",
-                    serviceProperties.getWaitBeforeRequests());
-            Thread.sleep(serviceProperties.getWaitBeforeRequests());
         } catch (JsonMappingException e) {
             log.error("Message doesn't match the structure of NewUrlRequest");
         } catch (JsonProcessingException e) {
             log.error("Message is not a valid JSON");
         } catch (IllegalArgumentException e) {
             log.debug("Message is not a valid NewUrlRequest");
-        } catch (InterruptedException e) {
-            log.error("Listener interrupted");
-            Thread.currentThread().interrupt();
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage());
         }
