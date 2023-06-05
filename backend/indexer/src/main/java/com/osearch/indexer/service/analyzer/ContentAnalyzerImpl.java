@@ -8,7 +8,6 @@ import com.osearch.indexer.service.entity.StopWords;
 import java.text.BreakIterator;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
@@ -81,9 +80,9 @@ public class ContentAnalyzerImpl implements ContentAnalyzer {
                 .collect(Collectors.toSet());
     }
 
-    private Set<Element> getMeta(Document document) {
+    private List<Element> getMeta(Document document) {
         var metaTags = document.select("meta");
-        return new HashSet<>(metaTags);
+        return new ArrayList<>(metaTags);
     }
 
     private List<String> findKeywords(String text, Locale locale) {
@@ -107,7 +106,7 @@ public class ContentAnalyzerImpl implements ContentAnalyzer {
         return keywords;
     }
 
-    private String metaToString(Set<Element> meta) {
+    private String metaToString(List<Element> meta) {
         return  " " + meta.stream()
                 .filter(metaElement -> metaElement.attr("name").equals("keywords") ||
                         metaElement.attr("name").equals("description"))
