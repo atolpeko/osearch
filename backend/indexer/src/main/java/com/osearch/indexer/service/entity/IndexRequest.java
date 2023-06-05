@@ -1,6 +1,6 @@
 package com.osearch.indexer.service.entity;
 
-import java.util.List;
+import java.util.Set;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,5 +13,5 @@ public class IndexRequest {
     private final String url;
     private final String content;
     private final Long loadTime;
-    private final List<String> nestedUrls;
+    private final Set<String> nestedUrls;
 }

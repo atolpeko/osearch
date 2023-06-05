@@ -1,14 +1,13 @@
 server:
   port: 5970
 spring:
-  data:
-    neo4j:
-      uri: bolt://localhost:7687/pageindex
-      username: neo4j
-      password: localneo
   kafka:
     consumer:
       auto-offset-reset: latest
+neo4j:
+  url: bolt://localhost:7687/pageindex
+  username: neo4j
+  password: localneo
 kafka:
   url: localhost:9092
   urlTopic: crawler-urls

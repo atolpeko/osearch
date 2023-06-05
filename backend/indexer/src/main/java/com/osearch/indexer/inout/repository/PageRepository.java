@@ -1,19 +1,11 @@
 package com.osearch.indexer.inout.repository;
 
-import com.osearch.indexer.inout.repository.dto.PageDto;
-
-import java.util.Optional;
-
-import org.springframework.data.neo4j.repository.Neo4jRepository;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import com.osearch.indexer.service.entity.Page;
 
 /**
  * Used to work with PageDto objects stored in neo.
  */
-@Repository
-@Transactional
-public interface PageRepository extends Neo4jRepository<PageDto, Long> {
+public interface PageRepository {
 
-    Optional<PageDto> findByUrl(String url);
+    Long save(Page pageDto);
 }
