@@ -10,8 +10,7 @@ neo4j:
   password: localneo
 kafka:
   url: localhost:9092
-  urlTopic: crawler-urls
-  requestTopic: index-change
+  topic: crawler-pages
   groupId: indexer-group
 service:
   waitBeforeRequests: 3000

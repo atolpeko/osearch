@@ -1,8 +1,8 @@
 package com.osearch.indexer.fixture;
 
-import com.osearch.indexer.service.entity.IndexRequest;
-import com.osearch.indexer.service.entity.Keyword;
-import com.osearch.indexer.service.entity.Page;
+import com.osearch.indexer.domain.entity.IndexRequest;
+import com.osearch.indexer.domain.entity.Keyword;
+import com.osearch.indexer.domain.entity.Page;
 
 import java.time.Duration;
 import java.util.Set;
@@ -21,26 +21,26 @@ public class IndexServiceFixture {
 
     public static IndexRequest request() {
         return IndexRequest.builder()
-                .url(URL)
-                .content(CONTENT)
-                .loadTime(LOAD_TIME)
-                .nestedUrls(Set.of(NESTED_URL_1, NESTED_URL_2))
-                .build();
+            .url(URL)
+            .content(CONTENT)
+            .loadTime(LOAD_TIME)
+            .nestedUrls(Set.of(NESTED_URL_1, NESTED_URL_2))
+            .build();
     }
 
     public static Page page() {
         return Page.builder()
-                .url(URL)
-                .title(TITLE)
-                .loadTime(Duration.ofMillis(LOAD_TIME))
-                .keywords(keywords())
-                .nestedUrls(Set.of(NESTED_URL_1, NESTED_URL_2))
-                .build();
+            .url(URL)
+            .title(TITLE)
+            .loadTime(Duration.ofMillis(LOAD_TIME))
+            .keywords(keywords())
+            .nestedUrls(Set.of(NESTED_URL_1, NESTED_URL_2))
+            .build();
     }
 
     public static Set<Keyword> keywords() {
         return LongStream.range(0 ,10)
-                .mapToObj(i -> new Keyword("KEY" + i, i))
-                .collect(Collectors.toSet());
+            .mapToObj(i -> new Keyword("KEY" + i, i))
+            .collect(Collectors.toSet());
     }
 }
