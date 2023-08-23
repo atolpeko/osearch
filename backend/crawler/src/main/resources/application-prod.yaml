@@ -18,13 +18,16 @@ management:
 service:
   crawlerThreadsCount: 6
   processorThreadsCount: 6
+  externalUrlRegex: "((http|https)://[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)"
+  invalidUrlRegex: ".*\\.(js|txt|json|csv|pdf|xml|mp3|mp4|avi|mov|zip|rar|exe|jpg|jpeg|gif|png|svg)$"
 rest:
-  urlsToKeep: 20000
+  pagesToKeep: 20000
   timeout: 10000
   maxRedirects: 5
   userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.1234.567 Safari/537.36
 swagger:
+  url: /swagger-ui/index.html
   title: Crawler API
-  description: The API allows you to start / stop this crawler service
-  version: "0.0.1"
-  controllersPackage: com.osearch.crawler.inout.web
+  description: This API allows you to start pages crawling
+  version: "1.2"
+  controllersPackage: com.osearch.crawler.adapter.in.rest

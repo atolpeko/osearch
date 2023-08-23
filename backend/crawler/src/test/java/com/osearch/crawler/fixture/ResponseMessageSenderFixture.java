@@ -1,7 +1,7 @@
 package com.osearch.crawler.fixture;
 
-import com.osearch.crawler.inout.messaging.entity.Response;
-import com.osearch.crawler.inout.messaging.entity.Response.Status;
+import com.osearch.crawler.adapter.in.messaging.entity.Response;
+import com.osearch.crawler.adapter.in.messaging.entity.Response.Status;
 
 import java.time.LocalDateTime;
 
@@ -13,16 +13,16 @@ public class ResponseMessageSenderFixture {
 
     public static Response response() {
         return Response.builder()
-                .status(RESPONSE_STATUS)
-                .description(RESPONSE_DESCRIPTION)
-                .requestDateTime(REQUEST_TIME)
-                .build();
+            .status(RESPONSE_STATUS)
+            .description(RESPONSE_DESCRIPTION)
+            .requestDateTime(REQUEST_TIME)
+            .build();
     }
 
     public static String responseJson() {
         return "{ status: " + RESPONSE_STATUS
-                + ", description: " + RESPONSE_DESCRIPTION
-                + ", requestDateTime: " + REQUEST_TIME
-                + "}";
+            + ", description: " + RESPONSE_DESCRIPTION
+            + ", requestDateTime: " + REQUEST_TIME
+            + "}";
     }
 }

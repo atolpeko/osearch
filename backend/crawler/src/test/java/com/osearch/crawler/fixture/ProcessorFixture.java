@@ -1,12 +1,9 @@
 package com.osearch.crawler.fixture;
 
-import com.osearch.crawler.inout.messaging.mapper.MessageURLMapper;
-import com.osearch.crawler.inout.messaging.producer.URLMessageSender;
-import com.osearch.crawler.inout.repository.URLRepository;
-import com.osearch.crawler.inout.repository.dto.URLDto;
-import com.osearch.crawler.inout.repository.mapper.RepositoryURLMapper;
-import com.osearch.crawler.service.processor.ProcessorImpl;
-import com.osearch.crawler.service.entity.URL;
+import com.osearch.crawler.application.port.PageMessageSender;
+import com.osearch.crawler.application.port.PageRepository;
+import com.osearch.crawler.application.service.Processor;
+import com.osearch.crawler.domain.entity.Page;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,81 +25,57 @@ public class ProcessorFixture {
     public static final String URL_1_CHANGED_PAGE_HASH = "3639b4f1705681256c7e79fe59d49db1";
     public static final String URL_2_PAGE_HASH = "67ab996e1dda4d631ad1ca001fdb8128";
 
-    public static URL url1() {
-        return URL.builder()
-                .value(URL_1)
-                .urlHash(URL_1_HASH)
-                .pageHash(URL_1_PAGE_HASH)
-                .foundAt(LocalDateTime.now())
-                .build();
+    public static Page page1() {
+        return Page.builder()
+            .url(URL_1)
+            .urlHash(URL_1_HASH)
+            .hash(URL_1_PAGE_HASH)
+            .foundAt(LocalDateTime.now())
+            .build();
     }
 
-    public static URL url2() {
-        return URL.builder()
-                .value(URL_2)
-                .urlHash(URL_2_HASH)
-                .pageHash(URL_2_PAGE_HASH)
-                .foundAt(LocalDateTime.now())
-                .build();
+    public static Page page2() {
+        return Page.builder()
+            .url(URL_2)
+            .urlHash(URL_2_HASH)
+            .hash(URL_2_PAGE_HASH)
+            .foundAt(LocalDateTime.now())
+            .build();
     }
 
-    public static URL changedUrl1() {
-        return URL.builder()
-                .value(URL_1)
-                .urlHash(URL_1_HASH)
-                .pageHash(URL_1_CHANGED_PAGE_HASH)
-                .foundAt(LocalDateTime.now())
-                .build();
+    public static Page changedPage1() {
+        return Page.builder()
+            .url(URL_1)
+            .urlHash(URL_1_HASH)
+            .hash(URL_1_CHANGED_PAGE_HASH)
+            .foundAt(LocalDateTime.now())
+            .build();
     }
 
-    public static URLDto urlDto1() {
-        return URLDto.builder()
-                .urlHash(URL_1_HASH)
-                .pageHash(URL_1_PAGE_HASH)
-                .foundAt(LocalDateTime.now())
-                .build();
-    }
-
-    public static URLDto urlDto2() {
-        return URLDto.builder()
-                .urlHash(URL_2_HASH)
-                .pageHash(URL_2_PAGE_HASH)
-                .foundAt(LocalDateTime.now())
-                .build();
-    }
-
-    public static List<Runnable> getProcessors(
-            URLMessageSender messageSender,
-            URLRepository repository,
-            RepositoryURLMapper repositoryURLMapper,
-            MessageURLMapper messageURLMapper,
-            BlockingDeque<URL> urls
+    public static List<Processor> getProcessors(
+        PageMessageSender messageSender,
+        PageRepository repository,
+        BlockingDeque<Page> pages
     ) {
-        IntFunction<ProcessorImpl> processor = id ->
-                processor(id, messageSender, repository,
-                        repositoryURLMapper, messageURLMapper, urls);
+        IntFunction<Processor> processor = id ->
+            processor(id, messageSender, repository, pages);
 
         return IntStream.range(0, PROCESSORS_COUNT)
-                .mapToObj(processor)
-                .collect(Collectors.toList());
+            .mapToObj(processor)
+            .collect(Collectors.toList());
     }
 
-    private static ProcessorImpl processor(
-            int id,
-            URLMessageSender messageSender,
-            URLRepository repository,
-            RepositoryURLMapper repositoryURLMapper,
-            MessageURLMapper messageURLMapper,
-            BlockingDeque<URL> urls
-
+    private static Processor processor(
+        int id,
+        PageMessageSender messageSender,
+        PageRepository repository,
+        BlockingDeque<Page> pages
     ) {
-        return ProcessorImpl.builder()
-                .id(id)
-                .messageProducer(messageSender)
-                .repository(repository)
-                .messageURLMapper(messageURLMapper)
-                .repositoryURLMapper(repositoryURLMapper)
-                .urls(urls)
-                .build();
+        return Processor.builder()
+            .id(id)
+            .messageSender(messageSender)
+            .repository(repository)
+            .pages(pages)
+            .build();
     }
 }
