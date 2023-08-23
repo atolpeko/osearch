@@ -23,14 +23,14 @@ public class BackgroundExecutorFixture {
 
     private static List<Runnable> generateTasks(IntFunction<Runnable> taskSupplier, int count) {
         return IntStream.range(1, count + 1)
-                .mapToObj(taskSupplier)
-                .collect(Collectors.toList());
+            .mapToObj(taskSupplier)
+            .collect(Collectors.toList());
     }
 
     public static List<String> listModifyingTasksResult() {
         return IntStream.range(1, TASKS_COUNT + 1)
-                .mapToObj(i -> "TASK " + i + " FINISHED")
-                .collect(Collectors.toList());
+            .mapToObj(i -> "TASK " + i + " FINISHED")
+            .collect(Collectors.toList());
     }
 
     public static List<Runnable> endlessTasks() {

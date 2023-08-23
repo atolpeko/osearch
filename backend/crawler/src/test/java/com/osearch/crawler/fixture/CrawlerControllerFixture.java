@@ -10,15 +10,15 @@ public class CrawlerControllerFixture {
 
     public static List<String> initialUrls() {
         return List.of(
-                "https://www.youtube.com",
-                "https://www.baeldung.com/"
+            "https://www.youtube.com",
+            "https://www.baeldung.com/"
         );
     }
 
     public static String startRequestJson() {
         var urls = initialUrls().stream()
-                .map(str -> "\"" + str + "\"")
-                .collect(Collectors.toList());
+            .map(str -> "\"" + str + "\"")
+            .collect(Collectors.toList());
         var urlsJson = String.join(", ", urls);
         return "{ \"urls\": ["  + urlsJson + "]}";
     }

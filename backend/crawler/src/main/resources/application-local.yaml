@@ -11,7 +11,7 @@ spring:
       auto-offset-reset: latest
 kafka:
   url: localhost:9092
-  urlTopic: crawler-urls
+  pageTopic: crawler-pages
   requestTopic: crawler-request
   responseTopic: crawler-response
   groupId: crawler-group
@@ -29,13 +29,16 @@ management:
 service:
   crawlerThreadsCount: 6
   processorThreadsCount: 6
-  urlsToKeep: 20000
+  pagesToKeep: 20000
+  externalUrlRegex: "((http|https)://[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)"
+  invalidUrlRegex: ".*\\.(js|txt|json|csv|pdf|xml|mp3|mp4|avi|mov|zip|rar|exe|jpg|jpeg|gif|png|svg)$"
 rest:
   timeout: 10000
   maxRedirects: 5
   userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36
 swagger:
+  url: /swagger-ui/index.html
   title: Crawler API [LOCAL PROFILE]
-  description: The API allows you to start / stop this crawler service
-  version: "0.0.1"
-  controllersPackage: com.osearch.crawler.inout.web
+  description: This API allows you to start pages crawling
+  version: "1.2"
+  controllersPackage: com.osearch.crawler.adapter.in.rest
