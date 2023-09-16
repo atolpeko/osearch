@@ -22,8 +22,8 @@ public class RequestMessageListener {
     private final InMessagingProperties properties;
 
     @KafkaListener(
-        topics = "#{inMessagingProperties.getTopic()}",
-        groupId = "#{inMessagingProperties.getGroupId()}"
+        topics = "#{messagingProperties.getTopic()}",
+        groupId = "#{messagingProperties.getGroupId()}"
     )
     public void listen(String message) {
         try {

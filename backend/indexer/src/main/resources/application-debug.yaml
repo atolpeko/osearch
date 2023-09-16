@@ -10,10 +10,11 @@ neo4j:
   password: localneo
 kafka:
   url: localhost:9092
-  topic: crawler-pages
-  groupId: indexer-group
-service:
-  waitBeforeRequests: 3000
+  in:
+    topic: crawler-pages
+    groupId: indexer-group
+  out:
+    topic: indexer-pages
 logging:
   level:
     com.osearch.indexer: DEBUG

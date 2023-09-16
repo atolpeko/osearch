@@ -1,5 +1,6 @@
 package com.osearch.indexer.boot.config;
 
+import com.osearch.indexer.application.port.PageMessageSender;
 import com.osearch.indexer.application.port.PageRepository;
 import com.osearch.indexer.application.usecase.IndexerUseCase;
 import com.osearch.indexer.application.usecase.IndexerUseCaseImpl;
@@ -14,8 +15,9 @@ public class UseCaseConfig {
     @Bean
     public IndexerUseCase indexerUseCase(
         ContentAnalyzer analyzer,
-        PageRepository repository
+        PageRepository repository,
+        PageMessageSender messageSender
     ) {
-        return new IndexerUseCaseImpl(analyzer, repository);
+        return new IndexerUseCaseImpl(analyzer, repository, messageSender);
     }
 }

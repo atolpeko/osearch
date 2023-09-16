@@ -8,6 +8,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.osearch.indexer.application.port.PageMessageSender;
 import com.osearch.indexer.application.usecase.IndexerUseCaseImpl;
 import com.osearch.indexer.application.port.PageRepository;
 import com.osearch.indexer.domain.analyzer.ContentAnalyzer;
@@ -32,6 +33,9 @@ class IndexerUseCaseImplTest {
     @Mock
     PageRepository repository;
 
+    @Mock
+    PageMessageSender messageSender;
+
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -43,5 +47,11 @@ class IndexerUseCaseImplTest {
     void shouldProcess() {
         target.process(request());
         verify(repository, times(1)).save(page());
+    }
+
+    @Test
+    void shouldMessageWhenProcess() {
+        target.process(request());
+        verify(messageSender, times(1)).send(page());
     }
 }

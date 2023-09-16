@@ -4,8 +4,6 @@ spring:
   kafka:
     consumer:
       auto-offset-reset: latest
-service:
-  waitBeforeRequests: 3000
 logging:
   level:
     com.osearch.indexer: INFO
