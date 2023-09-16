@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.osearch.indexer.application.exception.MessagingException;
 import com.osearch.indexer.application.port.PageMessageSender;
-import com.osearch.indexer.domain.entity.Page;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -19,11 +18,11 @@ public class PageMessageSenderImpl implements PageMessageSender {
     private final ObjectMapper objectMapper;
 
     @Override
-    public synchronized void send(Page page) {
+    public synchronized void send(long id) {
         var topic = properties.getOutTopic();
         try {
-            log.debug("Sending to kafka topic {}: {}", topic, page.getUrl());
-            var data = objectMapper.writeValueAsString(page.getUrl());
+            log.debug("Sending to kafka topic {}: {}", topic, id);
+            var data = objectMapper.writeValueAsString(id);
             kafkaTemplate.send(topic, data);
         } catch (Exception e) {
             var message = "Cannot send message to kafka topic "

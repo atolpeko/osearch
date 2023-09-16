@@ -1,9 +1,8 @@
 package com.osearch.indexer.adapter.out.messaging;
 
+import static com.osearch.indexer.fixture.PageMessageSenderFixture.ID;
 import static com.osearch.indexer.fixture.PageMessageSenderFixture.JSON;
 import static com.osearch.indexer.fixture.PageMessageSenderFixture.TOPIC;
-import static com.osearch.indexer.fixture.PageMessageSenderFixture.URL;
-import static com.osearch.indexer.fixture.PageMessageSenderFixture.page;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -45,19 +44,19 @@ class PageMessageSenderImplTest {
     void setUp() throws JsonProcessingException {
         MockitoAnnotations.initMocks(this);
         when(properties.getOutTopic()).thenReturn(TOPIC);
-        when(objectMapper.writeValueAsString(URL)).thenReturn(JSON);
+        when(objectMapper.writeValueAsString(ID)).thenReturn(JSON);
     }
 
     @Test
     void shouldSendPage() {
-        target.send(page());
+        target.send(ID);
         verify(kafkaTemplate, times(1)).send(TOPIC, JSON);
     }
 
     @Test
     void shouldThrowMessagingException() {
         when(kafkaTemplate.send(TOPIC, JSON)).thenThrow(RuntimeException.class);
-        assertThrows(MessagingException.class, () -> target.send(page()));
+        assertThrows(MessagingException.class, () -> target.send(ID));
     }
 
 }
