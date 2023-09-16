@@ -1,4 +1,4 @@
-package com.osearch.indexer.adapter.out;
+package com.osearch.indexer.adapter.out.repository;
 
 import com.osearch.indexer.application.port.PageRepository;
 import com.osearch.indexer.domain.entity.Keyword;

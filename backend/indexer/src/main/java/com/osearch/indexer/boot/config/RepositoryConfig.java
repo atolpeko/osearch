@@ -1,6 +1,6 @@
 package com.osearch.indexer.boot.config;
 
-import com.osearch.indexer.adapter.out.PageRepositoryImpl;
+import com.osearch.indexer.adapter.out.repository.PageRepositoryImpl;
 import com.osearch.indexer.application.port.PageRepository;
 
 import org.neo4j.driver.Driver;

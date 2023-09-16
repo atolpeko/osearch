@@ -1,32 +1,41 @@
 package com.osearch.indexer.boot.config.properties;
 
 import com.osearch.indexer.adapter.in.InMessagingProperties;
+import com.osearch.indexer.adapter.out.messaging.OutMessagingProperties;
 
 import lombok.Getter;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-@Component(value = "inMessagingProperties")
-public class KafkaProperties implements InMessagingProperties {
+@Component(value = "messagingProperties")
+public class KafkaProperties implements InMessagingProperties, OutMessagingProperties {
 
     @Getter
     @Value("${kafka.url}")
     private String url;
 
-    @Value("${kafka.groupId}")
+    @Value("${kafka.in.groupId}")
     private String groupId;
 
-    @Value("${kafka.topic}")
-    private String topic;
+    @Value("${kafka.in.topic}")
+    private String inTopic;
+
+    @Value("${kafka.out.topic}")
+    private String outTopic;
 
     @Override
     public String getTopic() {
-        return topic;
+        return inTopic;
     }
 
     @Override
     public String getGroupId() {
         return groupId;
+    }
+
+    @Override
+    public String getOutTopic() {
+        return outTopic;
     }
 }
