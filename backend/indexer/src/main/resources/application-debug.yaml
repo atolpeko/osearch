@@ -15,8 +15,6 @@ kafka:
     groupId: indexer-group
   out:
     topic: indexer-pages
-service:
-  waitBeforeRequests: 3000
 logging:
   level:
     com.osearch.indexer: DEBUG
