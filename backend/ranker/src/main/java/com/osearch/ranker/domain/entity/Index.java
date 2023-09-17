@@ -1,6 +1,5 @@
 package com.osearch.ranker.domain.entity;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import lombok.AllArgsConstructor;
@@ -16,8 +15,7 @@ public class Index {
     private String keywords;
     private Set<Page> pages;
 
-    public Index(Index other) {
-        keywords = other.getKeywords();
-        pages = new HashSet<>(other.pages);
+    public void addPage(Page page) {
+        pages.add(page);
     }
 }
