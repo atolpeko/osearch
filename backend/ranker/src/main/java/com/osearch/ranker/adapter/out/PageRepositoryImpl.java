@@ -6,6 +6,7 @@ import com.osearch.ranker.domain.entity.Page;
 
 import java.time.Duration;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -33,13 +34,14 @@ public class PageRepositoryImpl implements PageRepository {
                     + "(p)-[h:HAS]->(k:Keyword) "
                     + "WHERE ID(p) = $id "
                     + "RETURN p as page, "
+                    + "ID(p) as page_id, "
                     + "COLLECT(rp) as referred, "
                     + "COLLECT(k.value) as keywords, "
                     + "COLLECT(h.occurrences) as occurrences";
 
                 var result = transaction.run(query, Values.parameters("id", id));
                 if (result.hasNext()) {
-                    return Optional.of(mapResult(result.single()));
+                    return mapResult(result.single());
                 } else {
                     return Optional.empty();
                 }
@@ -47,9 +49,15 @@ public class PageRepositoryImpl implements PageRepository {
         }
     }
 
-    private Page mapResult(Record record) {
+    private Optional<Page> mapResult(Record record) {
+        var page = mapPage(record);
+        if (page == null) {
+            return Optional.empty();
+        }
+
         var referred = record.get("referred").asList(Value::asNode).stream()
-            .map(this::mapPage)
+            .map(this::mapReferredPage)
+            .filter(Objects::nonNull)
             .collect(Collectors.toSet());
         var keywordValues = record.get("keywords").asList(Value::asString);
         var occurrences = record.get("occurrences").asList(Value::asLong);
@@ -57,24 +65,38 @@ public class PageRepositoryImpl implements PageRepository {
             .mapToObj(i -> new Keyword(keywordValues.get(i), occurrences.get(i)))
             .collect(Collectors.toSet());
 
-        var page = mapPage(record.get("page").asNode());
+
         page.setKeywords(keywords);
         page.setReferredPages(new HashSet<>(referred));
-        return page;
+        return Optional.of(page);
     }
 
-    private Page mapPage(Node node) {
+    private Page mapPage(Record record) {
+        var isIndexed = record.get("page").get("isIndexed").asBoolean();
+        if (!isIndexed) {
+            return null;
+        }
+
+        var loadTime = Duration.ofNanos(record.get("page").asNode()
+            .get("loadTime").asIsoDuration().nanoseconds());
+        return Page.builder()
+            .sourceId(record.get("page_id").asLong())
+            .url(record.get("page").asNode().get("url").asString())
+            .title(record.get("page").asNode().get("title").asString())
+            .loadTime(loadTime)
+            .isIndexed(true)
+            .build();
+    }
+
+    private Page mapReferredPage(Node node) {
         var isIndexed = node.get("isIndexed").asBoolean();
         if (!isIndexed) {
-          return Page.builder().url(node.get("url").asString()).build();
+          return null;
         }
 
         return Page.builder()
             .url(node.get("url").asString())
-            .title(node.get("title").asString())
-            .loadTime(Duration.ofNanos(node.get("loadTime").asIsoDuration().nanoseconds()))
             .isIndexed(true)
             .build();
-
     }
 }

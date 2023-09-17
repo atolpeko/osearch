@@ -1,6 +1,8 @@
 package com.osearch.ranker.application.port;
 
 import com.osearch.ranker.domain.entity.Index;
+import com.osearch.ranker.domain.entity.Page;
+
 import java.util.Optional;
 
 /**
@@ -23,4 +25,14 @@ public interface IndexRepository {
      * @param index  index to save
      */
     void save(Index index);
+
+    /**
+     * Retrieves the page specified by the index and page URL.
+     *
+     * @param index    the index to retrieve the page from
+     * @param pageUrl  the URL of the page to retrieve
+     *
+     * @return an optional containing the retrieved page if it exists, otherwise an empty optional
+     */
+    Optional<Page> getPage(String index, String pageUrl);
 }

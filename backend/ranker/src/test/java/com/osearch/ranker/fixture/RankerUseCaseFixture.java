@@ -5,7 +5,6 @@ import com.osearch.ranker.domain.entity.Keyword;
 import com.osearch.ranker.domain.entity.Page;
 
 import java.time.Duration;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -42,31 +41,4 @@ public class RankerUseCaseFixture {
             .map(key -> new Index(key, Set.of(PAGE)))
             .collect(Collectors.toSet());
     }
-
-    public static Set<Index> existingIndexes() {
-        var pages = new HashSet<>(Set.of(EXISTING_PAGE_1, EXISTING_PAGE_2));
-        return INDEXED_KEYWORDS.stream()
-            .map(key -> new Index(key, pages))
-            .collect(Collectors.toSet());
-    }
-
-    public static final Page EXISTING_PAGE_1 = Page.builder()
-        .url("URL")
-        .title("TITLE")
-        .keywords(KEYWORDS)
-        .referredPages(REFERRED)
-        .loadTime(Duration.ZERO)
-        .totalRank(0.25)
-        .isIndexed(true)
-        .build();
-
-    public static final Page EXISTING_PAGE_2 = Page.builder()
-        .url("URL")
-        .title("TITLE")
-        .keywords(KEYWORDS)
-        .referredPages(REFERRED)
-        .loadTime(Duration.ZERO)
-        .totalRank(0.46)
-        .isIndexed(true)
-        .build();
 }

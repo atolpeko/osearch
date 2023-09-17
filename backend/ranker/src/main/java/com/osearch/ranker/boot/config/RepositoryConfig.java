@@ -4,6 +4,7 @@ import com.osearch.ranker.adapter.out.IndexRepositoryImpl;
 import com.osearch.ranker.adapter.out.PageRepositoryImpl;
 import com.osearch.ranker.adapter.out.jpa.IndexDtoJpaRepository;
 import com.osearch.ranker.adapter.out.mapper.IndexMapper;
+import com.osearch.ranker.adapter.out.mapper.PageMapper;
 import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
 
@@ -23,8 +24,9 @@ public class RepositoryConfig {
     @Bean
     public IndexRepository indexRepository(
         IndexDtoJpaRepository jpaRepository,
-        IndexMapper mapper
+        IndexMapper indexMapper,
+        PageMapper pageMapper
     ) {
-        return new IndexRepositoryImpl(jpaRepository, mapper);
+        return new IndexRepositoryImpl(jpaRepository, indexMapper, pageMapper);
     }
 }

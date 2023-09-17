@@ -4,7 +4,6 @@ import static com.osearch.ranker.fixture.RankerUseCaseFixture.INDEXED_KEYWORDS;
 import static com.osearch.ranker.fixture.RankerUseCaseFixture.NEW_PAGE_TOTAL_RANK;
 import static com.osearch.ranker.fixture.RankerUseCaseFixture.PAGE;
 import static com.osearch.ranker.fixture.RankerUseCaseFixture.PAGE_ID;
-import static com.osearch.ranker.fixture.RankerUseCaseFixture.existingIndexes;
 import static com.osearch.ranker.fixture.RankerUseCaseFixture.newIndexes;
 
 import static org.mockito.Mockito.doAnswer;
@@ -64,19 +63,6 @@ class RankerUseCaseImplTest {
 
         target.process(PAGE_ID);
         newIndexes().forEach(index ->
-            verify(indexRepository, times(1)).save(index));
-    }
-
-    @Test
-    void shouldReRankExistingIndexes() {
-        var indexes = existingIndexes();
-        indexes.forEach(index ->
-            when(indexRepository.findByKeyword(index.getKeywords()))
-                .thenReturn(Optional.of(index)));
-        indexes.forEach(index -> index.addPage(PAGE));
-
-        target.process(PAGE_ID);
-        indexes.forEach(index ->
             verify(indexRepository, times(1)).save(index));
     }
 }

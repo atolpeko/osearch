@@ -37,7 +37,7 @@ public class KeywordRanker implements Ranker {
     }
 
     private long countOccurrences(Set<Keyword> keywords, String keywordsStr) {
-        return  keywords.stream()
+        return keywords.stream()
             .filter(keyword -> keyword.getValue().equals(keywordsStr))
             .findFirst()
             .map(Keyword::getOccurrences)

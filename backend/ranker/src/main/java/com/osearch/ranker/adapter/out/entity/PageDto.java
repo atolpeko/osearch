@@ -1,5 +1,7 @@
 package com.osearch.ranker.adapter.out.entity;
 
+import java.util.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,16 +10,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
 @Entity
+@Getter
+@Setter
 @Table(name = "pages")
 public class PageDto {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(name = "source_id", nullable = false)
+    private Long sourceId;
 
     @Column(nullable = false)
     private String url;
@@ -28,4 +35,32 @@ public class PageDto {
     @ManyToOne
     @JoinColumn(name = "index_key", nullable = false)
     private IndexDto index;
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+        if (object == null || getClass() != object.getClass()) {
+            return false;
+        }
+        var pageDto = (PageDto) object;
+        return Objects.equals(id, pageDto.id)
+            && Objects.equals(url, pageDto.url)
+            && Objects.equals(rank, pageDto.rank);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, url, rank);
+    }
+
+    @Override
+    public String toString() {
+        return "PageDto{" +
+            "id=" + id +
+            ", url='" + url + '\'' +
+            ", rank=" + rank +
+            '}';
+    }
 }

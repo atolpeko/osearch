@@ -5,6 +5,7 @@ import static com.osearch.ranker.util.DurationLogger.withDurationLog;
 import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
 import com.osearch.ranker.domain.entity.Index;
+import com.osearch.ranker.domain.entity.Page;
 import com.osearch.ranker.domain.service.indexer.Indexer;
 import com.osearch.ranker.domain.service.ranker.RankerService;
 
@@ -42,18 +43,52 @@ public class RankerUseCaseImpl implements RankerUseCase {
             .orElseThrow(() -> new RuntimeException("Page " + id + " is not indexed yet"));
         var indexes = indexer.index(page);
         for (var index: indexes) {
+            Index newIndex;
             var existingIndex = indexRepository.findByKeyword(index);
-            var newIndex = existingIndex.orElseGet(() ->
-                Index.builder()
+            if (existingIndex.isPresent()) {
+                newIndex = existingIndex.get();
+                loadPages(newIndex);
+            } else {
+                newIndex = Index.builder()
                     .keywords(index)
                     .pages(new HashSet<>())
-                    .build());
-            newIndex.addPage(page);
+                    .build();
+            }
 
+            newIndex.addPage(page);
+            loadReferredPages(newIndex);
             rankerService.rank(newIndex);
 
             log.debug("Saving index: {}", index);
             indexRepository.save(newIndex);
+        }
+    }
+
+    private void loadPages(Index index) {
+        var pages = index.getPages();
+        var toRemove = new HashSet<Page>();
+        for (var page: pages) {
+            var data = pageRepository.findById(page.getSourceId());
+            if (data.isEmpty()) {
+                toRemove.add(page);
+                continue;
+            }
+
+            page.setTitle(data.get().getTitle());
+            page.setKeywords(data.get().getKeywords());
+            page.setReferredPages(data.get().getReferredPages());
+            page.setLoadTime(data.get().getLoadTime());
+        }
+
+        pages.removeAll(toRemove);
+    }
+
+    private void loadReferredPages(Index index) {
+        for (var page: index.getPages()) {
+            for (var referred: page.getReferredPages()) {
+                var saved = indexRepository.getPage(index.getKeywords(), referred.getUrl());
+                saved.ifPresent(value -> referred.setTotalRank(value.getTotalRank()));
+            }
         }
     }
 }
