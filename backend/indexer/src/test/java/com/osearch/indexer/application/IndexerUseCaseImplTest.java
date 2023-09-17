@@ -52,6 +52,6 @@ class IndexerUseCaseImplTest {
     @Test
     void shouldMessageWhenProcess() {
         target.process(request());
-        verify(messageSender, times(1)).send(page());
+        verify(messageSender, times(1)).send(ID);
     }
 }
