@@ -5,6 +5,11 @@ spring:
     url: jdbc:mysql://localhost:3306/indexes?createDatabaseIfNotExist=true
     username: root
     password: localmy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
   kafka:
     consumer:
       auto-offset-reset: latest
@@ -18,14 +23,14 @@ kafka:
   groupId: ranker-group
 rank:
   pageRankIterations: 20
-  pageRankDumpingFactor: 0.85
+  pageRankDampingFactor: 0.85
   keywordRankWeight: 0.5
   pageRankWeight: 0.3
   metaRankWeight: 0.2
 logging:
   level:
     org.springframework.data.neo4j.cypher: ERROR
-    com.osearch.indexer: INFO
+    com.osearch.ranker: INFO
 management:
   endpoint:
     health:
