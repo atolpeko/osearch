@@ -1,13 +1,14 @@
 package com.osearch.crawler.fixture;
 
-import com.osearch.crawler.service.http.entity.Response;
+import com.osearch.crawler.adapter.out.http.HttpResponseEntity;
+import com.osearch.crawler.application.port.entity.HttpResponse;
+
 import java.net.URI;
 import java.time.Duration;
 
 public class HttpServiceFixture {
     public static final String URL = "https://stackoverflow.com/questions/";
     public static final Integer MAX_REDIRECTS = 3;
-
     public static final String REDIRECT_URL = "https://stackoverflow.com/questions/1";
     public static final URI REDIRECT_URI = URI.create(REDIRECT_URL);
 
@@ -24,11 +25,11 @@ public class HttpServiceFixture {
 
     public static final String JSON = "{ }";
 
-    public static Response response() {
-        return Response.builder()
-                .url(URL)
-                .content(HTML)
-                .loadTime(LOAD_TIME)
-                .build();
+    public static HttpResponse response() {
+        return HttpResponseEntity.builder()
+            .url(URL)
+            .content(HTML)
+            .loadTime(LOAD_TIME)
+            .build();
     }
 }
