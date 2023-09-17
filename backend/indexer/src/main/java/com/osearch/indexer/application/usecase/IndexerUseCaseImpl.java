@@ -35,8 +35,8 @@ public class IndexerUseCaseImpl implements IndexerUseCase {
     private void processRequest(IndexRequest request) {
         var page = analyzer.analyze(request);
         page.setNestedUrls(request.getNestedUrls());
-        repository.save(page);
-        messageSender.send(page);
+        var id = repository.save(page);
+        messageSender.send(id);
     }
 
     private String formatDuration(Duration duration) {
