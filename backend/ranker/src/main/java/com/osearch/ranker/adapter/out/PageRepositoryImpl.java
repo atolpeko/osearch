@@ -1,6 +1,7 @@
 package com.osearch.ranker.adapter.out;
 
 import com.osearch.ranker.application.port.PageRepository;
+import com.osearch.ranker.application.port.exception.DataAccessException;
 import com.osearch.ranker.domain.entity.Keyword;
 import com.osearch.ranker.domain.entity.Page;
 
@@ -46,6 +47,8 @@ public class PageRepositoryImpl implements PageRepository {
                     return Optional.empty();
                 }
             });
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage(), e);
         }
     }
 

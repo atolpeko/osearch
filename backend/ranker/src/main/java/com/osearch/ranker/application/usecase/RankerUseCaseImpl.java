@@ -4,6 +4,7 @@ import static com.osearch.ranker.util.DurationLogger.withDurationLog;
 
 import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
+import com.osearch.ranker.application.port.exception.DataAccessException;
 import com.osearch.ranker.domain.entity.Index;
 import com.osearch.ranker.domain.entity.Page;
 import com.osearch.ranker.domain.service.indexer.Indexer;
@@ -33,6 +34,8 @@ public class RankerUseCaseImpl implements RankerUseCase {
             };
 
             withDurationLog(task, "Page with ID " + pageId + " processed", Level.INFO);
+        } catch (DataAccessException e) {
+            log.error("Page {} processing error. DB not available. {}", pageId, e.getMessage());
         } catch (Exception e) {
             log.error("Page {} processing error: {}", pageId, e.getMessage());
         }
