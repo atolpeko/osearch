@@ -2,9 +2,6 @@ package com.osearch.ranker.boot.config;
 
 import com.osearch.ranker.adapter.out.IndexRepositoryImpl;
 import com.osearch.ranker.adapter.out.PageRepositoryImpl;
-import com.osearch.ranker.adapter.out.jpa.IndexDtoJpaRepository;
-import com.osearch.ranker.adapter.out.mapper.IndexMapper;
-import com.osearch.ranker.adapter.out.mapper.PageMapper;
 import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
 
@@ -12,6 +9,7 @@ import org.neo4j.driver.Driver;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 @Configuration
 public class RepositoryConfig {
@@ -22,11 +20,7 @@ public class RepositoryConfig {
     }
 
     @Bean
-    public IndexRepository indexRepository(
-        IndexDtoJpaRepository jpaRepository,
-        IndexMapper indexMapper,
-        PageMapper pageMapper
-    ) {
-        return new IndexRepositoryImpl(jpaRepository, indexMapper, pageMapper);
+    public IndexRepository indexRepository(JdbcTemplate template) {
+        return new IndexRepositoryImpl(template);
     }
 }
