@@ -1,6 +1,8 @@
 package com.osearch.ranker.adapter.out;
 
 import com.osearch.ranker.application.port.IndexRepository;
+import com.osearch.ranker.application.port.exception.DataAccessException;
+import com.osearch.ranker.application.port.exception.DataModificationException;
 import com.osearch.ranker.domain.entity.Index;
 import com.osearch.ranker.domain.entity.Page;
 
@@ -14,6 +16,7 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
@@ -50,13 +53,21 @@ public class IndexRepositoryImpl implements IndexRepository {
             return Optional.of(index);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage(), e);
         }
     }
 
     @Override
     public void save(Index index) {
-        var id = saveIndex(index);
-        savePages(index.getPages(), id);
+        try {
+            var id = saveIndex(index);
+            savePages(index.getPages(), id);
+        } catch (DuplicateKeyException e) {
+            throw new DataModificationException(e.getMessage(), e);
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage(), e);
+        }
     }
 
     private long saveIndex(Index index) {
