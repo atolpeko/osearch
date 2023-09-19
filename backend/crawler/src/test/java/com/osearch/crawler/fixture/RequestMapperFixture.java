@@ -9,52 +9,37 @@ import java.util.stream.Collectors;
 public class RequestMapperFixture {
 
     public static String startRequestJson() {
-        var urls = initialUrls().stream()
+        var urls = INITIAL_URLS.stream()
             .map(str -> "\"" + str + "\"")
             .collect(Collectors.toList());
         var urlsJson = String.join(", ", urls);
         return "{ \"operation\":\"START\" \"urls\": ["  + urlsJson + "]}";
     }
 
-    public static Request startRequest() {
-        return Request.builder()
-            .operation(Operation.START)
-            .urls(initialUrls())
-            .build();
-    }
-
-    public static List<String> initialUrls() {
-        return List.of(
+    public static final List<String> INITIAL_URLS =
+        List.of(
             "https://www.youtube.com",
             "https://www.baeldung.com/"
         );
-    }
 
-    public static String stopRequestJson() {
-        return "{ \"operation\":\"STOP\" }";
-    }
+    public static final Request START_REQUEST =
+        Request.builder()
+            .operation(Operation.START)
+            .urls(INITIAL_URLS)
+            .build();
 
-    public static Request stopRequest() {
-        return Request.builder()
+    public static final Request STOP_REQUEST =
+        Request.builder()
             .operation(Operation.STOP)
             .build();
-    }
 
-    public static String invalidStartRequestJson() {
-        return "{ \"operation\":\"START\" }";
-    }
-
-    public static Request invalidStartRequest() {
-        return Request.builder()
+    public static final Request INVALID_START_REQUEST =
+        Request.builder()
             .operation(Operation.START)
             .build();
-    }
 
-    public static String invalidRequestJson() {
-        return "{  }";
-    }
-
-    public static Request invalidStopRequest() {
-        return Request.builder().build();
-    }
+    public static final Request INVALID_STOP_REQUEST = Request.builder().build();
+    public static final String STOP_REQUEST_JSON = "{ \"operation\":\"STOP\" }";
+    public static final String INVALID_START_REQUEST_JSON = "{ \"operation\":\"START\" }";
+    public static final String INVALID_STOP_REQUEST_JSON = "{  }";
 }

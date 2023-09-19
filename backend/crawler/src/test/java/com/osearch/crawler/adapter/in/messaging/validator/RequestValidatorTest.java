@@ -1,10 +1,11 @@
 package com.osearch.crawler.adapter.in.messaging.validator;
 
-import static com.osearch.crawler.fixture.RequestValidatorFixture.invalidStartRequest;
-import static com.osearch.crawler.fixture.RequestValidatorFixture.invalidStopRequest;
-import static com.osearch.crawler.fixture.RequestValidatorFixture.validStartRequest;
-import static com.osearch.crawler.fixture.RequestValidatorFixture.validStopRequest;
-
+import static com.osearch.crawler.fixture.RequestValidatorFixture.INVALID_STOP_REQUEST;
+import static com.osearch.crawler.fixture.RequestValidatorFixture.START_REQUEST_BLANK_URLS;
+import static com.osearch.crawler.fixture.RequestValidatorFixture.START_REQUEST_INVALID_URLS;
+import static com.osearch.crawler.fixture.RequestValidatorFixture.START_REQUEST_NO_URLS;
+import static com.osearch.crawler.fixture.RequestValidatorFixture.VALID_START_REQUEST;
+import static com.osearch.crawler.fixture.RequestValidatorFixture.VALID_STOP_REQUEST;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -22,26 +23,38 @@ class RequestValidatorTest {
     }
 
     @Test
-    void shouldReturnTrueWhenStartRequestIsValid() {
-        var valid = target.isValid(validStartRequest());
-        assertTrue(valid);
+    void shouldReturnEmptySetWhenStartRequestIsValid() {
+        var violations = target.validate(VALID_START_REQUEST);
+        assertTrue(violations.isEmpty());
     }
 
     @Test
-    void shouldReturnTrueWhenStopRequestIsValid() {
-        var valid = target.isValid(validStopRequest());
-        assertTrue(valid);
+    void shouldReturnEmptySetWhenStopRequestIsValid() {
+        var violations = target.validate(VALID_STOP_REQUEST);
+        assertTrue(violations.isEmpty());
     }
 
     @Test
-    void shouldReturnFalseWhenStartRequestIsInvalid() {
-        var invalid = target.isValid(invalidStartRequest());
-        assertFalse(invalid);
+    void shouldReturnViolationsWhenStartRequestHasNoUrl() {
+        var violations = target.validate(START_REQUEST_NO_URLS);
+        assertFalse(violations.isEmpty());
     }
 
     @Test
-    void shouldReturnFalseWhenStopRequestIsInvalid() {
-        var invalid = target.isValid(invalidStopRequest());
-        assertFalse(invalid);
+    void shouldReturnViolationsWhenStartRequestHasBlankUrl() {
+        var violations = target.validate(START_REQUEST_BLANK_URLS);
+        assertFalse(violations.isEmpty());
+    }
+
+    @Test
+    void shouldReturnViolationsWhenStartRequestHasInvalidUrl() {
+        var violations = target.validate(START_REQUEST_INVALID_URLS);
+        assertFalse(violations.isEmpty());
+    }
+
+    @Test
+    void shouldReturnViolationsWhenStopRequestIsInvalid() {
+        var violations = target.validate(INVALID_STOP_REQUEST);
+        assertFalse(violations.isEmpty());
     }
 }
