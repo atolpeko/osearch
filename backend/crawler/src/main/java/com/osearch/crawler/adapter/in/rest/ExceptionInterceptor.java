@@ -39,12 +39,12 @@ public class ExceptionInterceptor {
     }
 
     @ExceptionHandler(CrawlerAlreadyRunningException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     public JsonErrorMessage handleCrawlerAlreadyRunningException(
         CrawlerAlreadyRunningException e,
         HttpServletRequest request
     ) {
-        return handleException(e.getMessage(), request, HttpStatus.BAD_REQUEST);
+        return handleException(e.getMessage(), request, HttpStatus.EXPECTATION_FAILED);
     }
 
     private JsonErrorMessage handleException(String msg, HttpServletRequest request, HttpStatus status) {
@@ -63,16 +63,16 @@ public class ExceptionInterceptor {
     }
 
     @ExceptionHandler(CrawlerNotRunningException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
     public JsonErrorMessage handleCrawlerNotRunningException(
         CrawlerNotRunningException e,
         HttpServletRequest request
     ) {
-        return handleException(e.getMessage(), request, HttpStatus.BAD_REQUEST);
+        return handleException(e.getMessage(), request, HttpStatus.EXPECTATION_FAILED);
     }
 
     @ExceptionHandler(ServiceException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public JsonErrorMessage handleServiceException(
         ServiceException e,
         HttpServletRequest request

@@ -8,15 +8,15 @@ public class CrawlerControllerFixture {
     public static final String STOP_URL = "/crawler/stop";
     public static final String IS_RUNNING_URL = "/crawler/running";
 
-    public static List<String> initialUrls() {
-        return List.of(
+    public static final List<String> INITIAL_URLS =
+        List.of(
             "https://www.youtube.com",
             "https://www.baeldung.com/"
         );
-    }
+
 
     public static String startRequestJson() {
-        var urls = initialUrls().stream()
+        var urls = INITIAL_URLS.stream()
             .map(str -> "\"" + str + "\"")
             .collect(Collectors.toList());
         var urlsJson = String.join(", ", urls);

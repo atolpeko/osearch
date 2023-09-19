@@ -1,9 +1,9 @@
 package com.osearch.crawler.adapter.in.rest.controller;
 
+import static com.osearch.crawler.fixture.CrawlerControllerFixture.INITIAL_URLS;
 import static com.osearch.crawler.fixture.CrawlerControllerFixture.IS_RUNNING_URL;
 import static com.osearch.crawler.fixture.CrawlerControllerFixture.START_URL;
 import static com.osearch.crawler.fixture.CrawlerControllerFixture.STOP_URL;
-import static com.osearch.crawler.fixture.CrawlerControllerFixture.initialUrls;
 import static com.osearch.crawler.fixture.CrawlerControllerFixture.startRequestJson;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -60,19 +60,19 @@ class CrawlerControllerTest {
 
     @Test
     void shouldNotStartCrawlerWhenItsRunning() throws Exception {
-        useCase.start(initialUrls());
+        useCase.start(INITIAL_URLS);
         mvc.perform(post(START_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(startRequestJson()))
             .andDo(print())
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isExpectationFailed());
 
         assertTrue(useCase.isRunning());
     }
 
     @Test
     void shouldStopCrawler() throws Exception {
-        useCase.start(initialUrls());
+        useCase.start(INITIAL_URLS);
         mvc.perform(delete(STOP_URL))
             .andDo(print())
             .andExpect(status().isOk());
@@ -84,14 +84,14 @@ class CrawlerControllerTest {
     void shouldNotStopCrawlerWhenItsNotRunning() throws Exception {
         mvc.perform(delete(STOP_URL))
             .andDo(print())
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isExpectationFailed());
 
         assertFalse(useCase.isRunning());
     }
 
     @Test
     void shouldReturnRunningTrueWhenCrawlerIsRunning() throws Exception {
-        useCase.start(initialUrls());
+        useCase.start(INITIAL_URLS);
         mvc.perform(get(IS_RUNNING_URL))
             .andDo(print())
             .andExpect(status().isOk())

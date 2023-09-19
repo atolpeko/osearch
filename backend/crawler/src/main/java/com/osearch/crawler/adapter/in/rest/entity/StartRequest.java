@@ -11,8 +11,11 @@ import javax.validation.constraints.NotEmpty;
 
 import lombok.Data;
 
+/**
+ * The StartRequest class represents a crawler start request entity.
+ */
 @Data
-@ApiModel(description = "Crawler start request entity")
+@ApiModel(value = "StartRequest", description = "Crawler start request entity")
 public class StartRequest {
 
     @ApiModelProperty(
