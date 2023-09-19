@@ -137,6 +137,13 @@
         </dependency>
 
 
+        <!--Jackson Object mapper-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+
+
         <!--Test-->
         <dependency>
             <groupId>org.awaitility</groupId>
