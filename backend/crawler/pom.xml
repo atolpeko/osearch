@@ -19,6 +19,7 @@
         <mongo-connector.version>3.12.13</mongo-connector.version>
         <swagger.version>3.0.0</swagger.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
+        <maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
     </properties>
 
     <dependencies>
@@ -200,6 +201,23 @@
             </plugin>
 
 
+            <!-- Site -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven-javadoc-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>site</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+
             <!-- Run -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -207,4 +225,14 @@
             </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.6.0</version>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

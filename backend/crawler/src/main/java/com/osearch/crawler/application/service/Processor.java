@@ -11,13 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * <p>
  * {@link Crawler} and {@link Processor} implement producer-consumer design pattern.
  * While Crawler looks for new pages Processor processes them.
- * <p/>
+ * </p>
  *
  * The Processor is a class that processes crawled web pages.
- * <p/>
- *
  * It uses 'pages' blocking deque to process pages that have been crawled by
  * Crawler.
  */

@@ -17,13 +17,12 @@ import lombok.Builder;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * <p>
  * {@link Crawler} and {@link Processor} implement producer-consumer design pattern.
  * While Crawler looks for new pages Processor processes them.
- * <p/>
+ * </p>
  *
  * The Crawler class represents a web crawler that searches for web pages.
- * <p/>
- *
  * It uses 'pagesToSave' blocking deque to save found pages for processing and
  * 'pagesToCrawl' blocking deque to save recursively found pages for later crawling.
  */
