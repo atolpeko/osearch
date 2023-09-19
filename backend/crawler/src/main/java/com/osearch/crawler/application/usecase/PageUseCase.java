@@ -2,12 +2,17 @@ package com.osearch.crawler.application.usecase;
 
 import com.osearch.crawler.application.usecase.exception.PageServiceException;
 
+/**
+ * A use case class for counting the number of processed pages.
+ */
 public interface PageUseCase {
 
     /**
-     * @return the number of processed pages
+     * Returns the number of processed pages.
      *
-     * @throws PageServiceException  if any error happens
+     * @return the count of processed pages.
+     *
+     * @throws PageServiceException  if any error happens.
      */
     long countProcessed();
 }

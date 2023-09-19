@@ -7,7 +7,7 @@ import static com.osearch.crawler.fixture.HttpServiceFixture.REDIRECT_URI;
 import static com.osearch.crawler.fixture.HttpServiceFixture.REDIRECT_URL;
 import static com.osearch.crawler.fixture.HttpServiceFixture.URL;
 
-import static com.osearch.crawler.fixture.HttpServiceFixture.response;
+import static com.osearch.crawler.fixture.HttpServiceFixture.RESPONSE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -67,7 +67,7 @@ class HttpServiceImplTest {
         when(headers.getContentType()).thenReturn(MediaType.TEXT_HTML);
 
         var response = target.get(URL);
-        assertEquals(response(), response);
+        assertEquals(RESPONSE, response);
     }
 
     @Test
@@ -75,14 +75,14 @@ class HttpServiceImplTest {
         when(restTemplate.getForEntity(URL, String.class)).thenReturn(response);
         when(restTemplate.getForEntity(REDIRECT_URL, String.class)).thenReturn(response);
         when(response.getStatusCode())
-                .thenReturn(HttpStatus.MULTIPLE_CHOICES)
-                .thenReturn(HttpStatus.OK);
+            .thenReturn(HttpStatus.MULTIPLE_CHOICES)
+            .thenReturn(HttpStatus.OK);
         when(response.getBody()).thenReturn(HTML);
         when(headers.getLocation()).thenReturn(REDIRECT_URI);
         when(headers.getContentType()).thenReturn(MediaType.TEXT_HTML);
 
         var response = target.get(URL);
-        assertEquals(response(), response);
+        assertEquals(RESPONSE, response);
     }
 
     @Test
@@ -108,7 +108,7 @@ class HttpServiceImplTest {
     @Test
     void shouldThrowHttpForbiddenExceptionWhenResponseIsForbidden() {
         when(restTemplate.getForEntity(URL, String.class))
-                .thenThrow(new HttpClientErrorException(HttpStatus.FORBIDDEN));
+            .thenThrow(new HttpClientErrorException(HttpStatus.FORBIDDEN));
 
         assertThrows(HttpForbiddenException.class, () -> target.get(URL));
     }
@@ -116,7 +116,7 @@ class HttpServiceImplTest {
     @Test
     void shouldThrowHttpToManyRequestsExceptionWhenResponseIsToManyRequest() {
         when(restTemplate.getForEntity(URL, String.class))
-                .thenThrow(new HttpClientErrorException(HttpStatus.TOO_MANY_REQUESTS));
+            .thenThrow(new HttpClientErrorException(HttpStatus.TOO_MANY_REQUESTS));
 
         assertThrows(HttpToManyRequestsException.class, () -> target.get(URL));
     }

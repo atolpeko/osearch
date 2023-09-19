@@ -13,6 +13,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
+/**
+ * Represents a page stored in Mongo.
+ */
 @Data
 @Builder
 @AllArgsConstructor

@@ -6,6 +6,7 @@ import static com.osearch.crawler.fixture.RequestValidatorFixture.START_REQUEST_
 import static com.osearch.crawler.fixture.RequestValidatorFixture.START_REQUEST_NO_URLS;
 import static com.osearch.crawler.fixture.RequestValidatorFixture.VALID_START_REQUEST;
 import static com.osearch.crawler.fixture.RequestValidatorFixture.VALID_STOP_REQUEST;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

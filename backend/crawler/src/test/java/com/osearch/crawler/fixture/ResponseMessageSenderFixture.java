@@ -11,18 +11,16 @@ public class ResponseMessageSenderFixture {
     public static final String RESPONSE_DESCRIPTION = "DESCRIPTION";
     public static final LocalDateTime REQUEST_TIME = LocalDateTime.now();
 
-    public static Response response() {
-        return Response.builder()
+    public static final Response RESPONSE =
+        Response.builder()
             .status(RESPONSE_STATUS)
             .description(RESPONSE_DESCRIPTION)
             .requestDateTime(REQUEST_TIME)
             .build();
-    }
 
-    public static String responseJson() {
-        return "{ status: " + RESPONSE_STATUS
+    public static final String RESPONSE_JSON =
+        "{ status: " + RESPONSE_STATUS
             + ", description: " + RESPONSE_DESCRIPTION
             + ", requestDateTime: " + REQUEST_TIME
             + "}";
-    }
 }

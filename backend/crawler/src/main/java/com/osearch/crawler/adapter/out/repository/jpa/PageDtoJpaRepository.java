@@ -10,18 +10,18 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 /**
- * Used to work with PageDto objects stored in mongo.
+ * Interface for manipulating PageDto objects in the database.
  */
 @Repository
 @Transactional
 public interface PageDtoJpaRepository extends MongoRepository<PageDto, String> {
 
     /**
-     * Find PageDto by its hash.
+     * Finds a page by its URL hash.
      *
-     * @param hash  URL hash of the PageDto to find
-     *
-     * @return optional of found PageDto or Optional.empty()
+     * @param hash The URL hash of the page to find.
+     * @return An Optional representing the PageDto found,
+     * or an empty Optional if no page was found.
      */
     Optional<PageDto> findByUrlHash(String hash);
 }

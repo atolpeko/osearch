@@ -11,8 +11,7 @@ public class HttpServiceFixture {
     public static final Integer MAX_REDIRECTS = 3;
     public static final String REDIRECT_URL = "https://stackoverflow.com/questions/1";
     public static final URI REDIRECT_URI = URI.create(REDIRECT_URL);
-
-    public static Duration LOAD_TIME = Duration.ofMillis(1000);
+    public static final Duration LOAD_TIME = Duration.ofMillis(1000);
 
     public static final String HTML =
             "<!doctype html>\n" +
@@ -25,11 +24,10 @@ public class HttpServiceFixture {
 
     public static final String JSON = "{ }";
 
-    public static HttpResponse response() {
-        return HttpResponseEntity.builder()
+    public static HttpResponse RESPONSE =
+        HttpResponseEntity.builder()
             .url(URL)
             .content(HTML)
             .loadTime(LOAD_TIME)
             .build();
-    }
 }

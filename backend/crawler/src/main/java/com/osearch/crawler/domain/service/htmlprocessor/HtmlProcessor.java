@@ -8,12 +8,12 @@ import java.util.List;
 public interface HtmlProcessor {
 
     /**
-     * FInd nestedUrls on HTML page.
+     * Find nested URLs on HTML page.
      *
-     * @param url          page URL
-     * @param htmlContent  page content
+     * @param url          page URL.
+     * @param htmlContent  page content.
      *
-     * @return all nested URLS
+     * @return a list of nested URLS
      */
     List<String> findNestedUrls(String url, String htmlContent);
 }

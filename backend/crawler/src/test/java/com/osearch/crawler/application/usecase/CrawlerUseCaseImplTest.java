@@ -1,6 +1,6 @@
 package com.osearch.crawler.application.usecase;
 
-import static com.osearch.crawler.fixture.CrawlerUseCaseFixture.initialUrls;
+import static com.osearch.crawler.fixture.CrawlerUseCaseFixture.INITIAL_URLS;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -63,7 +63,7 @@ class CrawlerUseCaseImplTest {
         doAnswer(i ->  when(target.isRunning()).thenReturn(true))
             .when(executor).execute(any());
 
-        target.start(initialUrls());
+        target.start(INITIAL_URLS);
         assertTrue(target.isRunning());
     }
 
@@ -74,7 +74,7 @@ class CrawlerUseCaseImplTest {
         doAnswer(i ->  when(target.isRunning()).thenReturn(false))
             .when(executor).stop();
 
-        target.start(initialUrls());
+        target.start(INITIAL_URLS);
         target.stop();
 
         assertFalse(target.isRunning());
@@ -85,8 +85,9 @@ class CrawlerUseCaseImplTest {
         doAnswer(i ->  when(target.isRunning()).thenReturn(true))
             .when(executor).execute(any());
 
-        target.start(initialUrls());
-        assertThrows(CrawlerAlreadyRunningException.class, () -> target.start(initialUrls()));
+        target.start(INITIAL_URLS);
+        assertThrows(CrawlerAlreadyRunningException.class,
+            () -> target.start(INITIAL_URLS));
     }
 
     @Test
@@ -97,6 +98,7 @@ class CrawlerUseCaseImplTest {
     @Test
     void shouldThrowExceptionWhenErrorHappens() {
         doThrow(RuntimeException.class).when(executor).execute(any());
-        assertThrows(CrawlerServiceException.class, () -> target.start(initialUrls()));
+        assertThrows(CrawlerServiceException.class,
+            () -> target.start(INITIAL_URLS));
     }
 }

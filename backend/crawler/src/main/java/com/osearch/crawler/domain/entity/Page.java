@@ -9,6 +9,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Core domain entity. Represents a web page.
+ */
 @Data
 @Builder
 @AllArgsConstructor

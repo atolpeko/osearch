@@ -1,13 +1,14 @@
 package com.osearch.crawler.application.service;
 
+import static com.osearch.crawler.fixture.ProcessorFixture.CHANGED_PAGE;
+import static com.osearch.crawler.fixture.ProcessorFixture.PAGE_1;
+import static com.osearch.crawler.fixture.ProcessorFixture.PAGE_2;
 import static com.osearch.crawler.fixture.ProcessorFixture.URL_1_HASH;
 import static com.osearch.crawler.fixture.ProcessorFixture.URL_2_HASH;
-import static com.osearch.crawler.fixture.ProcessorFixture.changedPage1;
 import static com.osearch.crawler.fixture.ProcessorFixture.getProcessors;
-import static com.osearch.crawler.fixture.ProcessorFixture.page1;
-import static com.osearch.crawler.fixture.ProcessorFixture.page2;
 
 import static org.awaitility.Awaitility.await;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -34,9 +35,9 @@ import org.mockito.MockitoAnnotations;
 
 @Tag("category.UnitTest")
 class ProcessorTest {
-    private BackgroundExecutor executor;
-    private List<Processor> processors;
-    private BlockingDeque<Page> pages;
+    BackgroundExecutor executor;
+    List<Processor> processors;
+    BlockingDeque<Page> pages;
 
     @Mock
     PageMessageSender messageSender;
@@ -57,12 +58,12 @@ class ProcessorTest {
     void shouldMessageUrlsWhenTheyAreNotProcessed() {
         when(repository.findByUrlHash(URL_1_HASH))
             .thenReturn(Optional.empty())
-            .thenReturn(Optional.of(page1()));
+            .thenReturn(Optional.of(PAGE_1));
         when(repository.findByUrlHash(URL_2_HASH))
             .thenReturn(Optional.empty())
-            .thenReturn(Optional.of(page2()));
+            .thenReturn(Optional.of(PAGE_2));
 
-        pages.addAll(List.of(page1(), page2(), page1(), page2()));
+        pages.addAll(List.of(PAGE_1, PAGE_2, PAGE_1, PAGE_2));
         executor.execute(processors);
         await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
 
@@ -72,11 +73,11 @@ class ProcessorTest {
     @Test
     void shouldMessageUrlsWhenPageChanged() {
         when(repository.findByUrlHash(URL_1_HASH))
-            .thenReturn(Optional.of(page1()));
+            .thenReturn(Optional.of(PAGE_1));
         when(repository.findByUrlHash(URL_2_HASH))
-            .thenReturn(Optional.of(page2()));
+            .thenReturn(Optional.of(PAGE_2));
 
-        pages.addAll(List.of(page1(), page2(), changedPage1(), page2()));
+        pages.addAll(List.of(PAGE_1, PAGE_2, CHANGED_PAGE, PAGE_2));
         executor.execute(processors);
         await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
 
@@ -86,11 +87,11 @@ class ProcessorTest {
     @Test
     void shouldNotMessageUrlsWhenTheyAreProcessed() {
         when(repository.findByUrlHash(URL_1_HASH))
-            .thenReturn(Optional.of(page1()));
+            .thenReturn(Optional.of(PAGE_1));
         when(repository.findByUrlHash(URL_2_HASH))
-            .thenReturn(Optional.of(page2()));
+            .thenReturn(Optional.of(PAGE_2));
 
-        pages.addAll(List.of(page1(), page2(), page1(), page2()));
+        pages.addAll(List.of(PAGE_1, PAGE_2, PAGE_1, PAGE_2));
         executor.execute(processors);
         await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
 

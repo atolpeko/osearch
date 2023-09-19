@@ -70,7 +70,7 @@ public class CrawlerUseCaseImpl implements CrawlerUseCase {
 
     private List<Runnable> getTasks() {
         return Stream.concat(getCrawlers(), getProcessors())
-                .collect(Collectors.toList());
+            .collect(Collectors.toList());
     }
 
     private Stream<Runnable> getCrawlers() {
@@ -99,7 +99,7 @@ public class CrawlerUseCaseImpl implements CrawlerUseCase {
                 .build();
 
         return IntStream.range(0, properties.getProcessorThreadsCount())
-                .mapToObj(processor);
+            .mapToObj(processor);
     }
 
     @Override

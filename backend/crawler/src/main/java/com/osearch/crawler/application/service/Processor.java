@@ -10,6 +10,17 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * {@link Crawler} and {@link Processor} implement producer-consumer design pattern.
+ * While Crawler looks for new pages Processor processes them.
+ * <p/>
+ *
+ * The Processor is a class that processes crawled web pages.
+ * <p/>
+ *
+ * It uses 'pages' blocking deque to process pages that have been crawled by
+ * Crawler.
+ */
 @Log4j2
 @Builder
 @RequiredArgsConstructor
@@ -20,8 +31,11 @@ public class Processor implements Runnable {
     private final PageMessageSender messageSender;
     private final PageRepository repository;
 
-    /**
-     * Starts an infinite loop processing new pages.
+     /**
+     * Executes the processor in a separate thread. While the thread is not interrupted,
+     * it continuously takes a page from the `pages` blocking queue and
+     * processes it. If the thread is interrupted, it breaks
+     * the execution loop and stops the crawler.
      */
     @Override
     public void run() {

@@ -15,8 +15,8 @@ public class HtmlProcessorImpl implements HtmlProcessor {
     /**
      * Constructs HtmlProcessorImpl.
      *
-     * @param externalUrlRegex         external URL regex
-     * @param invalidUrlRegex          invalid URL regex
+     * @param externalUrlRegex         external URL regex.
+     * @param invalidUrlRegex          invalid URL regex.
      */
     public HtmlProcessorImpl(String externalUrlRegex, String invalidUrlRegex) {
         externalUrlPattern = Pattern.compile(externalUrlRegex);

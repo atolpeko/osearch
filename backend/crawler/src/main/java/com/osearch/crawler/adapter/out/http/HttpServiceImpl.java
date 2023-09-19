@@ -19,6 +19,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * An implementation of the HttpService interface that
+ * uses RestTemplate to send HTTP GET requests.
+ */
 @Log4j2
 @RequiredArgsConstructor
 public class HttpServiceImpl implements HttpService {
