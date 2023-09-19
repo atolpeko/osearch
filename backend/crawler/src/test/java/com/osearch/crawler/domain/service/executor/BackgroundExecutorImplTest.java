@@ -34,7 +34,7 @@ class BackgroundExecutorImplTest {
 
         target.execute(tasks);
         await().atMost(8, TimeUnit.SECONDS)
-                .until(() -> !target.isRunning());
+            .until(() -> !target.isRunning());
 
         var expectedList = listModifyingTasksResult();
         var resultList = emptyList.stream().sorted().collect(Collectors.toList());

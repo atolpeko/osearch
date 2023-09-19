@@ -28,8 +28,8 @@ public class PageMessageSenderFixture {
         "https://stackoverflow.com/questions/3.jps"
     );
 
-    public static Page page() {
-        return Page.builder()
+    public static final Page PAGE =
+        Page.builder()
             .url(URL)
             .content(CONTENT)
             .hash(CONTENT_HASH)
@@ -38,26 +38,23 @@ public class PageMessageSenderFixture {
             .loadTime(Duration.of(LOAD_TIME, ChronoUnit.MILLIS))
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static PageDto pageDto() {
-        return PageDto.builder()
+    public static final PageDto PAGE_DTO =
+        PageDto.builder()
             .url(URL)
             .content(CONTENT)
             .nestedUrls(NESTED_URLS)
             .loadTime(LOAD_TIME)
             .build();
-    }
 
     public static String pageJson() {
-        var page = page();
-        var nested = page.getNestedUrls().stream()
+        var nested = PAGE.getNestedUrls().stream()
             .map(str -> "{ \"value\": \"" + str + "\" }")
             .collect(Collectors.toList());
 
-        return "{ \"value\": \"" + page.getUrl() + "\","
-            + "\"content\": " + page.getContent() + "\""
-            + "\"loadTime\": " + page.getLoadTime() + "\""
+        return "{ \"value\": \"" + PAGE.getUrl() + "\","
+            + "\"content\": " + PAGE.getContent() + "\""
+            + "\"loadTime\": " + PAGE.getLoadTime() + "\""
             + "\"nestedUrls\": [" + nested + "]}";
     }
 }

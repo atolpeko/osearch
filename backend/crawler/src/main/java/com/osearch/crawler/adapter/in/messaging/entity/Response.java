@@ -7,14 +7,21 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+/**
+ * Represents a response being sent via Kafka after request.
+ */
 @Data
 @Builder
 @EqualsAndHashCode(exclude = "requestDateTime")
 public class Response implements Serializable {
+
+    /**
+     * Status enumeration represents the status of request.
+     */
     public enum Status { SUCCESSFUL, ERROR }
 
-    private LocalDateTime requestDateTime;
-    private Status status;
+    private final LocalDateTime requestDateTime;
+    private final Status status;
     private String description;
 
     @Override

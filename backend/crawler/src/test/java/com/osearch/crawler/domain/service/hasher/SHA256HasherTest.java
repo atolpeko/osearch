@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 @Tag("category.UnitTest")
-class MD5HasherTest {
-    MD5Hasher target;
+class SHA256HasherTest {
+    SHA256Hasher target;
 
     @BeforeEach
     void setUp() {
-        target = new MD5Hasher();
+        target = new SHA256Hasher();
     }
 
     @Test

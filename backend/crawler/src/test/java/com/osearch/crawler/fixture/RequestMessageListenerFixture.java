@@ -11,83 +11,67 @@ import java.util.stream.Collectors;
 
 public class RequestMessageListenerFixture {
     public static final String TOPIC = "TOPIC";
+    public static final List<String> INITIAL_URLS =
+        List.of(
+            "https://www.youtube.com",
+            "https://www.baeldung.com/"
+        );
 
     public static String startRequestJson() {
-        var urls = initialUrls().stream()
+        var urls = INITIAL_URLS.stream()
                 .map(str -> "\"" + str + "\"")
                 .collect(Collectors.toList());
         var urlsJson = String.join(", ", urls);
         return "{ \"operation\":\"START\" \"urls\": ["  + urlsJson + "]}";
     }
 
-    public static List<String> initialUrls() {
-        return List.of(
-            "https://www.youtube.com",
-            "https://www.baeldung.com/"
-        );
-    }
-
-    public static Request startRequest() {
-        return Request.builder()
+    public static final Request START_REQUEST =
+        Request.builder()
             .operation(Operation.START)
-            .urls(initialUrls())
+            .urls(INITIAL_URLS)
             .build();
-    }
 
-    public static String stopRequestJson() {
-        return "{ \"operation\":\"STOP\" }";
-    }
-
-    public static Request stopRequest() {
-        return Request.builder()
+    public static final Request STOP_REQUEST =
+        Request.builder()
             .operation(Operation.STOP)
             .build();
-    }
 
-    public static String invalidStartRequestJson() {
-        return "{ \"operation\":\"START\" }";
-    }
-
-    public static String invalidRequestJson() {
-        return "{  }";
-    }
-
-    public static Response successResponseJson() {
-        return Response.builder()
+    public static final Response SUCCESSFUL_RESPONSE =
+        Response.builder()
             .status(Status.SUCCESSFUL)
             .requestDateTime(LocalDateTime.now())
             .build();
-    }
 
-    public static Response invalidStartRequestResponse() {
-        return Response.builder()
+
+    public static final Response INVALID_START_RESPONSE =
+        Response.builder()
             .status(Status.ERROR)
-            .description("{ \"operation\":\"START\" } is not a valid request")
+            .description("{ \"operation\":\"START\" } INVALID_START")
             .requestDateTime(LocalDateTime.now())
             .build();
-    }
 
-    public static Response invalidStopRequestResponse() {
-        return Response.builder()
+    public static final Response INVALID_STOP_RESPONSE =
+        Response.builder()
             .status(Status.ERROR)
-            .description("{  } is not a valid request")
+            .description("{  } INVALID_STOP")
             .requestDateTime(LocalDateTime.now())
             .build();
-    }
 
-    public static Response crawlerAlreadyRunningResponse() {
-        return Response.builder()
+    public static final Response CRAWLER_ALREADY_RINNING_RESPONSE =
+        Response.builder()
             .status(Status.ERROR)
             .description("Crawler is already running")
             .requestDateTime(LocalDateTime.now())
             .build();
-    }
 
-    public static Response crawlerNotRunningResponse() {
-        return Response.builder()
+    public static final Response CRAWLER_NOT_RINNING_RESPONSE =
+        Response.builder()
             .status(Status.ERROR)
             .description("Crawler is not running")
             .requestDateTime(LocalDateTime.now())
             .build();
-    }
+
+    public static final String STOP_REQUEST_JSON = "{ \"operation\":\"STOP\" }";
+    public static final String INVALID_START_REQUEST_JSON = "{ \"operation\":\"START\" }";
+    public static final String INVALID_STOP_REQUEST_JSON = "{  }";
 }

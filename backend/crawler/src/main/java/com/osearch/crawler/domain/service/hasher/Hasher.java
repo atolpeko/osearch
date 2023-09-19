@@ -6,11 +6,10 @@ package com.osearch.crawler.domain.service.hasher;
 public interface Hasher {
 
     /**
-     * Hash a string.
+     * Generates a hash value for the given string.
      *
-     * @param string  string to hash
-     *
-     * @return hash
+     * @param string the string to be hashed.
+     * @return the hash value of the string.
      */
     String hash(String string);
 }

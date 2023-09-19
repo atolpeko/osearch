@@ -28,6 +28,7 @@ public class PageMessageSenderImpl extends BaseMessageSender implements PageMess
         this.properties = properties;
     }
 
+    @Override
     public synchronized void send(Page page) {
         var topic = properties.getTopic();
         var dto = mapper.toDto(page);

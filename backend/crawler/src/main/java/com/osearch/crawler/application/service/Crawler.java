@@ -16,6 +16,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * <p>
+ * {@link Crawler} and {@link Processor} implement producer-consumer design pattern.
+ * While Crawler looks for new pages Processor processes them.
+ * </p>
+ *
+ * The Crawler class represents a web crawler that searches for web pages.
+ * It uses 'pagesToSave' blocking deque to save found pages for processing and
+ * 'pagesToCrawl' blocking deque to save recursively found pages for later crawling.
+ */
 @Log4j2
 @Builder
 @AllArgsConstructor
@@ -30,7 +40,10 @@ public class Crawler implements Runnable {
     private final Hasher hasher;
 
     /**
-     * Starts an infinite loop searching for new pages.
+     * Executes the crawler in a separate thread. While the thread is not interrupted,
+     * it continuously takes a page to crawl from the `pagesToCrawl` blocking queue and
+     * processes it. If the thread is interrupted, it breaks
+     * the execution loop and stops the crawler.
      */
     @Override
     public void run() {
@@ -58,7 +71,7 @@ public class Crawler implements Runnable {
             var page = assemblePage(response, nestedUrls);
 
             pagesToSave.put(page);
-            processNestedUrls(nestedUrls);
+            saveNestedUrls(nestedUrls);
         } catch (InterruptedException e) {
             throw e;
         } catch (HttpForbiddenException | HttpToManyRequestsException e) {
@@ -81,7 +94,7 @@ public class Crawler implements Runnable {
             .build();
     }
 
-    private void processNestedUrls(List<String> urls) throws InterruptedException {
+    private void saveNestedUrls(List<String> urls) throws InterruptedException {
         var pagesLeft = getPagesLeft();
         if (pagesLeft >= pagesToKeep) {
             log.debug("Not saving nested URLs as the number of pages"

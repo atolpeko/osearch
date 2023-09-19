@@ -4,7 +4,7 @@ import static com.osearch.crawler.fixture.HtmlProcessorFixture.CONTENT;
 import static com.osearch.crawler.fixture.HtmlProcessorFixture.INVALID_URL_REGEX;
 import static com.osearch.crawler.fixture.HtmlProcessorFixture.URL_REGEX;
 import static com.osearch.crawler.fixture.HtmlProcessorFixture.URL_STRING;
-import static com.osearch.crawler.fixture.HtmlProcessorFixture.page;
+import static com.osearch.crawler.fixture.HtmlProcessorFixture.PAGE;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -24,6 +24,6 @@ class HtmlProcessorTest {
     @Test
     void shouldFindNestedUrls() {
         var urls = target.findNestedUrls(URL_STRING, CONTENT);
-        assertEquals(page().getNestedUrls(), urls);
+        assertEquals(PAGE.getNestedUrls(), urls);
     }
 }

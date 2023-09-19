@@ -1,33 +1,41 @@
 package com.osearch.crawler.application.port;
 
+import com.osearch.crawler.application.port.exception.DataAccessException;
 import com.osearch.crawler.domain.entity.Page;
+
 import java.util.Optional;
 
 /**
- * Used to work with stored Page objects.
+ * Interface for managing pages in a repository.
  */
 public interface PageRepository {
 
     /**
-     * Find Page by its hash.
+     * Finds a page with the given URL hash.
      *
-     * @param hash  URL hash of the Page to find
+     * @param hash the URL hash of the page to find.
+     * @return an Optional containing the page with the specified URL hash,
+     * or an empty Optional if no page is found.
      *
-     * @return optional of Page or Optional.empty()
+     * @throws DataAccessException in case of any repository error.
      */
     Optional<Page> findByUrlHash(String hash);
 
     /**
-     * Save page.
+     * Saves the given page.
      *
-     * @param page  page to save
+     * @param page the page to save.
+     *
+     * @throws DataAccessException in case of any repository error.
      */
     void save(Page page);
 
     /**
-     * Count saved pages.
+     * Returns the count of pages saved.
      *
-     * @return  the number of pages
+     * @return the count of pages.
+     *
+     * @throws DataAccessException in case of any repository error.
      */
     long count();
 }

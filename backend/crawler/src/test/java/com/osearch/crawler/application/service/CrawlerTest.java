@@ -2,16 +2,16 @@ package com.osearch.crawler.application.service;
 
 import static com.osearch.crawler.fixture.CrawlerFixture.CONTENT;
 import static com.osearch.crawler.fixture.CrawlerFixture.INITIAL_URL;
+import static com.osearch.crawler.fixture.CrawlerFixture.NESTED_PAGE_1;
+import static com.osearch.crawler.fixture.CrawlerFixture.NESTED_PAGE_2;
+import static com.osearch.crawler.fixture.CrawlerFixture.NESTED_PAGE_3;
 import static com.osearch.crawler.fixture.CrawlerFixture.NESTED_URL_1;
 import static com.osearch.crawler.fixture.CrawlerFixture.NESTED_URL_2;
 import static com.osearch.crawler.fixture.CrawlerFixture.NESTED_URL_3;
+import static com.osearch.crawler.fixture.CrawlerFixture.PAGE;
+import static com.osearch.crawler.fixture.CrawlerFixture.PAGE_RESPONSE;
 import static com.osearch.crawler.fixture.CrawlerFixture.RESULT_URLS_COUNT;
 import static com.osearch.crawler.fixture.CrawlerFixture.getCrawlers;
-import static com.osearch.crawler.fixture.CrawlerFixture.page;
-import static com.osearch.crawler.fixture.CrawlerFixture.nestedPage1;
-import static com.osearch.crawler.fixture.CrawlerFixture.nestedPage2;
-import static com.osearch.crawler.fixture.CrawlerFixture.nestedPage3;
-import static com.osearch.crawler.fixture.CrawlerFixture.pageResponse;
 
 import static org.awaitility.Awaitility.await;
 
@@ -39,9 +39,9 @@ import org.mockito.MockitoAnnotations;
 
 @Tag("category.UnitTest")
 class CrawlerTest {
-    private BackgroundExecutor executor;
-    private BlockingDeque<String> urlsToGet;
-    private BlockingDeque<Page> urlsToSave;
+    BackgroundExecutor executor;
+    BlockingDeque<String> urlsToGet;
+    BlockingDeque<Page> urlsToSave;
 
     @Mock
     HttpService httpService;
@@ -56,21 +56,21 @@ class CrawlerTest {
     void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        when(httpService.get(INITIAL_URL)).thenReturn(pageResponse());
+        when(httpService.get(INITIAL_URL)).thenReturn(PAGE_RESPONSE);
         when(htmlProcessor.findNestedUrls(INITIAL_URL, CONTENT))
-            .thenReturn(page().getNestedUrls());
+            .thenReturn(PAGE.getNestedUrls());
 
-        when(httpService.get(NESTED_URL_1)).thenReturn(pageResponse());
+        when(httpService.get(NESTED_URL_1)).thenReturn(PAGE_RESPONSE);
         when(htmlProcessor.findNestedUrls(NESTED_URL_1, CONTENT))
-            .thenReturn(nestedPage1().getNestedUrls());
+            .thenReturn(NESTED_PAGE_1.getNestedUrls());
 
-        when(httpService.get(NESTED_URL_2)).thenReturn(pageResponse());
+        when(httpService.get(NESTED_URL_2)).thenReturn(PAGE_RESPONSE);
         when(htmlProcessor.findNestedUrls(NESTED_URL_2, CONTENT))
-            .thenReturn(nestedPage2().getNestedUrls());
+            .thenReturn(NESTED_PAGE_2.getNestedUrls());
 
-        when(httpService.get(NESTED_URL_3)).thenReturn(pageResponse());
+        when(httpService.get(NESTED_URL_3)).thenReturn(PAGE_RESPONSE);
         when(htmlProcessor.findNestedUrls(NESTED_URL_3, CONTENT))
-            .thenReturn(nestedPage3().getNestedUrls());
+            .thenReturn(NESTED_PAGE_3.getNestedUrls());
 
         executor = new BackgroundExecutorImpl();
         urlsToGet = new LinkedBlockingDeque<>();

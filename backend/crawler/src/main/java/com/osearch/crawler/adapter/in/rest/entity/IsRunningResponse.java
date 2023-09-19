@@ -5,10 +5,20 @@ import io.swagger.annotations.ApiModelProperty;
 
 import lombok.Data;
 
+/**
+ * Represents the response object that contains information about
+ * the running state of the crawler service.
+ */
 @Data
-@ApiModel(description = "Is crawler service running or not")
+@ApiModel(
+    value = "IsRunningResponse",
+    description = "Details about the running state of the crawler service"
+)
 public class IsRunningResponse {
 
-    @ApiModelProperty(value = "Is crawler service running or not", example = "true")
+    @ApiModelProperty(
+        value = "An indicator representing whether the crawler service is running or not.",
+        example = "true"
+    )
     private final Boolean isRunning;
 }

@@ -77,22 +77,20 @@ public class HtmlProcessorFixture {
                 "</html>";
 
 
-    public static Page page() {
-        var nestedUrls = List.of(
-            NESTED_URL_1, NESTED_URL_2, NESTED_URL_3, NESTED_URL_4,
-            NESTED_URL_5, NESTED_URL_6, NESTED_URL_7, NESTED_URL_8,
-            NESTED_URL_9, NESTED_URL_10, NESTED_URL_11, NESTED_URL_12,
-            NESTED_URL_13, NESTED_URL_14, NESTED_URL_15, NESTED_URL_16,
-            NESTED_URL_17, NESTED_URL_18, NESTED_URL_19, NESTED_URL_20
-        );
-        return Page.builder()
+    public static final Page PAGE =
+        Page.builder()
             .url(URL_STRING)
             .urlHash(URL_HASH)
             .hash(PAGE_HASH)
-            .nestedUrls(nestedUrls)
+            .nestedUrls(List.of(
+                NESTED_URL_1, NESTED_URL_2, NESTED_URL_3, NESTED_URL_4,
+                NESTED_URL_5, NESTED_URL_6, NESTED_URL_7, NESTED_URL_8,
+                NESTED_URL_9, NESTED_URL_10, NESTED_URL_11, NESTED_URL_12,
+                NESTED_URL_13, NESTED_URL_14, NESTED_URL_15, NESTED_URL_16,
+                NESTED_URL_17, NESTED_URL_18, NESTED_URL_19, NESTED_URL_20
+            ))
             .content(CONTENT)
             .loadTime(LOAD_TIME)
             .foundAt(LocalDateTime.now())
             .build();
-    }
 }

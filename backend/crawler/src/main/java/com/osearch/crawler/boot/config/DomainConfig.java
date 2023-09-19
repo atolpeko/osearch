@@ -4,7 +4,7 @@ import com.osearch.crawler.boot.config.properties.ServiceProperties;
 import com.osearch.crawler.domain.service.executor.BackgroundExecutor;
 import com.osearch.crawler.domain.service.executor.BackgroundExecutorImpl;
 import com.osearch.crawler.domain.service.hasher.Hasher;
-import com.osearch.crawler.domain.service.hasher.MD5Hasher;
+import com.osearch.crawler.domain.service.hasher.SHA256Hasher;
 import com.osearch.crawler.domain.service.htmlprocessor.HtmlProcessor;
 import com.osearch.crawler.domain.service.htmlprocessor.HtmlProcessorImpl;
 
@@ -24,7 +24,7 @@ public class DomainConfig {
 
     @Bean
     public Hasher hasher() {
-        return new MD5Hasher();
+        return new SHA256Hasher();
     }
 
     @Bean

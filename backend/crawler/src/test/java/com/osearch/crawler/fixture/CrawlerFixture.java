@@ -26,8 +26,8 @@ public class CrawlerFixture {
     public static final String NESTED_URL_2 = "https://stackoverflow.com/questions/2";
     public static final String NESTED_URL_3 = "https://stackoverflow.com/questions/3";
 
-    public static Page page() {
-        return Page.builder()
+    public static final Page PAGE =
+        Page.builder()
             .url(INITIAL_URL)
             .content(CONTENT)
             .urlHash(URL_HASH)
@@ -35,17 +35,16 @@ public class CrawlerFixture {
             .nestedUrls(List.of(NESTED_URL_1, NESTED_URL_2, NESTED_URL_3))
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static HttpResponse pageResponse() {
-        return HttpResponseEntity.builder()
+    public static final HttpResponse PAGE_RESPONSE =
+        HttpResponseEntity.builder()
             .url(INITIAL_URL)
             .content(CONTENT)
             .build();
-    }
 
-    public static Page nestedPage1() {
-        return Page.builder()
+
+    public static final Page NESTED_PAGE_1 =
+        Page.builder()
             .url(NESTED_URL_1)
             .content(CONTENT)
             .urlHash(URL_HASH)
@@ -53,10 +52,9 @@ public class CrawlerFixture {
             .nestedUrls(List.of())
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static Page nestedPage2() {
-        return Page.builder()
+    public static final Page NESTED_PAGE_2 =
+        Page.builder()
             .url(NESTED_URL_2)
             .content(CONTENT)
             .urlHash(URL_HASH)
@@ -64,10 +62,9 @@ public class CrawlerFixture {
             .nestedUrls(List.of())
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static Page nestedPage3() {
-        return Page.builder()
+    public static final Page NESTED_PAGE_3 =
+        Page.builder()
             .url(NESTED_URL_2)
             .content(CONTENT)
             .urlHash(URL_HASH)
@@ -75,7 +72,6 @@ public class CrawlerFixture {
             .nestedUrls(List.of())
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
     public static List<Crawler> getCrawlers(
         BlockingDeque<String> pagesToCrawl,

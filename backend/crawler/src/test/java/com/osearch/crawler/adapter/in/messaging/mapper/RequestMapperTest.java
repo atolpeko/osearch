@@ -1,13 +1,13 @@
 package com.osearch.crawler.adapter.in.messaging.mapper;
 
-import static com.osearch.crawler.fixture.RequestMapperFixture.invalidRequestJson;
-import static com.osearch.crawler.fixture.RequestMapperFixture.invalidStartRequest;
-import static com.osearch.crawler.fixture.RequestMapperFixture.invalidStartRequestJson;
-import static com.osearch.crawler.fixture.RequestMapperFixture.invalidStopRequest;
-import static com.osearch.crawler.fixture.RequestMapperFixture.startRequest;
+import static com.osearch.crawler.fixture.RequestMapperFixture.INVALID_STOP_REQUEST_JSON;
+import static com.osearch.crawler.fixture.RequestMapperFixture.INVALID_START_REQUEST;
+import static com.osearch.crawler.fixture.RequestMapperFixture.INVALID_STOP_REQUEST;
+import static com.osearch.crawler.fixture.RequestMapperFixture.INVALID_START_REQUEST_JSON;
+import static com.osearch.crawler.fixture.RequestMapperFixture.START_REQUEST;
+import static com.osearch.crawler.fixture.RequestMapperFixture.STOP_REQUEST;
+import static com.osearch.crawler.fixture.RequestMapperFixture.STOP_REQUEST_JSON;
 import static com.osearch.crawler.fixture.RequestMapperFixture.startRequestJson;
-import static com.osearch.crawler.fixture.RequestMapperFixture.stopRequest;
-import static com.osearch.crawler.fixture.RequestMapperFixture.stopRequestJson;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -19,6 +19,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.osearch.crawler.adapter.in.messaging.entity.Request;
 import com.osearch.crawler.adapter.in.messaging.validator.RequestValidator;
+
+import java.util.Collections;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -43,35 +46,41 @@ class RequestMapperTest {
     @BeforeEach
     void setUp() throws JsonProcessingException {
         MockitoAnnotations.initMocks(this);
-        when(mapper.readValue(startRequestJson(), Request.class)).thenReturn(startRequest());
-        when(mapper.readValue(stopRequestJson(), Request.class)).thenReturn(stopRequest());
-        when(validator.isValid(startRequest())).thenReturn(true);
-        when(validator.isValid(stopRequest())).thenReturn(true);
-        when(validator.isValid(invalidStartRequest())).thenReturn(false);
-        when(validator.isValid(invalidStopRequest())).thenReturn(false);
+
+        when(mapper.readValue(startRequestJson(), Request.class)).thenReturn(START_REQUEST);
+        when(mapper.readValue(STOP_REQUEST_JSON, Request.class)).thenReturn(STOP_REQUEST);
+        when(mapper.readValue(INVALID_STOP_REQUEST_JSON, Request.class))
+            .thenThrow(JsonProcessingException.class);
+        when(mapper.readValue(INVALID_START_REQUEST_JSON, Request.class))
+            .thenThrow(JsonProcessingException.class);
+
+        when(validator.validate(START_REQUEST)).thenReturn(Collections.emptySet());
+        when(validator.validate(STOP_REQUEST)).thenReturn(Collections.emptySet());
+        when(validator.validate(INVALID_START_REQUEST)).thenReturn(Set.of(""));
+        when(validator.validate(INVALID_STOP_REQUEST)).thenReturn(Set.of(""));
     }
 
     @Test
-    void shouldMapStartRequestWhenItsValid() throws JsonProcessingException {
+    void shouldMapStartRequestWhenItsValid() {
         var result = target.toRequest(startRequestJson());
-        assertEquals(startRequest(), result);
+        assertEquals(START_REQUEST, result);
     }
 
     @Test
-    void shouldMapStopRequestWhenItsValid() throws JsonProcessingException {
-        var result = target.toRequest(stopRequestJson());
-        assertEquals(stopRequest(), result);
+    void shouldMapStopRequestWhenItsValid() {
+        var result = target.toRequest(STOP_REQUEST_JSON);
+        assertEquals(STOP_REQUEST, result);
     }
 
     @Test
     void shouldThrowExceptionWhenStartRequestIsInValid() {
         assertThrows(IllegalArgumentException.class,
-            () -> target.toRequest(invalidStartRequestJson()));
+            () -> target.toRequest(INVALID_START_REQUEST_JSON));
     }
 
     @Test
     void shouldThrowExceptionWhenStopRequestIsInValid() {
         assertThrows(IllegalArgumentException.class,
-            () -> target.toRequest(invalidRequestJson()));
+            () -> target.toRequest(INVALID_STOP_REQUEST_JSON));
     }
 }

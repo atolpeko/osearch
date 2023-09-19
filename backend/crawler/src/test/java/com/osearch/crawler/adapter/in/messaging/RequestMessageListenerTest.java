@@ -1,18 +1,18 @@
 package com.osearch.crawler.adapter.in.messaging;
 
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.CRAWLER_ALREADY_RINNING_RESPONSE;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.CRAWLER_NOT_RINNING_RESPONSE;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.INITIAL_URLS;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.INVALID_STOP_REQUEST_JSON;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.INVALID_START_REQUEST_JSON;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.INVALID_START_RESPONSE;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.INVALID_STOP_RESPONSE;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.START_REQUEST;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.STOP_REQUEST;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.STOP_REQUEST_JSON;
+import static com.osearch.crawler.fixture.RequestMessageListenerFixture.SUCCESSFUL_RESPONSE;
 import static com.osearch.crawler.fixture.RequestMessageListenerFixture.TOPIC;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.crawlerAlreadyRunningResponse;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.crawlerNotRunningResponse;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.invalidStartRequestResponse;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.initialUrls;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.invalidRequestJson;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.invalidStartRequestJson;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.invalidStopRequestResponse;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.startRequest;
 import static com.osearch.crawler.fixture.RequestMessageListenerFixture.startRequestJson;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.stopRequest;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.stopRequestJson;
-import static com.osearch.crawler.fixture.RequestMessageListenerFixture.successResponseJson;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,8 +22,6 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 import com.osearch.crawler.adapter.in.messaging.mapper.RequestMapper;
 import com.osearch.crawler.adapter.in.messaging.properties.InMessagingProperties;
@@ -61,19 +59,21 @@ class RequestMessageListenerTest {
     InMessagingProperties properties;
 
     @BeforeEach
-    void setUp() throws JsonProcessingException {
+    void setUp() {
         MockitoAnnotations.initMocks(this);
         when(properties.getRequestTopic()).thenReturn(TOPIC);
-        when(mapper.toRequest(startRequestJson())).thenReturn(startRequest());
-        when(mapper.toRequest(stopRequestJson())).thenReturn(stopRequest());
-        when(mapper.toRequest(invalidStartRequestJson())).thenThrow(IllegalArgumentException.class);
-        when(mapper.toRequest(invalidRequestJson())).thenThrow(IllegalArgumentException.class);
+        when(mapper.toRequest(startRequestJson())).thenReturn(START_REQUEST);
+        when(mapper.toRequest(STOP_REQUEST_JSON)).thenReturn(STOP_REQUEST);
+        when(mapper.toRequest(INVALID_START_REQUEST_JSON))
+            .thenThrow(new IllegalArgumentException("INVALID_START"));
+        when(mapper.toRequest(INVALID_STOP_REQUEST_JSON))
+            .thenThrow(new IllegalArgumentException("INVALID_STOP"));
     }
 
     @Test
     void shouldStartCrawlerWhenRequestIsValid() {
         doAnswer(i -> when(useCase.isRunning()).thenReturn(true))
-            .when(useCase).start(initialUrls());
+            .when(useCase).start(INITIAL_URLS);
 
         target.listen(startRequestJson());
         assertTrue(useCase.isRunning());
@@ -82,55 +82,55 @@ class RequestMessageListenerTest {
     @Test
     void shouldSendResponseWhenStartsCrawler() {
         target.listen(startRequestJson());
-        verify(messageSender, times(1)).send(successResponseJson());
+        verify(messageSender, times(1)).send(SUCCESSFUL_RESPONSE);
     }
 
     @Test
     void shouldStopCrawlerWhenRequestIsValid() {
         doAnswer(i -> when(useCase.isRunning()).thenReturn(true))
-            .when(useCase).start(initialUrls());
+            .when(useCase).start(INITIAL_URLS);
         doAnswer(i -> when(useCase.isRunning()).thenReturn(false))
             .when(useCase).stop();
 
-        useCase.start(initialUrls());
-        target.listen(stopRequestJson());
+        useCase.start(INITIAL_URLS);
+        target.listen(STOP_REQUEST_JSON);
 
         assertFalse(useCase.isRunning());
     }
 
     @Test
     void shouldSendResponseWhenStopsCrawler() {
-        useCase.start(initialUrls());
-        target.listen(stopRequestJson());
+        useCase.start(INITIAL_URLS);
+        target.listen(STOP_REQUEST_JSON);
 
-        verify(messageSender, times(1)).send(successResponseJson());
+        verify(messageSender, times(1)).send(SUCCESSFUL_RESPONSE);
     }
 
     @Test
     void shouldSendResponseWhenStartRequestIsInvalid() {
-        target.listen(invalidStartRequestJson());
-        verify(messageSender, times(1)).send(invalidStartRequestResponse());
+        target.listen(INVALID_START_REQUEST_JSON);
+        verify(messageSender, times(1)).send(INVALID_START_RESPONSE);
     }
 
     @Test
     void shouldSendResponseWhenStopRequestIsInvalid() {
-        target.listen(invalidRequestJson());
-        verify(messageSender, times(1)).send(invalidStopRequestResponse());
+        target.listen(INVALID_STOP_REQUEST_JSON);
+        verify(messageSender, times(1)).send(INVALID_STOP_RESPONSE);
     }
 
     @Test
     void shouldSendResponseWhenCrawlerAlreadyRunning() {
-        doThrow(CrawlerAlreadyRunningException.class).when(useCase).start(initialUrls());
+        doThrow(CrawlerAlreadyRunningException.class).when(useCase).start(INITIAL_URLS);
 
         target.listen(startRequestJson());
-        verify(messageSender, times(1)).send(crawlerAlreadyRunningResponse());
+        verify(messageSender, times(1)).send(CRAWLER_ALREADY_RINNING_RESPONSE);
     }
 
     @Test
     void shouldSendResponseWhenCrawlerNotRunning() {
         doThrow(CrawlerNotRunningException.class).when(useCase).stop();
 
-        target.listen(stopRequestJson());
-        verify(messageSender, times(1)).send(crawlerNotRunningResponse());
+        target.listen(STOP_REQUEST_JSON);
+        verify(messageSender, times(1)).send(CRAWLER_NOT_RINNING_RESPONSE);
     }
 }

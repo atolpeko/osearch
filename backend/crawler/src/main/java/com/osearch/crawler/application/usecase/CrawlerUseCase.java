@@ -7,7 +7,7 @@ import com.osearch.crawler.application.usecase.exception.CrawlerServiceException
 import java.util.List;
 
 /**
- * Used to start / stop crawler.
+ * The CrawlerUseCase interface defines the methods for interacting with crawler.
  */
 public interface CrawlerUseCase {
 
@@ -22,15 +22,17 @@ public interface CrawlerUseCase {
     void start(List<String> initialUrls);
 
     /**
-     * Stop crawler service.
+     * Stop the crawler service.
      *
-     * @throws CrawlerNotRunningException  if crawler service is not running
+     * @throws CrawlerNotRunningException  if the crawler service is not running
      * @throws CrawlerServiceException     if any other error happens
      */
     void stop();
 
     /**
-     * @return true if crawler service is running, false otherwise
+     * Checks if the crawler service is currently running.
+     *
+     * @return true if the crawler service is running, false otherwise.
      *
      * @throws CrawlerServiceException  if any error happens
      */

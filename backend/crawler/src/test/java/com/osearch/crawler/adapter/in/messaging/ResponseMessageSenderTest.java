@@ -1,8 +1,8 @@
 package com.osearch.crawler.adapter.in.messaging;
 
+import static com.osearch.crawler.fixture.ResponseMessageSenderFixture.RESPONSE;
+import static com.osearch.crawler.fixture.ResponseMessageSenderFixture.RESPONSE_JSON;
 import static com.osearch.crawler.fixture.ResponseMessageSenderFixture.TOPIC;
-import static com.osearch.crawler.fixture.ResponseMessageSenderFixture.response;
-import static com.osearch.crawler.fixture.ResponseMessageSenderFixture.responseJson;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,12 +42,12 @@ class ResponseMessageSenderTest {
     void setUp() throws JsonProcessingException {
         MockitoAnnotations.initMocks(this);
         when(properties.getResponseTopic()).thenReturn(TOPIC);
-        when(objectMapper.writeValueAsString(response())).thenReturn(responseJson());
+        when(objectMapper.writeValueAsString(RESPONSE)).thenReturn(RESPONSE_JSON);
     }
 
     @Test
     void shouldSend() {
-        target.send(response());
-        verify(kafkaTemplate, times(1)).send(TOPIC, responseJson());
+        target.send(RESPONSE);
+        verify(kafkaTemplate, times(1)).send(TOPIC, RESPONSE_JSON);
     }
 }

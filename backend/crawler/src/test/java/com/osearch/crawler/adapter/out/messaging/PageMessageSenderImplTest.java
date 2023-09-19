@@ -1,8 +1,8 @@
 package com.osearch.crawler.adapter.out.messaging;
 
 import static com.osearch.crawler.fixture.PageMessageSenderFixture.TOPIC;
-import static com.osearch.crawler.fixture.PageMessageSenderFixture.page;
-import static com.osearch.crawler.fixture.PageMessageSenderFixture.pageDto;
+import static com.osearch.crawler.fixture.PageMessageSenderFixture.PAGE;
+import static com.osearch.crawler.fixture.PageMessageSenderFixture.PAGE_DTO;
 import static com.osearch.crawler.fixture.PageMessageSenderFixture.pageJson;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -49,22 +49,22 @@ class PageMessageSenderImplTest {
     void setUp() throws JsonProcessingException {
         MockitoAnnotations.initMocks(this);
         when(properties.getTopic()).thenReturn(TOPIC);
-        when(objectMapper.writeValueAsString(pageDto())).thenReturn(pageJson());
+        when(objectMapper.writeValueAsString(PAGE_DTO)).thenReturn(pageJson());
     }
 
     @Test
     void shouldSendPage() {
-        when(mapper.toDto(page())).thenReturn(pageDto());
+        when(mapper.toDto(PAGE)).thenReturn(PAGE_DTO);
 
-        target.send(page());
+        target.send(PAGE);
         verify(kafkaTemplate, times(1)).send(TOPIC, pageJson());
     }
 
     @Test
     void shouldThrowMessagingException() {
-        when(mapper.toDto(page())).thenReturn(pageDto());
+        when(mapper.toDto(PAGE)).thenReturn(PAGE_DTO);
         when(kafkaTemplate.send(TOPIC, pageJson())).thenThrow(RuntimeException.class);
 
-        assertThrows(MessagingException.class, () -> target.send(page()));
+        assertThrows(MessagingException.class, () -> target.send(PAGE));
     }
 }

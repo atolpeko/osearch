@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Represents a page data transfer object that is used in kafka messages.
+ */
 @Data
 @Builder
 @RequiredArgsConstructor

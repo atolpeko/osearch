@@ -25,32 +25,29 @@ public class ProcessorFixture {
     public static final String URL_1_CHANGED_PAGE_HASH = "3639b4f1705681256c7e79fe59d49db1";
     public static final String URL_2_PAGE_HASH = "67ab996e1dda4d631ad1ca001fdb8128";
 
-    public static Page page1() {
-        return Page.builder()
+    public static final Page PAGE_1 =
+        Page.builder()
             .url(URL_1)
             .urlHash(URL_1_HASH)
             .hash(URL_1_PAGE_HASH)
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static Page page2() {
-        return Page.builder()
+    public static final Page PAGE_2 =
+        Page.builder()
             .url(URL_2)
             .urlHash(URL_2_HASH)
             .hash(URL_2_PAGE_HASH)
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static Page changedPage1() {
-        return Page.builder()
+    public static final Page CHANGED_PAGE =
+        Page.builder()
             .url(URL_1)
             .urlHash(URL_1_HASH)
             .hash(URL_1_CHANGED_PAGE_HASH)
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
     public static List<Processor> getProcessors(
         PageMessageSender messageSender,

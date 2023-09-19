@@ -38,6 +38,6 @@ rest:
 swagger:
   url: /swagger-ui/index.html
   title: Crawler API [TEST PROFILE]
-  description: The API allows you to start / stop this crawler service
+  description: Crawler API [TEST PROFILE]
   version: "0.0.1"
   controllersPackage: com.osearch.crawler.inout.web

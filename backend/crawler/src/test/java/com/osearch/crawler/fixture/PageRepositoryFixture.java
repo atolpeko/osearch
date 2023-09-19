@@ -19,8 +19,8 @@ public class PageRepositoryFixture {
     public static final String NESTED_URL_2 = "https://stackoverflow.com/questions/2";
     public static final String NESTED_URL_3 = "https://stackoverflow.com/questions/3";
 
-    public static Page page() {
-        return Page.builder()
+    public static final Page PAGE =
+        Page.builder()
             .url(INITIAL_URL)
             .content(CONTENT)
             .urlHash(URL_HASH)
@@ -28,10 +28,9 @@ public class PageRepositoryFixture {
             .nestedUrls(List.of(NESTED_URL_1, NESTED_URL_2, NESTED_URL_3))
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static Page updatedPage() {
-        return Page.builder()
+    public static final Page UPDATED_PAGE =
+        Page.builder()
             .url(INITIAL_URL)
             .content(CONTENT)
             .urlHash(UPDATED_URL_HASH)
@@ -39,21 +38,18 @@ public class PageRepositoryFixture {
             .nestedUrls(List.of(NESTED_URL_1, NESTED_URL_2, NESTED_URL_3))
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static PageDto pageDto() {
-        return PageDto.builder()
+    public static final PageDto PAGE_DTO =
+        PageDto.builder()
             .urlHash(URL_HASH)
             .hash(PAGE_HASH)
             .foundAt(LocalDateTime.now())
             .build();
-    }
 
-    public static PageDto updatedPageDto() {
-        return PageDto.builder()
+    public static final PageDto UPDATED_PAGE_DTO =
+        PageDto.builder()
             .urlHash(UPDATED_URL_HASH)
             .hash(UPDATED_PAGE_HASH)
             .foundAt(LocalDateTime.now())
             .build();
-    }
 }
