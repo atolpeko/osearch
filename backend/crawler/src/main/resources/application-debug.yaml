@@ -11,10 +11,10 @@ spring:
       auto-offset-reset: latest
 kafka:
   url: localhost:9092
-  pageTopic: crawler-pages
-  requestTopic: crawler-request
-  responseTopic: crawler-response
-  groupId: crawler-group
+  requestTopic: crawler.request
+  responseTopic: crawler.response
+  pageTopic: crawler.pages
+  groupId: crawler.group
   maxMessageSize: 10485760
 logging:
   level:
