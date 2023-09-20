@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Validated
 @Api(tags = "Crawler API")
-@RequestMapping(path = "/crawler", produces = "application/json")
+@RequestMapping(path = "/api/crawler", produces = "application/json")
 public interface CrawlerApi {
 
     @PostMapping("/start")

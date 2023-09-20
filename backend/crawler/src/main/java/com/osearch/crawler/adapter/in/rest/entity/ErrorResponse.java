@@ -3,12 +3,14 @@ package com.osearch.crawler.adapter.in.rest.entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
  * The ErrorResponse class represents details about any error response from the service.
  */
 @Data
+@Builder
 @ApiModel(
     value = "ErrorResponse",
     description = "Details about any error response from the service"

@@ -1,5 +1,6 @@
 package com.osearch.crawler.adapter.in.rest;
 
+import com.osearch.crawler.adapter.in.rest.entity.ErrorResponse;
 import com.osearch.crawler.application.usecase.exception.CrawlerAlreadyRunningException;
 import com.osearch.crawler.application.usecase.exception.CrawlerNotRunningException;
 import com.osearch.crawler.application.usecase.exception.ServiceException;
@@ -9,8 +10,6 @@ import java.time.ZoneId;
 
 import javax.servlet.http.HttpServletRequest;
 
-import lombok.Builder;
-import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 import org.springframework.http.HttpStatus;
@@ -29,32 +28,23 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @RestControllerAdvice
 public class ExceptionInterceptor {
 
-    @Data
-    @Builder
-    public static class JsonErrorMessage {
-        private final long timestamp;
-        private final int status;
-        private final String error;
-        private final String path;
-    }
-
     @ExceptionHandler(CrawlerAlreadyRunningException.class)
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-    public JsonErrorMessage handleCrawlerAlreadyRunningException(
+    public ErrorResponse handleCrawlerAlreadyRunningException(
         CrawlerAlreadyRunningException e,
         HttpServletRequest request
     ) {
         return handleException(e.getMessage(), request, HttpStatus.EXPECTATION_FAILED);
     }
 
-    private JsonErrorMessage handleException(String msg, HttpServletRequest request, HttpStatus status) {
+    private ErrorResponse handleException(String msg, HttpServletRequest request, HttpStatus status) {
         var path = request.getServletPath();
         log.error("Request for {} error: {}", path, msg);
         var timestamp = LocalDateTime.now()
             .atZone(ZoneId.systemDefault())
             .toInstant()
             .toEpochMilli();
-        return JsonErrorMessage.builder()
+        return ErrorResponse.builder()
             .status(status.value())
             .error(msg)
             .path(path)
@@ -64,7 +54,7 @@ public class ExceptionInterceptor {
 
     @ExceptionHandler(CrawlerNotRunningException.class)
     @ResponseStatus(HttpStatus.EXPECTATION_FAILED)
-    public JsonErrorMessage handleCrawlerNotRunningException(
+    public ErrorResponse handleCrawlerNotRunningException(
         CrawlerNotRunningException e,
         HttpServletRequest request
     ) {
@@ -73,7 +63,7 @@ public class ExceptionInterceptor {
 
     @ExceptionHandler(ServiceException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public JsonErrorMessage handleServiceException(
+    public ErrorResponse handleServiceException(
         ServiceException e,
         HttpServletRequest request
     ) {
@@ -86,13 +76,13 @@ public class ExceptionInterceptor {
         MissingServletRequestParameterException.class,
         MethodArgumentTypeMismatchException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public JsonErrorMessage handleBadRequestException(Exception e, HttpServletRequest request) {
+    public ErrorResponse handleBadRequestException(Exception e, HttpServletRequest request) {
         return handleException(e.getMessage(), request, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public JsonErrorMessage handleNotSupportedException(
+    public ErrorResponse handleNotSupportedException(
         HttpRequestMethodNotSupportedException e,
         HttpServletRequest request
     ) {
@@ -101,7 +91,7 @@ public class ExceptionInterceptor {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public JsonErrorMessage handleValidationException(
+    public ErrorResponse handleValidationException(
         MethodArgumentNotValidException e,
         HttpServletRequest request
     ) {
@@ -117,7 +107,7 @@ public class ExceptionInterceptor {
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public JsonErrorMessage handleUnknownException(Exception e, HttpServletRequest request) {
+    public ErrorResponse handleUnknownException(Exception e, HttpServletRequest request) {
         return handleException(e.getMessage(), request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Validated
 @Api(tags = "Pages API")
-@RequestMapping(path = "/pages", produces = "application/json")
+@RequestMapping(path = "/api/pages", produces = "application/json")
 public interface PageAPI {
 
     @GetMapping("/count")
