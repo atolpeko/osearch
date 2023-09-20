@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class CrawlerControllerFixture {
-    public static final String START_URL = "/crawler/start";
-    public static final String STOP_URL = "/crawler/stop";
-    public static final String IS_RUNNING_URL = "/crawler/running";
+    public static final String START_URL = "/api/crawler/start";
+    public static final String STOP_URL = "/api/crawler/stop";
+    public static final String IS_RUNNING_URL = "/api/crawler/running";
 
     public static final List<String> INITIAL_URLS =
         List.of(
