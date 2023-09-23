@@ -3,14 +3,14 @@ package com.osearch.indexer.application.usecase;
 import com.osearch.indexer.domain.entity.IndexRequest;
 
 /**
- * Used to process index request.
+ * IndexerUseCase interface provides a method to process index requests.
  */
 public interface IndexerUseCase {
 
     /**
-     * Process index request.
+     * Process the given IndexRequest.
      *
-     * @param request  index request
+     * @param request the IndexRequest to process.
      */
     void process(IndexRequest request);
 }

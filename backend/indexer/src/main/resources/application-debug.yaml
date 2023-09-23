@@ -15,6 +15,9 @@ kafka:
     groupId: indexer-group
   out:
     topic: indexer-pages
+domain:
+  supportedLocales: en, en-usa, en-gb, en-ca, en-au, en-nz, en-in, en-ie, en-za, en-jm, en-bz,
+    en-tt, en-sg, en-my
 logging:
   level:
     com.osearch.indexer: DEBUG

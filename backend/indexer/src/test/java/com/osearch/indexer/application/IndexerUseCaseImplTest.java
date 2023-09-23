@@ -1,8 +1,8 @@
 package com.osearch.indexer.application;
 
-import static com.osearch.indexer.fixture.IndexServiceFixture.ID;
-import static com.osearch.indexer.fixture.IndexServiceFixture.page;
-import static com.osearch.indexer.fixture.IndexServiceFixture.request;
+import static com.osearch.indexer.fixture.IndexUseCaseFixture.ID;
+import static com.osearch.indexer.fixture.IndexUseCaseFixture.PAGE;
+import static com.osearch.indexer.fixture.IndexUseCaseFixture.REQUEST;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -11,7 +11,7 @@ import static org.mockito.Mockito.when;
 import com.osearch.indexer.application.port.PageMessageSender;
 import com.osearch.indexer.application.usecase.IndexerUseCaseImpl;
 import com.osearch.indexer.application.port.PageRepository;
-import com.osearch.indexer.domain.analyzer.ContentAnalyzer;
+import com.osearch.indexer.domain.IndexService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -28,7 +28,7 @@ class IndexerUseCaseImplTest {
     IndexerUseCaseImpl target;
 
     @Mock
-    ContentAnalyzer analyzer;
+    IndexService indexService;
 
     @Mock
     PageRepository repository;
@@ -39,19 +39,19 @@ class IndexerUseCaseImplTest {
     @BeforeEach
     void setUp() {
         MockitoAnnotations.initMocks(this);
-        when(analyzer.analyze(request())).thenReturn(page());
-        when(repository.save(page())).thenReturn(ID);
+        when(indexService.index(REQUEST)).thenReturn(PAGE);
+        when(repository.save(PAGE)).thenReturn(ID);
     }
 
     @Test
     void shouldProcess() {
-        target.process(request());
-        verify(repository, times(1)).save(page());
+        target.process(REQUEST);
+        verify(repository, times(1)).save(PAGE);
     }
 
     @Test
     void shouldMessageWhenProcess() {
-        target.process(request());
+        target.process(REQUEST);
         verify(messageSender, times(1)).send(ID);
     }
 }

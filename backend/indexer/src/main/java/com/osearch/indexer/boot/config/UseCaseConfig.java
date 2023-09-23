@@ -4,7 +4,7 @@ import com.osearch.indexer.application.port.PageMessageSender;
 import com.osearch.indexer.application.port.PageRepository;
 import com.osearch.indexer.application.usecase.IndexerUseCase;
 import com.osearch.indexer.application.usecase.IndexerUseCaseImpl;
-import com.osearch.indexer.domain.analyzer.ContentAnalyzer;
+import com.osearch.indexer.domain.IndexService;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +14,10 @@ public class UseCaseConfig {
 
     @Bean
     public IndexerUseCase indexerUseCase(
-        ContentAnalyzer analyzer,
+        IndexService indexService,
         PageRepository repository,
         PageMessageSender messageSender
     ) {
-        return new IndexerUseCaseImpl(analyzer, repository, messageSender);
+        return new IndexerUseCaseImpl(indexService, repository, messageSender);
     }
 }

@@ -2,7 +2,7 @@ package com.osearch.indexer.application.usecase;
 
 import com.osearch.indexer.application.port.PageMessageSender;
 import com.osearch.indexer.application.port.PageRepository;
-import com.osearch.indexer.domain.analyzer.ContentAnalyzer;
+import com.osearch.indexer.domain.IndexService;
 import com.osearch.indexer.domain.entity.IndexRequest;
 
 import java.time.Duration;
@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 @RequiredArgsConstructor
 public class IndexerUseCaseImpl implements IndexerUseCase {
-    private final ContentAnalyzer analyzer;
+    private final IndexService indexService;
     private final PageRepository repository;
     private final PageMessageSender messageSender;
 
@@ -33,7 +33,7 @@ public class IndexerUseCaseImpl implements IndexerUseCase {
     }
 
     private void processRequest(IndexRequest request) {
-        var page = analyzer.analyze(request);
+        var page = indexService.index(request);
         page.setNestedUrls(request.getNestedUrls());
         var id = repository.save(page);
         messageSender.send(id);
