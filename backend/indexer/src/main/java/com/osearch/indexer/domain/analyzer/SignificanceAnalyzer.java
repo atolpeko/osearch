@@ -12,9 +12,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import java.util.stream.Stream;
+
 import lombok.extern.log4j.Log4j2;
+
+import org.apache.logging.log4j.Level;
 
 /**
  * The SignificanceAnalyzer class is responsible for analyzing
@@ -25,19 +27,23 @@ public class SignificanceAnalyzer extends BaseAnalyzer {
 
     @Override
     public void analyze(AnalyzerContext context) {
-        log.debug("Analyzing significance for {} topics in {}",
-            context.getTopics().size(), context.getId());
-        var occurrenceToTopic = topicsToOccurrences(
-            context.getTopics(),
-            context.getDocument()
-        );
+        Runnable task = () -> {
+            log.debug("Analyzing significance for {} topics in {}",
+                context.getTopics().size(), context.getId());
+            var occurrenceToTopic = topicsToOccurrences(
+                context.getTopics(),
+                context.getDocument()
+            );
 
-        var total = context.getDocument().sentences().size();
-        for (var topic: occurrenceToTopic.entrySet()) {
-            var significance = (double) topic.getValue() * 100 / total;
-            topic.getKey().setSignificance(Significance.of(significance));
-        }
+            var total = context.getDocument().sentences().size();
+            for (var topic: occurrenceToTopic.entrySet()) {
+                var significance = (double) topic.getValue() * 100 / total;
+                topic.getKey().setSignificance(Significance.of(significance));
+            }
+        };
 
+        var msg = "Analyzed significance for {} topics in {}";
+        withDurationLog(Level.DEBUG, task, msg, context.getTopics().size(), context.getId());
         next(context);
     }
 

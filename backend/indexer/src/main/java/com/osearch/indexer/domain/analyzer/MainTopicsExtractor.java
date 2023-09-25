@@ -9,9 +9,12 @@ import edu.stanford.nlp.semgraph.SemanticGraphEdge;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
 import lombok.extern.log4j.Log4j2;
+
+import org.apache.logging.log4j.Level;
 
 /**
  * The MainTopicsExtractor class is responsible for extracting the main topics from a document.
@@ -24,18 +27,22 @@ public class MainTopicsExtractor extends BaseAnalyzer {
 
     @Override
     public void analyze(AnalyzerContext context) {
-        log.debug("Extracting main topics from {}", context.getId());
-        var topics = new HashSet<Topic>();
-        for (var sentence : context.getDocument().sentences()) {
-            var graph = sentence.dependencyParse();
-            var topicsForSentence = extractMainData(graph);
-            extractSideData(graph, topicsForSentence);
-            topics.addAll(topicsForSentence);
-        }
+        Callable<Integer> task = () -> {
+            log.debug("Extracting main topics from {}", context.getId());
+            var topics = new HashSet<Topic>();
+            for (var sentence : context.getDocument().sentences()) {
+                var graph = sentence.dependencyParse();
+                var topicsForSentence = extractMainData(graph);
+                extractSideData(graph, topicsForSentence);
+                topics.addAll(topicsForSentence);
+            }
 
+            context.setTopics(topics);
+            return topics.size();
+        };
 
-        log.debug("{} main topics extracted from {}", topics.size(), context.getId());
-        context.setTopics(topics);
+        var msg = "{} main topics extracted from {}";
+        withDurationLog(Level.DEBUG, task, msg, context.getId());
         next(context);
     }
 
