@@ -29,7 +29,7 @@ public class MetaRankerFixture {
         .build();
 
     public static final Index INDEX = Index.builder()
-        .keywords("A")
+        .topic("A")
         .pages(Set.of(PAGE_4, PAGE_3, PAGE_2, PAGE_1))
         .build();
 }

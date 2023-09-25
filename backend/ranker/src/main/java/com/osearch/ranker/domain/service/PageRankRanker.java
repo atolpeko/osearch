@@ -1,6 +1,4 @@
-package com.osearch.ranker.domain.service.ranker.impl;
-
-import static com.osearch.ranker.util.DurationLogger.withDurationLog;
+package com.osearch.ranker.domain.service;
 
 import com.osearch.ranker.domain.entity.Index;
 import com.osearch.ranker.domain.entity.Page;
@@ -11,24 +9,23 @@ import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
-import org.apache.logging.log4j.Level;
-
+/**
+ * PageRankRanker is a class that implements the ranking algorithm based on page rank.
+ */
 @Log4j2
 @RequiredArgsConstructor
-public class PageRankRanker implements Ranker {
+public class PageRankRanker extends BaseRanker {
     private final DomainProperties properties;
 
     @Override
     public void rank(Index index) {
-        var pages = index.getPages();
-        Runnable task = () -> {
-            log.debug("Ranking {} pages by page rank", pages.size());
-            var iterations = properties.getPageRankIterations();
-            var dampingFactor = properties.getPageRankDampingFactor();
-            calculatePageRanks(pages, iterations, dampingFactor);
-        };
+        var iterations = properties.getPageRankIterations();
+        var dampingFactor = properties.getPageRankDampingFactor();
+        calculatePageRanks(index.getPages(), iterations, dampingFactor);
 
-        withDurationLog(task, pages.size() + " pages ranked using page rank", Level.DEBUG);
+        log.debug("{} pages ranked by page rank for index {}",
+            index.getPages().size(), index.getTopic());
+        next(index);
     }
 
     public void calculatePageRanks(Set<Page> pages, int iterations, double dampingFactor) {

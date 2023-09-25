@@ -1,8 +1,9 @@
 package com.osearch.ranker.fixture;
 
 import com.osearch.ranker.domain.entity.Index;
-import com.osearch.ranker.domain.entity.Keyword;
 import com.osearch.ranker.domain.entity.Page;
+import com.osearch.ranker.domain.entity.Topic;
+import com.osearch.ranker.domain.valueobject.Significance;
 
 import java.time.Duration;
 import java.util.Set;
@@ -12,11 +13,11 @@ public class RankerUseCaseFixture {
     public static final long PAGE_ID = 4343L;
     public static final double NEW_PAGE_TOTAL_RANK = 0.75;
 
-    public static final Set<Keyword> KEYWORDS = Set.of(
-        new Keyword("Java", 5),
-        new Keyword("Programming", 5),
-        new Keyword("Language", 1),
-        new Keyword("C++", 2)
+    public static final Set<Topic> TOPICS = Set.of(
+        new Topic("Java", Significance.of(5)),
+        new Topic("Programming", Significance.of(5)),
+        new Topic("Language", Significance.of(1)),
+        new Topic("C++", Significance.of(2))
     );
 
     public static final Set<Page> REFERRED = Set.of(
@@ -24,20 +25,21 @@ public class RankerUseCaseFixture {
     );
 
     public static final Page PAGE = Page.builder()
+        .sourceId(111L)
         .url("URL")
         .title("TITLE")
-        .keywords(KEYWORDS)
+        .topics(TOPICS)
         .referredPages(REFERRED)
         .loadTime(Duration.ZERO)
         .isIndexed(true)
         .build();
 
-    public static final Set<String> INDEXED_KEYWORDS = Set.of(
-        "TITLE", "Java Programming", "Java", "Programming", "C++"
-    );
+    public static final Set<String> TOPIC_NAMES = TOPICS.stream()
+        .map(Topic::getName)
+        .collect(Collectors.toSet());
 
     public static Set<Index> newIndexes() {
-        return INDEXED_KEYWORDS.stream()
+        return TOPIC_NAMES.stream()
             .map(key -> new Index(key, Set.of(PAGE)))
             .collect(Collectors.toSet());
     }

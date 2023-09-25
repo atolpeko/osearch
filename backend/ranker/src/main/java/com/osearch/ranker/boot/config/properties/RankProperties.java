@@ -14,8 +14,8 @@ public class RankProperties implements DomainProperties {
     @Value("${rank.pageRankDampingFactor}")
     private double pageRankDampingFactor;
 
-    @Value("${rank.keywordRankWeight}")
-    private double keywordRankWeight;
+    @Value("${rank.topicRankWeight}")
+    private double topicRankWeight;
 
     @Value("${rank.pageRankWeight}")
     private double pageRankWeight;
@@ -34,8 +34,8 @@ public class RankProperties implements DomainProperties {
     }
 
     @Override
-    public double getKeywordRankWeight() {
-        return keywordRankWeight;
+    public double getTopicRankWeight() {
+        return topicRankWeight;
     }
 
     @Override

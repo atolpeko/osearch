@@ -1,4 +1,4 @@
-package com.osearch.ranker.domain.service.ranker.impl;
+package com.osearch.ranker.domain.service;
 
 import static com.osearch.ranker.fixture.PageRankRankerFixture.DAMPING_FACTOR;
 import static com.osearch.ranker.fixture.PageRankRankerFixture.INDEX;
@@ -42,8 +42,11 @@ class PageRankRankerTest {
     void shouldRank() {
         target.rank(INDEX);
 
-        assertEquals(PAGE_1.getPageRank(), Double.max(PAGE_1.getPageRank(),  PAGE_2.getPageRank()));
-        assertEquals(PAGE_2.getPageRank(), Double.max(PAGE_2.getPageRank(),  PAGE_3.getPageRank()));
-        assertEquals(PAGE_3.getPageRank(), Double.max(PAGE_3.getPageRank(),  PAGE_4.getPageRank()));
+        assertEquals(PAGE_1.getPageRank(),
+            Double.max(PAGE_1.getPageRank(), PAGE_2.getPageRank()));
+        assertEquals(PAGE_2.getPageRank(),
+            Double.max(PAGE_2.getPageRank(), PAGE_3.getPageRank()));
+        assertEquals(PAGE_3.getPageRank(),
+            Double.max(PAGE_3.getPageRank(), PAGE_4.getPageRank()));
     }
 }

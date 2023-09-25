@@ -6,18 +6,19 @@ import com.osearch.ranker.application.port.exception.DataAccessException;
 import java.util.Optional;
 
 /**
- * Used to work with stored pages.
+ * The PageRepository interface provides methods to interact
+ * with a repository of Page objects.
  */
 public interface PageRepository {
 
     /**
      * Find a page by its ID.
      *
-     * @param id  page ID
+     * @param id  the page ID.
      *
-     * @return found page if it exists or Optional.empty() otherwise
+     * @return found page if it exists or Optional.empty() otherwise.
      *
-     * @throws DataAccessException if any repository exception occurred
+     * @throws DataAccessException if any repository exception occurred.
      */
     Optional<Page> findById(long id);
 }
