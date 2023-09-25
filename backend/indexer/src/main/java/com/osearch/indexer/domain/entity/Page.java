@@ -14,6 +14,7 @@ import lombok.Data;
 @Builder
 @AllArgsConstructor
 public class Page {
+    private long id;
     private String url;
     private String title;
     private Duration loadTime;

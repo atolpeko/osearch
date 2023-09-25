@@ -1,4 +1,4 @@
-package com.osearch.indexer.adapter.out.messaging;
+package com.osearch.indexer.adapter.out.messaging.properties;
 
 /**
  * Output kafka messaging properties.

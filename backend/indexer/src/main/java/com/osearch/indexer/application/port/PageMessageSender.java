@@ -1,18 +1,19 @@
 package com.osearch.indexer.application.port;
 
 import com.osearch.indexer.application.exception.MessagingException;
+import com.osearch.indexer.domain.entity.Page;
 
 /**
- * PageMessageSender is an interface for sending page IDs to a messaging queue.
+ * PageMessageSender is an interface for sending pages to a messaging queue.
  */
 public interface PageMessageSender {
 
     /**
-     * Send page ID to messaging queue.
+     * Send page to messaging queue.
      *
-     * @param id  page ID to send.
+     * @param page to send.
      *
      * @throws MessagingException if any messaging error occurred.
      */
-    void send(long id);
+    void send(Page page);
 }
