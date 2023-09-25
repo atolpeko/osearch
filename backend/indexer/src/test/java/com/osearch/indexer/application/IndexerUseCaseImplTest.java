@@ -2,7 +2,10 @@ package com.osearch.indexer.application;
 
 import static com.osearch.indexer.fixture.IndexUseCaseFixture.ID;
 import static com.osearch.indexer.fixture.IndexUseCaseFixture.PAGE;
+import static com.osearch.indexer.fixture.IndexUseCaseFixture.PAGES_COUNT;
 import static com.osearch.indexer.fixture.IndexUseCaseFixture.REQUEST;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,6 +44,7 @@ class IndexerUseCaseImplTest {
         MockitoAnnotations.initMocks(this);
         when(indexService.index(REQUEST)).thenReturn(PAGE);
         when(repository.save(PAGE)).thenReturn(ID);
+        when(repository.countIndexed()).thenReturn(PAGES_COUNT);
     }
 
     @Test
@@ -53,5 +57,11 @@ class IndexerUseCaseImplTest {
     void shouldMessageWhenProcess() {
         target.process(REQUEST);
         verify(messageSender, times(1)).send(ID);
+    }
+
+    @Test
+    void shouldReturnCount() {
+        var count = target.countIndexed();
+        assertEquals(PAGES_COUNT, count);
     }
 }

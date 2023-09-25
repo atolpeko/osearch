@@ -86,4 +86,18 @@ public class PageRepositoryImpl implements PageRepository {
         transaction.run(mergePage, params);
         transaction.run(mergeRelationship, params);
     }
+
+    @Override
+    public int countIndexed() {
+        try (var session = driver.session()) {
+            return session.readTransaction(transaction -> {
+                var query = "MATCH(p:Page{isIndexed: True}) "
+                    + "RETURN COUNT(*) AS count";
+                var result = transaction.run(query);
+                return result.single().get("count", 0);
+            });
+        } catch (Exception e) {
+            throw new DataAccessException(e.getMessage(), e);
+        }
+    }
 }

@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class IndexUseCaseFixture {
+    public static final int PAGES_COUNT = 10;
     public static final long ID = 1L;
     public static final String URL = "https://host/resource";
     public static final long LOAD_TIME = 1000L;

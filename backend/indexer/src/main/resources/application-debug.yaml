@@ -11,10 +11,10 @@ neo4j:
 kafka:
   url: localhost:9092
   in:
-    topic: crawler-pages
-    groupId: indexer-group
+    topic: crawler.pages
+    groupId: indexer.group
   out:
-    topic: indexer-pages
+    topic: indexer.pages
 domain:
   supportedLocales: en, en-usa, en-gb, en-ca, en-au, en-nz, en-in, en-ie, en-za, en-jm, en-bz,
     en-tt, en-sg, en-my
@@ -26,3 +26,9 @@ management:
     health:
       probes:
         enabled: true
+swagger:
+  url: /swagger-ui/index.html
+  title: Indexer API [DEBUG PROFILE]
+  description: This API allows you to work with indexer service
+  version: "2.0"
+  controllersPackage: com.osearch.indexer.adapter.in.rest

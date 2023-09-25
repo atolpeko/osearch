@@ -25,3 +25,9 @@ management:
     health:
       probes:
         enabled: true
+swagger:
+  url: /swagger-ui/index.html
+  title: Indexer API [TEST PROFILE]
+  description: This API allows you to work with indexer service
+  version: "1.5"
+  controllersPackage: com.osearch.indexer.adapter.in.rest

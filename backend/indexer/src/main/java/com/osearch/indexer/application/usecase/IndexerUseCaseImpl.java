@@ -44,4 +44,9 @@ public class IndexerUseCaseImpl implements IndexerUseCase {
             ? String.format("%d seconds", duration.toSeconds())
             : String.format("%d ms", duration.toMillis());
     }
+
+    @Override
+    public int countIndexed() {
+        return repository.countIndexed();
+    }
 }

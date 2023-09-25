@@ -49,8 +49,10 @@ public class IndexServiceImpl implements IndexService {
 
     private void checkLocale(Document document) {
         var locale = getLocale(document);
-        if (locale == null
-            || supportedLocales.get().stream().noneMatch((l -> l.equals(locale)))) {
+        var notSupported = supportedLocales.get().stream()
+            .map(Locale::toLanguageTag)
+            .noneMatch((l -> l.equals(locale.toLanguageTag())));
+        if (locale == null || notSupported) {
             var mg = locale + " is not a supported locale. Locales available: "
                 + Arrays.toString(supportedLocales.get().toArray());
             throw new UnsupportedLocaleException(mg);

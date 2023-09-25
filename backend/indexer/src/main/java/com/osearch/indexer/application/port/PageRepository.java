@@ -18,4 +18,11 @@ public interface PageRepository {
      * @throws DataAccessException if any error happens.
      */
     Long save(Page page);
+
+    /**
+     * Count the number of indexed pages.
+     *
+     * @return the number of indexed pages.
+     */
+    int countIndexed();
 }
