@@ -1,0 +1,33 @@
+server:
+  port: 0
+spring:
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+neo4j:
+  url: url
+  username: username
+  password: password
+kafka:
+  url: url
+  in:
+    topic: topic
+    groupId: groupId
+  out:
+    topic: topic
+domain:
+  supportedLocales: en
+logging:
+  level:
+    com.osearch.indexer: DEBUG
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+swagger:
+  url: /swagger-ui/index.html
+  title: Indexer API [TEST PROFILE]
+  description: This API allows you to work with indexer service
+  version: "1.5"
+  controllersPackage: com.osearch.indexer.adapter.in.rest

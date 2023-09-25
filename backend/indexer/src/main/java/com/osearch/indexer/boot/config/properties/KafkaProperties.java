@@ -1,6 +1,6 @@
 package com.osearch.indexer.boot.config.properties;
 
-import com.osearch.indexer.adapter.in.InMessagingProperties;
+import com.osearch.indexer.adapter.in.messaging.InMessagingProperties;
 import com.osearch.indexer.adapter.out.messaging.OutMessagingProperties;
 
 import lombok.Getter;

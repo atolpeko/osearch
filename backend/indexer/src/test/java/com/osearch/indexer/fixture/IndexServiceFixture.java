@@ -1,46 +1,92 @@
 package com.osearch.indexer.fixture;
 
 import com.osearch.indexer.domain.entity.IndexRequest;
-import com.osearch.indexer.domain.entity.Keyword;
 import com.osearch.indexer.domain.entity.Page;
+import com.osearch.indexer.domain.entity.Topic;
+import com.osearch.indexer.domain.valueobject.Significance;
 
 import java.time.Duration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 public class IndexServiceFixture {
-    public static final long ID = 1L;
-    public static final String URL = ContentAnalyzerFixture.URL;
-    public static final long LOAD_TIME = ContentAnalyzerFixture.LOAD_TIME;
-    public static final String CONTENT = ContentAnalyzerFixture.CONTENT;
+    public static final List<Locale> SUPPORTED_LOCALES = Stream.of("en", "ar")
+        .map(Locale::new)
+        .collect(Collectors.toList());
 
-    public static final String TITLE = "TITLE";
-    public static final String NESTED_URL_1 = "http://host/resource1";
-    public static final String NESTED_URL_2 = "http://host/resource2";
+    public static final String URL = "https://host/resource";
+    public static final long LOAD_TIME = 1000L;
+    public static final String CONTENT =
+        "<!doctype html>\n" +
+            "<html lang=\"en\">\n " +
+            "<head> " +
+                "<meta charset=\"UTF-8'\"> " +
+                "<meta name=\"author\" content=\"John Doe\">" +
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+                "<title>My Travel Blog</title>" +
+            "</head>\n " +
+            "<body>\n " +
+                "<h1>Hello! This is a travel blog. Today I'm gonna show you Spain</h1>\n " +
+                "<p>Holiday vibes are a way of life in beautiful Spain!</p> " +
+            "</body>\n " +
+        "</html>";
 
-    public static IndexRequest request() {
-        return IndexRequest.builder()
+    public static final String CONTENT_UNSUPPORTED_LOCALE =
+        "<!doctype html>\n" +
+            "<html lang=\"ru\">\n " +
+            "<head> " +
+                "<meta charset=\"UTF-8'\"> " +
+                "<meta name=\"author\" content=\"John Doe\">" +
+                "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+                "<title>My Travel Blog</title>" +
+            "</head>\n " +
+            "<body>\n " +
+                "<h1>Hello! This is a travel blog. Today I'm gonna show you Spain</h1>\n " +
+                "<p>Holiday vibes are a way of life in beautiful Spain!</p> " +
+            "</body>\n " +
+        "</html>";
+
+    public static final IndexRequest REQUEST =
+        IndexRequest.builder()
             .url(URL)
             .content(CONTENT)
             .loadTime(LOAD_TIME)
-            .nestedUrls(Set.of(NESTED_URL_1, NESTED_URL_2))
             .build();
-    }
 
-    public static Page page() {
-        return Page.builder()
+    public static final IndexRequest REQUEST_UNSUPPORTED_LOCALE =
+        IndexRequest.builder()
             .url(URL)
-            .title(TITLE)
-            .loadTime(Duration.ofMillis(LOAD_TIME))
-            .keywords(keywords())
-            .nestedUrls(Set.of(NESTED_URL_1, NESTED_URL_2))
+            .content(CONTENT_UNSUPPORTED_LOCALE)
+            .loadTime(LOAD_TIME)
             .build();
+
+    public static final Set<Topic> EXTRACTED_TOPICS = Set.of(
+        Topic.builder()
+            .mainSubject("Blog")
+            .significance(Significance.of(40))
+            .build()
+    );
+
+    public static Set<Topic> allTopics() {
+        var title = Topic.builder()
+            .mainSubject("My Travel Blog")
+            .significance(Significance.of(100))
+            .build();
+
+        var topics = new HashSet<>(EXTRACTED_TOPICS);
+        topics.add(title);
+        return topics;
     }
 
-    public static Set<Keyword> keywords() {
-        return LongStream.range(0 ,10)
-            .mapToObj(i -> new Keyword("KEY" + i, i))
-            .collect(Collectors.toSet());
-    }
+    public static final Page PAGE =
+        Page.builder()
+            .url(URL)
+            .title("My Travel Blog")
+            .topics(new HashSet<>(allTopics()))
+            .loadTime(Duration.ofMillis(LOAD_TIME))
+            .build();
 }

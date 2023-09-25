@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * Represents a web page.
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -14,6 +17,6 @@ public class Page {
     private String url;
     private String title;
     private Duration loadTime;
+    private Set<Topic> topics;
     private Set<String> nestedUrls;
-    private Set<Keyword> keywords;
 }

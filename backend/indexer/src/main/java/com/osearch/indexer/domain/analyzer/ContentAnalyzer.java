@@ -1,19 +1,23 @@
 package com.osearch.indexer.domain.analyzer;
 
-import com.osearch.indexer.domain.entity.IndexRequest;
-import com.osearch.indexer.domain.entity.Page;
+import com.osearch.indexer.domain.entity.AnalyzerContext;
 
 /**
- * Used to process index request and assemble page object.
+ * Interface for analyzing content using a chain of ContentAnalyzers.
  */
 public interface ContentAnalyzer {
 
     /**
-     * Process index request and assemble page object
+     * Analyzes the provided AnalyzerContext.
      *
-     * @param request  request to process
-     *
-     * @return Page object
+     * @param context The context containing the data to be analyzed.
      */
-    Page analyze(IndexRequest request);
+    void analyze(AnalyzerContext context);
+
+    /**
+     * Sets the next ContentAnalyzer in the chain.
+     *
+     * @param next The next ContentAnalyzer instance to be set.
+     */
+    void setNext(ContentAnalyzer next);
 }
