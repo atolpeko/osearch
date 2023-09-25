@@ -6,6 +6,9 @@ spring:
     username: root
     password: localmy
     driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
   kafka:
     consumer:
       auto-offset-reset: latest
@@ -15,14 +18,14 @@ neo4j:
   password: localneo
 kafka:
   url: localhost:9092
-  topic: indexer-pages
-  groupId: ranker-group
+  topic: indexer.pages
+  groupId: ranker.group
 rank:
   pageRankIterations: 20
   pageRankDampingFactor: 0.85
-  keywordRankWeight: 0.5
-  pageRankWeight: 0.3
-  metaRankWeight: 0.2
+  topicRankWeight: 0.6
+  pageRankWeight: 0.2
+  metaRankWeight: 0.1
 logging:
   level:
     org.springframework.data.neo4j.cypher: ERROR

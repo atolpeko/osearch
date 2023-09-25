@@ -41,7 +41,7 @@ public class PageRankRankerFixture {
         .build();
 
     public static final Index INDEX = Index.builder()
-        .keywords("Java")
+        .topic("Java")
         .pages(Set.of(PAGE_4, PAGE_3, PAGE_2, PAGE_1))
         .build();
 }

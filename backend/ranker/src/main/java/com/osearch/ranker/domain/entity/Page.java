@@ -7,6 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
+/**
+ * The Page class represents a web page.
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -16,11 +19,11 @@ public class Page {
     private String title;
     private Duration loadTime;
     private Set<Page> referredPages;
-    private Set<Keyword> keywords;
+    private Set<Topic> topics;
     private boolean isIndexed;
 
     private double totalRank;
     private double pageRank;
-    private double keywordRank;
+    private double topicRank;
     private double metaRank;
 }

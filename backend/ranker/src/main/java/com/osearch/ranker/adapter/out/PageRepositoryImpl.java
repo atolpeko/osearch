@@ -2,13 +2,15 @@ package com.osearch.ranker.adapter.out;
 
 import com.osearch.ranker.application.port.PageRepository;
 import com.osearch.ranker.application.port.exception.DataAccessException;
-import com.osearch.ranker.domain.entity.Keyword;
 import com.osearch.ranker.domain.entity.Page;
+import com.osearch.ranker.domain.entity.Topic;
+import com.osearch.ranker.domain.valueobject.Significance;
 
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -32,13 +34,13 @@ public class PageRepositoryImpl implements PageRepository {
             return session.readTransaction(transaction -> {
                 var query = "MATCH (p:Page), "
                     + "(p)-[:REFERS_TO]->(rp:Page), "
-                    + "(p)-[h:HAS]->(k:Keyword) "
+                    + "(p)-[h:HAS]->(t:Topic) "
                     + "WHERE ID(p) = $id "
                     + "RETURN p as page, "
                     + "ID(p) as page_id, "
                     + "COLLECT(rp) as referred, "
-                    + "COLLECT(k.value) as keywords, "
-                    + "COLLECT(h.occurrences) as occurrences";
+                    + "COLLECT(t.name) as topics, "
+                    + "COLLECT(h.significance) as significances";
 
                 var result = transaction.run(query, Values.parameters("id", id));
                 if (result.hasNext()) {
@@ -62,14 +64,9 @@ public class PageRepositoryImpl implements PageRepository {
             .map(this::mapReferredPage)
             .filter(Objects::nonNull)
             .collect(Collectors.toSet());
-        var keywordValues = record.get("keywords").asList(Value::asString);
-        var occurrences = record.get("occurrences").asList(Value::asLong);
-        var keywords = IntStream.range(0, keywordValues.size())
-            .mapToObj(i -> new Keyword(keywordValues.get(i), occurrences.get(i)))
-            .collect(Collectors.toSet());
+        var topics = mapTopics(record);
 
-
-        page.setKeywords(keywords);
+        page.setTopics(topics);
         page.setReferredPages(new HashSet<>(referred));
         return Optional.of(page);
     }
@@ -89,6 +86,18 @@ public class PageRepositoryImpl implements PageRepository {
             .loadTime(loadTime)
             .isIndexed(true)
             .build();
+    }
+
+    private Set<Topic> mapTopics(Record record) {
+        var topicNames = record.get("topics").asList(Value::asString);
+        var topicSignificances = record.get("significances")
+            .asList(Value::asDouble)
+            .stream()
+            .map(Significance::new)
+            .collect(Collectors.toList());
+        return IntStream.range(0, topicNames.size())
+            .mapToObj(i -> new Topic(topicNames.get(i), topicSignificances.get(i)))
+            .collect(Collectors.toSet());
     }
 
     private Page mapReferredPage(Node node) {

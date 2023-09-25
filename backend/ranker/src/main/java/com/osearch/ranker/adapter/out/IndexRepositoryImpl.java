@@ -38,16 +38,16 @@ public class IndexRepositoryImpl implements IndexRepository {
             .build();
 
     @Override
-    public Optional<Index> findByKeyword(String keyword) {
+    public Optional<Index> findByTopic(String topic) {
         try {
             var query = "SELECT p.source_id, p.url, p.page_rank "
                 + "FROM indexes i "
                 + "LEFT JOIN pages p ON p.index_key = i.id "
-                + "WHERE i.keywords = ?";
-            var pages = jdbc.query(query, pageMapper, keyword);
+                + "WHERE i.topic = ?";
+            var pages = jdbc.query(query, pageMapper, topic);
 
             var index = Index.builder()
-                .keywords(keyword)
+                .topic(topic)
                 .pages(new HashSet<>(pages))
                 .build();
             return Optional.of(index);
@@ -73,33 +73,37 @@ public class IndexRepositoryImpl implements IndexRepository {
     private long saveIndex(Index index) {
         var savedId = findIndex(index);
         if (savedId == null) {
-            log.debug("Saving new index: {}", index.getKeywords());
+            log.debug("Saving new index: {}", index.getTopic());
             var statementFactory = new PreparedStatementCreatorFactory(
-                "INSERT INTO indexes (keywords) VALUES (?)", Types.VARCHAR
+                "INSERT INTO indexes (topic) VALUES (?)", Types.VARCHAR
             );
             statementFactory.setReturnGeneratedKeys(true);
             var statementCreator = statementFactory.newPreparedStatementCreator(
-                List.of(index.getKeywords())
+                List.of(index.getTopic())
             );
             var keyHolder = new GeneratedKeyHolder();
             jdbc.update(statementCreator, keyHolder);
             savedId = keyHolder.getKey().longValue();
         } else {
-            log.debug("Index already exists: {}", index.getKeywords());
+            log.debug("Index already exists: {}", index.getTopic());
         }
 
         return savedId;
     }
 
     private Long findIndex(Index index) {
-        var query = "SELECT i.id FROM indexes i WHERE i.keywords = ?";
-        RowMapper<Long> rowMapper = (rs, rowNum) -> rs.getLong("id");
-        return jdbc.queryForObject(query, rowMapper, index.getKeywords());
+        try {
+            var query = "SELECT i.id FROM indexes i WHERE i.topic = ?";
+            RowMapper<Long> rowMapper = (rs, rowNum) -> rs.getLong("id");
+            return jdbc.queryForObject(query, rowMapper, index.getTopic());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     private void savePages(Set<Page> pages, long indexId) {
-        var query = "INSERT INTO pages (source_id, url, page_rank, index_key) "
-            + "VALUES (?, ?, ?, ?) "
+        var query = "INSERT INTO pages (source_id, url, title, page_rank, index_key) "
+            + "VALUES (?, ?, ?, ?, ?) "
             + "ON DUPLICATE KEY UPDATE page_rank = ?";
 
         var batchArgs = new ArrayList<Object[]>();
@@ -107,6 +111,7 @@ public class IndexRepositoryImpl implements IndexRepository {
             var values = new Object[]{
                 page.getSourceId(),
                 page.getUrl(),
+                page.getTitle(),
                 page.getPageRank(),
                 indexId,
                 page.getPageRank()};
@@ -123,7 +128,7 @@ public class IndexRepositoryImpl implements IndexRepository {
             var query = "SELECT p.source_id, p.url, p.page_rank "
                 + "FROM indexes i "
                 + "LEFT JOIN pages p ON p.index_key = i.id "
-                + "WHERE i.keywords = ? AND p.url = ?";
+                + "WHERE i.topic = ? AND p.url = ?";
 
             var page = jdbc.queryForObject(query, pageMapper, index, pageUrl);
             return Optional.of(page);

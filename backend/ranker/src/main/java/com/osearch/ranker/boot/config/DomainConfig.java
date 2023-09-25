@@ -1,16 +1,11 @@
 package com.osearch.ranker.boot.config;
 
 import com.osearch.ranker.domain.properties.DomainProperties;
-import com.osearch.ranker.domain.service.indexer.IndexImpl;
-import com.osearch.ranker.domain.service.indexer.Indexer;
-import com.osearch.ranker.domain.service.ranker.RankerService;
-import com.osearch.ranker.domain.service.ranker.impl.KeywordRanker;
-import com.osearch.ranker.domain.service.ranker.impl.MetaRanker;
-import com.osearch.ranker.domain.service.ranker.impl.PageRankRanker;
-import com.osearch.ranker.domain.service.ranker.impl.Ranker;
-import com.osearch.ranker.domain.service.ranker.RankerServiceImpl;
-
-import java.util.List;
+import com.osearch.ranker.domain.service.FinalRanker;
+import com.osearch.ranker.domain.service.TopicRanker;
+import com.osearch.ranker.domain.service.MetaRanker;
+import com.osearch.ranker.domain.service.PageRankRanker;
+import com.osearch.ranker.domain.service.Ranker;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,21 +14,8 @@ import org.springframework.context.annotation.Configuration;
 public class DomainConfig {
 
     @Bean
-    public Indexer indexer() {
-        return new IndexImpl();
-    }
-
-    @Bean
-    public RankerService rankerService(
-        List<Ranker> rankers,
-        DomainProperties properties
-    ) {
-        return new RankerServiceImpl(rankers, properties);
-    }
-
-    @Bean
-    public Ranker keywordRanker() {
-        return new KeywordRanker();
+    public Ranker topicRanker() {
+        return new TopicRanker();
     }
 
     @Bean
@@ -44,5 +26,10 @@ public class DomainConfig {
     @Bean
     public Ranker metaRanker() {
         return new MetaRanker();
+    }
+
+    @Bean
+    public Ranker finalRanker(DomainProperties properties) {
+        return new FinalRanker(properties);
     }
 }

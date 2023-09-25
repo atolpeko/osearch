@@ -4,8 +4,7 @@ import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
 import com.osearch.ranker.application.usecase.RankerUseCase;
 import com.osearch.ranker.application.usecase.RankerUseCaseImpl;
-import com.osearch.ranker.domain.service.indexer.Indexer;
-import com.osearch.ranker.domain.service.ranker.RankerService;
+import com.osearch.ranker.domain.service.Ranker;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +14,17 @@ public class UseCaseConfig {
 
     @Bean
     public RankerUseCase rankerUseCase(
-        Indexer indexer,
-        RankerService rankerService,
+        Ranker topicRanker,
+        Ranker metaRanker,
+        Ranker pageRankRanker,
+        Ranker finalRanker,
         PageRepository pageRepository,
         IndexRepository indexRepository
     ) {
-        return new RankerUseCaseImpl(indexer, rankerService, pageRepository, indexRepository);
+        topicRanker.setNext(metaRanker);
+        metaRanker.setNext(pageRankRanker);
+        pageRankRanker.setNext(finalRanker);
+
+        return new RankerUseCaseImpl(topicRanker, pageRepository, indexRepository);
     }
 }

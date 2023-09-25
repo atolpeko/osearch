@@ -1,6 +1,6 @@
 package com.osearch.ranker.boot.config.properties;
 
-import com.osearch.ranker.adapter.in.InMessagingProperties;
+import com.osearch.ranker.adapter.in.properties.InMessagingProperties;
 
 import lombok.Getter;
 
