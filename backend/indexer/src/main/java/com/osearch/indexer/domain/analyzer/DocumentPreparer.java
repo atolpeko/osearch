@@ -8,6 +8,8 @@ import edu.stanford.nlp.pipeline.StanfordCoreNLP;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+import org.apache.logging.log4j.Level;
+
 /**
  * The DocumentPreparer class is responsible for annotating a document
  * using the StanfordCoreNLP pipeline.
@@ -19,11 +21,15 @@ public class DocumentPreparer extends BaseAnalyzer {
 
     @Override
     public void analyze(AnalyzerContext context) {
-        log.debug("Preparing document for {}", context.getId());
-        var document = new CoreDocument(context.getContent());
-        pipeline.annotate(document);
-        context.setDocument(document);
+        Runnable task = () -> {
+            log.debug("Preparing document for {}", context.getId());
+            var document = new CoreDocument(context.getContent());
+            pipeline.annotate(document);
+            context.setDocument(document);
+        };
 
+        var msg = "Prepared document for {}";
+        withDurationLog(Level.DEBUG, task, msg, context.getId());
         next(context);
     }
 }

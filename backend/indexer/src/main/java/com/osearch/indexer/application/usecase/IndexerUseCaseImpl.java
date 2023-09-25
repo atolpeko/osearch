@@ -1,5 +1,7 @@
 package com.osearch.indexer.application.usecase;
 
+import static com.osearch.indexer.util.DurationFormatter.formatDuration;
+
 import com.osearch.indexer.application.port.PageMessageSender;
 import com.osearch.indexer.application.port.PageRepository;
 import com.osearch.indexer.domain.IndexService;
@@ -38,12 +40,6 @@ public class IndexerUseCaseImpl implements IndexerUseCase {
         var id = repository.save(page);
         page.setId(id);
         messageSender.send(page);
-    }
-
-    private String formatDuration(Duration duration) {
-        return duration.toMillis() >= 1000
-            ? String.format("%d seconds", duration.toSeconds())
-            : String.format("%d ms", duration.toMillis());
     }
 
     @Override
