@@ -22,7 +22,7 @@ public class IndexerUseCaseImpl implements IndexerUseCase {
     public void process(IndexRequest request) {
         try {
             var start = Instant.now();
-            log.debug("Processing page with URL {}", request.getUrl());
+            log.info("Processing page with URL {}", request.getUrl());
             processRequest(request);
             var timeElapsed = Duration.between(start, Instant.now());
             log.info("Page with URL {} indexed in {} ",
@@ -36,7 +36,8 @@ public class IndexerUseCaseImpl implements IndexerUseCase {
         var page = indexService.index(request);
         page.setNestedUrls(request.getNestedUrls());
         var id = repository.save(page);
-        messageSender.send(id);
+        page.setId(id);
+        messageSender.send(page);
     }
 
     private String formatDuration(Duration duration) {
