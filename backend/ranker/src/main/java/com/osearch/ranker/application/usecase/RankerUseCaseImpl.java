@@ -44,7 +44,6 @@ public class RankerUseCaseImpl implements RankerUseCase {
         for (var topic: page.getTopics()) {
             var index = getIndex(topic.getName());
             index.addPage(page);
-            loadReferredPages(index);
             ranker.rank(index);
 
             log.debug("Saving index: {}", index.getTopic());
@@ -89,15 +88,6 @@ public class RankerUseCaseImpl implements RankerUseCase {
         }
 
         pages.removeAll(toRemove);
-    }
-
-    private void loadReferredPages(Index index) {
-        for (var page: index.getPages()) {
-            for (var referred: page.getReferredPages()) {
-                var saved = indexRepository.getPage(index.getTopic(), referred.getUrl());
-                saved.ifPresent(value -> referred.setTotalRank(value.getTotalRank()));
-            }
-        }
     }
 
     private String formatDuration(Duration duration) {
