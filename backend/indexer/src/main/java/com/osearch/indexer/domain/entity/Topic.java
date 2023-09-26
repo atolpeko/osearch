@@ -40,6 +40,6 @@ public class Topic implements Comparable<Topic> {
             result += " " + mainActionTarget;
         }
 
-        return result;
+        return result.toLowerCase();
     }
 }

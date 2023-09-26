@@ -59,9 +59,7 @@ public class MainTopicsExtractor extends BaseAnalyzer {
     private void extractSideData(SemanticGraph graph, List<Topic> topics) {
         for (var edge : graph.edgeIterable()) {
             var relation = edge.getRelation().getShortName();
-            if (relation.equals("compound")) {
-                extractCompound(edge, topics);
-            } else if (relation.equals("conj")) {
+            if (relation.equals("conj")) {
                 extractConjunction(edge, topics);
             } else if (relation.equals("nmod:poss")
                 || relation.equals("amod")
@@ -73,14 +71,6 @@ public class MainTopicsExtractor extends BaseAnalyzer {
                 extractActionTargetDependent(edge, topics);
             }
         }
-    }
-
-    private void extractCompound(SemanticGraphEdge edge, List<Topic> topics) {
-        var governor = edge.getGovernor().word();
-        var dependent = edge.getDependent().word();
-        topics.stream()
-            .filter(t -> t.getMainSubject().equals(governor))
-            .forEach(t -> t.setMainSubject(dependent + "-" + governor));
     }
 
     private void extractConjunction(SemanticGraphEdge edge, List<Topic> topics) {
