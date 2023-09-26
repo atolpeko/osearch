@@ -25,9 +25,3 @@ rest:
   timeout: 10000
   maxRedirects: 5
   userAgent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.1234.567 Safari/537.36
-swagger:
-  url: /swagger-ui/index.html
-  title: Crawler API
-  description: This API allows you to work with crawler service
-  version: "1.3"
-  controllersPackage: com.osearch.crawler.adapter.in.rest

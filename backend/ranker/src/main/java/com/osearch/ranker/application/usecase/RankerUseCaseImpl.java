@@ -26,10 +26,10 @@ public class RankerUseCaseImpl implements RankerUseCase {
         try {
             var start = Instant.now();
             log.info("Processing page with ID {}", pageId);
-            processPage(pageId);
+            var indexesProcessed = processPage(pageId);
             var timeElapsed = Duration.between(start, Instant.now());
-            log.info("Page with ID {} processed in {} ",
-                pageId, formatDuration(timeElapsed));
+            log.info("{} indexes processed for page with ID {} in {}",
+                indexesProcessed, pageId, formatDuration(timeElapsed));
         } catch (DataAccessException e) {
             log.error("Page {} processing error. DB not available. {}", pageId, e.getMessage());
         } catch (Exception e) {
@@ -37,7 +37,7 @@ public class RankerUseCaseImpl implements RankerUseCase {
         }
     }
 
-    private void processPage(long id) {
+    private long processPage(long id) {
         var page = pageRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Page " + id + " is not indexed yet"));
         var counter = 0;
@@ -53,8 +53,7 @@ public class RankerUseCaseImpl implements RankerUseCase {
                 index.getTopic(), page.getTopics().size() - ++counter);
         }
 
-        log.info("{} indexes processed for page {}",
-            page.getTopics().size(), page.getUrl());
+        return page.getTopics().size();
     }
 
     private Index getIndex(String topic) {

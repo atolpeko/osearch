@@ -20,8 +20,11 @@ domain:
     en-tt, en-sg, en-my
 logging:
   level:
-    org.springframework.data.neo4j.cypher: ERROR
     com.osearch.indexer: INFO
+    org.springframework.data.neo4j.cypher: ERROR
+    org.apache.kafka: ERROR
+    edu.stanford.nlp.pipeline.StanfordCoreNLP: INFO
+    edu.stanford.nlp: ERROR
 management:
   endpoint:
     health:
