@@ -52,7 +52,7 @@ public class Crawler implements Runnable {
             try {
                 var page = pagesToCrawl.take();
                 process(page);
-                log.info("Page {} crawled. {} left", page, getPagesLeft());
+                log.debug("Page {} crawled. {} left", page, getPagesLeft());
             } catch (InterruptedException e) {
                 log.debug("Crawler {} interrupted", id);
                 Thread.currentThread().interrupt();

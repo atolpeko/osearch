@@ -44,6 +44,7 @@ public class Processor implements Runnable {
                 var page = pages.take();
                 log.debug("Processing page {}", page.getUrl());
                 process(page);
+                log.info("Page {} crawled", page.getUrl());
             } catch (InterruptedException e) {
                 log.debug("Processor {} interrupted", id);
                 Thread.currentThread().interrupt();
@@ -59,7 +60,7 @@ public class Processor implements Runnable {
             if (notProcessed(page)) {
                 messagePage(page);
                 savePage(page);
-                log.info("Page {} processed. {} left", page.getUrl(), getPagesLeft());
+                log.debug("Page {} processed. {} left", page.getUrl(), getPagesLeft());
             } else {
                 log.debug("Page {} is already processed. Pages left for processing: {}",
                     page.getUrl(), getPagesLeft());

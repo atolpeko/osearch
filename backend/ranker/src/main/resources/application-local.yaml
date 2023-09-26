@@ -28,8 +28,9 @@ rank:
   metaRankWeight: 0.1
 logging:
   level:
-    org.springframework.data.neo4j.cypher: ERROR
     com.osearch.ranker: INFO
+    org.springframework.data.neo4j.cypher: ERROR
+    org.apache.kafka: ERROR
 management:
   endpoint:
     health:
