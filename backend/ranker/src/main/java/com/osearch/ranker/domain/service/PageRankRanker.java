@@ -5,6 +5,7 @@ import com.osearch.ranker.domain.entity.Page;
 import com.osearch.ranker.domain.properties.DomainProperties;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +22,7 @@ public class PageRankRanker extends BaseRanker {
     public void rank(Index index) {
         var iterations = properties.getPageRankIterations();
         var dampingFactor = properties.getPageRankDampingFactor();
+        setInitialRanks(index.getPages());
         calculatePageRanks(index.getPages(), iterations, dampingFactor);
 
         log.debug("{} pages ranked by page rank for index {}",
@@ -28,7 +30,18 @@ public class PageRankRanker extends BaseRanker {
         next(index);
     }
 
-    public void calculatePageRanks(Set<Page> pages, int iterations, double dampingFactor) {
+    private void setInitialRanks(Set<Page> pages) {
+        var allPages = pages.stream()
+            .map(page -> Set.of(page.getReferredPages(), Set.of(page)))
+            .flatMap(Set::stream)
+            .flatMap(Set::stream)
+            .collect(Collectors.toList());
+
+        var initialRank = (double) 1 / allPages.size();
+        allPages.forEach(page -> page.setPageRank(initialRank));
+    }
+
+    private void calculatePageRanks(Set<Page> pages, int iterations, double dampingFactor) {
         for (var i = 0; i < iterations; i++) {
             for (var page : pages) {
                 double sum = 0.0;
@@ -39,7 +52,7 @@ public class PageRankRanker extends BaseRanker {
                     }
                 }
 
-                var rank = (1 - dampingFactor) + dampingFactor * sum;
+                var rank = (1 - dampingFactor) / pages.size() + dampingFactor * sum;
                 page.setPageRank(rank);
             }
         }

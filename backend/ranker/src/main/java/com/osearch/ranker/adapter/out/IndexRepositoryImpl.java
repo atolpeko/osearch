@@ -34,7 +34,7 @@ public class IndexRepositoryImpl implements IndexRepository {
         Page.builder()
             .sourceId(resultSet.getLong("source_id"))
             .url(resultSet.getString("url"))
-            .pageRank(resultSet.getDouble("page_rank"))
+            .totalRank(resultSet.getDouble("page_rank"))
             .build();
 
     @Override
@@ -72,23 +72,22 @@ public class IndexRepositoryImpl implements IndexRepository {
 
     private long saveIndex(Index index) {
         var savedId = findIndex(index);
-        if (savedId == null) {
-            log.debug("Saving new index: {}", index.getTopic());
-            var statementFactory = new PreparedStatementCreatorFactory(
-                "INSERT INTO indexes (topic) VALUES (?)", Types.VARCHAR
-            );
-            statementFactory.setReturnGeneratedKeys(true);
-            var statementCreator = statementFactory.newPreparedStatementCreator(
-                List.of(index.getTopic())
-            );
-            var keyHolder = new GeneratedKeyHolder();
-            jdbc.update(statementCreator, keyHolder);
-            savedId = keyHolder.getKey().longValue();
-        } else {
+        if (savedId != null) {
             log.debug("Index already exists: {}", index.getTopic());
+            return savedId;
         }
 
-        return savedId;
+        log.debug("Saving new index: {}", index.getTopic());
+        var statementFactory = new PreparedStatementCreatorFactory(
+            "INSERT INTO indexes (topic) VALUES (?)", Types.VARCHAR
+        );
+        statementFactory.setReturnGeneratedKeys(true);
+        var statementCreator = statementFactory.newPreparedStatementCreator(
+            List.of(index.getTopic())
+        );
+        var keyHolder = new GeneratedKeyHolder();
+        jdbc.update(statementCreator, keyHolder);
+        return keyHolder.getKey().longValue();
     }
 
     private Long findIndex(Index index) {
@@ -112,28 +111,13 @@ public class IndexRepositoryImpl implements IndexRepository {
                 page.getSourceId(),
                 page.getUrl(),
                 page.getTitle(),
-                page.getPageRank(),
+                page.getTotalRank(),
                 indexId,
-                page.getPageRank()};
+                page.getTotalRank()};
             batchArgs.add(values);
         }
 
         log.debug("Saving {} pages", pages.size());
         jdbc.batchUpdate(query, batchArgs);
-    }
-
-    @Override
-    public Optional<Page> getPage(String index, String pageUrl) {
-        try {
-            var query = "SELECT p.source_id, p.url, p.page_rank "
-                + "FROM indexes i "
-                + "LEFT JOIN pages p ON p.index_key = i.id "
-                + "WHERE i.topic = ? AND p.url = ?";
-
-            var page = jdbc.queryForObject(query, pageMapper, index, pageUrl);
-            return Optional.of(page);
-        } catch (EmptyResultDataAccessException e) {
-            return Optional.empty();
-        }
     }
 }
