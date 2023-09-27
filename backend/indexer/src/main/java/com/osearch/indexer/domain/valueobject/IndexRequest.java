@@ -1,4 +1,4 @@
-package com.osearch.indexer.domain.entity;
+package com.osearch.indexer.domain.valueobject;
 
 import java.util.Set;
 

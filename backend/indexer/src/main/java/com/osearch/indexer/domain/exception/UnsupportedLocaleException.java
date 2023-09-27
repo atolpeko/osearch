@@ -6,35 +6,35 @@ package com.osearch.indexer.domain.exception;
 public class UnsupportedLocaleException extends RuntimeException {
 
     /**
-     * This exception is thrown when a locale is not supported by the application.
+     * Constructs a new UnsupportedLocaleException.
      */
     public UnsupportedLocaleException() {
         super();
     }
 
     /**
-     * This exception is thrown when a locale is not supported by the application.
+     * Constructs a new UnsupportedLocaleException with the specified detail message.
      *
-     * @param message  the detail message.
+     * @param message the detail message
      */
     public UnsupportedLocaleException(String message) {
         super(message);
     }
 
     /**
-     * This exception is thrown when a locale is not supported by the application.
+     * Constructs a new UnsupportedLocaleException with the specified detail message and cause.
      *
-     * @param message  the detail message.
-     * @param cause    the cause of the exception.
+     * @param message the detail message
+     * @param cause the cause
      */
     public UnsupportedLocaleException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * This exception is thrown when a locale is not supported by the application.
+     * Constructs a new UnsupportedLocaleException with the specified cause.
      *
-     * @param cause the cause.
+     * @param cause the cause of this exception
      */
     public UnsupportedLocaleException(Throwable cause) {
         super(cause);

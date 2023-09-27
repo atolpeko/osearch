@@ -1,7 +1,6 @@
 # Indexer
+This service consumes pages found by the crawler and indexes them.
 
-### API
-Swagger documentation available at the root path.
 
 ### Kafka
 > Queue: crawler.pages
@@ -20,6 +19,11 @@ Index request example:
 }
 ```
 
+
+### API
+Swagger documentation available at the root path.
+
+
 ## Build and run locally
 
 ```            
@@ -28,6 +32,15 @@ docker compose up
 java -jar -Dspring.profiles.active=local target/indexer-$version.jar
 ```
 > Endpoint: http://localhost:5970/
+
+
+## Run SonarQube
+```  
+docker run -d --name sonarqube -p 9000:9000 sonarqube
+mvn clean verify sonar:sonar -Dsonar.login=... -Dsonar.password=...
+```  
+> Access: http://localhost:9000/dashboard?id=osearch%3Aindexer
+
 
 ## Generate Javadoc
 ```            

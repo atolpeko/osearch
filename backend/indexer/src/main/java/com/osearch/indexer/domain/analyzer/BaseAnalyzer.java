@@ -2,7 +2,8 @@ package com.osearch.indexer.domain.analyzer;
 
 import static com.osearch.indexer.util.DurationFormatter.formatDuration;
 
-import com.osearch.indexer.domain.entity.AnalyzerContext;
+import com.osearch.indexer.domain.exception.AnalyzerException;
+import com.osearch.indexer.domain.valueobject.AnalyzerContext;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -76,7 +77,7 @@ public abstract class BaseAnalyzer implements ContentAnalyzer {
             var timeElapsed = Duration.between(start, Instant.now());
             log.log(logLevel, message + " in " + formatDuration(timeElapsed), reslt,  params);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new AnalyzerException(e);
         }
     }
 }

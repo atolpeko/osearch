@@ -1,8 +1,7 @@
 package com.osearch.indexer.application.usecase;
 
-import com.osearch.indexer.application.exception.DataAccessException;
-import com.osearch.indexer.application.exception.MessagingException;
-import com.osearch.indexer.domain.entity.IndexRequest;
+import com.osearch.indexer.application.usecase.exception.IndexerException;
+import com.osearch.indexer.domain.valueobject.IndexRequest;
 
 /**
  * IndexerUseCase interface provides a method to process index requests.
@@ -14,8 +13,7 @@ public interface IndexerUseCase {
      *
      * @param request the IndexRequest to process.
      *
-     * @throws MessagingException  if kafka messaging error happens.
-     * @throws DataAccessException if any repository error happens.
+     * @throws IndexerException if any error happens.
      */
     void process(IndexRequest request);
 
@@ -24,7 +22,7 @@ public interface IndexerUseCase {
      *
      * @return the count of indexed pages.
      *
-     * @throws DataAccessException if any repository error happens.
+     * @throws IndexerException if any error happens.
      */
     int countIndexed();
 }

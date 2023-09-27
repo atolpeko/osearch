@@ -1,4 +1,4 @@
-package com.osearch.indexer.application.exception;
+package com.osearch.indexer.application.port.exception;
 
 /**
  * Thrown to indicate that a messaging error occurred.
@@ -15,8 +15,7 @@ public class MessagingException extends RuntimeException {
     /**
      * Constructs a new MessagingException with the specified detail message.
      *
-     * @param message the detail message (which is saved for later
-     *               retrieval by the getMessage() method)
+     * @param message the detail message
      */
     public MessagingException(String message) {
         super(message);
@@ -25,9 +24,8 @@ public class MessagingException extends RuntimeException {
     /**
      * Constructs a new MessagingException with the specified detail message and cause.
      *
-     * @param message the detail message (which is saved for later
-     *                retrieval by the getMessage() method)
-     * @param cause the cause (which is saved for later retrieval by the getCause() method)
+     * @param message the detail message
+     * @param cause the cause
      */
     public MessagingException(String message, Throwable cause) {
         super(message, cause);
@@ -36,7 +34,7 @@ public class MessagingException extends RuntimeException {
     /**
      * Constructs a new MessagingException with the specified cause.
      *
-     * @param cause the cause (which is saved for later retrieval by the getCause() method)
+     * @param cause the cause
      */
     public MessagingException(Throwable cause) {
         super(cause);

@@ -8,29 +8,34 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * This interface represents the API for the Indexer service.
+ * IndexerApi interface represents the API endpoints for consuming
+ * information about pages that have been indexed.
+ * <p>
+ * All methods in this interface are designed to be used over HTTP.
  */
-@Validated
 @Api(tags = "Indexer API")
 @RequestMapping(path = "/api/indexer", produces = "application/json")
 public interface IndexerApi {
 
     @GetMapping("/pages")
-    @ApiOperation(value = "Count indexed pages")
+    @ApiOperation(
+        value = "Count indexed pages",
+        notes = "API to get the total count of indexed pages",
+        response = PagesCountResponse.class
+    )
     @ApiResponses(value = {
         @ApiResponse(
             code = 200,
-            message = "Success response.",
+            message = "Successfully retrieved the pages count",
             response = PagesCountResponse.class
         ),
         @ApiResponse(
             code = 500,
-            message = "Response in case of an unknown error.",
+            message = "Response in case of an unknown internal error",
             response = ErrorResponse.class
         )
     })

@@ -1,6 +1,6 @@
 package com.osearch.indexer.fixture;
 
-import com.osearch.indexer.domain.entity.AnalyzerContext;
+import com.osearch.indexer.domain.valueobject.AnalyzerContext;
 import com.osearch.indexer.domain.entity.Topic;
 import com.osearch.indexer.domain.valueobject.Significance;
 

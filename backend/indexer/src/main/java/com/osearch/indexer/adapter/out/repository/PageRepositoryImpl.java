@@ -1,6 +1,6 @@
 package com.osearch.indexer.adapter.out.repository;
 
-import com.osearch.indexer.application.exception.DataAccessException;
+import com.osearch.indexer.application.port.exception.DataAccessException;
 import com.osearch.indexer.application.port.PageRepository;
 import com.osearch.indexer.domain.entity.Page;
 import com.osearch.indexer.domain.entity.Topic;
@@ -15,6 +15,9 @@ import org.neo4j.driver.Driver;
 import org.neo4j.driver.Transaction;
 import org.neo4j.driver.Values;
 
+/**
+ * Implements the PageRepository that works with neo4j database.
+ */
 @Log4j2
 @RequiredArgsConstructor
 public class PageRepositoryImpl implements PageRepository {
@@ -91,8 +94,9 @@ public class PageRepositoryImpl implements PageRepository {
     public int countIndexed() {
         try (var session = driver.session()) {
             return session.readTransaction(transaction -> {
-                var query = "MATCH(p:Page{isIndexed: True}) "
-                    + "RETURN COUNT(*) AS count";
+                var query = "MATCH(p:Page) "
+                    + "WHERE p.isIndexed = True "
+                    + "RETURN COUNT(p.url) AS count";
                 var result = transaction.run(query);
                 return result.single().get("count", 0);
             });

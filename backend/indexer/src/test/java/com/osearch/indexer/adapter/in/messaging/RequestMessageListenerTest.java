@@ -51,7 +51,7 @@ class RequestMessageListenerTest {
     }
 
     @Test
-    void shouldNotStartIndexingWhenRequestIsValid() {
+    void shouldNotStartIndexingWhenRequestIsInvalid() {
         target.listen(INVALID_JSON);
         verify(useCase, times(0)).process(REQUEST);
     }

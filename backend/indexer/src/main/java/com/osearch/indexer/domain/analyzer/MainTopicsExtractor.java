@@ -1,7 +1,7 @@
 package com.osearch.indexer.domain.analyzer;
 
 import com.osearch.indexer.domain.entity.Topic;
-import com.osearch.indexer.domain.entity.AnalyzerContext;
+import com.osearch.indexer.domain.valueobject.AnalyzerContext;
 
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
