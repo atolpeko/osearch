@@ -1,0 +1,10 @@
+server:
+  port: 8080
+logging:
+  level:
+    com.osearch.search: INFO
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true

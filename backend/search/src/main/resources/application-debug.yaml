@@ -1,0 +1,25 @@
+server:
+  port: 5980
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/indexes?createDatabaseIfNotExist=true
+    username: root
+    password: localmy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
+logging:
+  level:
+    com.osearch.search: DEBUG
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+swagger:
+  url: /swagger-ui/index.html
+  title: Search API [DEBUG PROFILE]
+  description: This API allows you to search for web pages
+  version: "1.0"
+  controllersPackage: com.osearch.search.adapter.in
