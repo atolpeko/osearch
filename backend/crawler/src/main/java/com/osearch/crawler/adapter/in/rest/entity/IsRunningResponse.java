@@ -7,17 +7,18 @@ import lombok.Data;
 
 /**
  * Represents the response object that contains information about
- * the running state of the crawler service.
+ * the running state of the crawler.
  */
 @Data
 @ApiModel(
     value = "IsRunningResponse",
-    description = "Details about the running state of the crawler service"
+    description = "Details about the running state of the crawler"
 )
 public class IsRunningResponse {
 
     @ApiModelProperty(
-        value = "An indicator representing whether the crawler service is running or not.",
+        value = "An indicator representing whether "
+            + "the crawler is running or not.",
         example = "true"
     )
     private final Boolean isRunning;

@@ -40,5 +40,5 @@ swagger:
   url: /swagger-ui/index.html
   title: Crawler API [LOCAL PROFILE]
   description: This API allows you to work with crawler service
-  version: "1.3"
+  version: "1.5"
   controllersPackage: com.osearch.crawler.adapter.in.rest

@@ -11,7 +11,7 @@ public interface PageMessageSender {
     /**
      * Send Page objects to messaging queue.
      *
-     * @param page  Page to send
+     * @param page Page to send
      *
      * @throws MessagingException if any messaging error occurred
      */

@@ -17,6 +17,13 @@ import org.springframework.kafka.core.KafkaTemplate;
 public class ResponseMessageSender extends BaseMessageSender {
     private final InMessagingProperties properties;
 
+    /**
+     * Constructs a new ResponseMessageSender object.
+     *
+     * @param kafkaTemplate The KafkaTemplate used for sending Kafka messages.
+     * @param objectMapper The ObjectMapper used for converting objects to JSON.
+     * @param properties The InMessagingProperties object containing messaging properties.
+     */
     public ResponseMessageSender(
         KafkaTemplate<String, String> kafkaTemplate,
         ObjectMapper objectMapper,

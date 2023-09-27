@@ -9,6 +9,9 @@ import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
 
+/**
+ * This class represents a custom annotation used to validate a list of URLs.
+ */
 @Documented
 @Constraint(validatedBy = URLListValidator.class)
 @Target({ElementType.FIELD, ElementType.PARAMETER})

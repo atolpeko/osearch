@@ -15,7 +15,7 @@ public class PageController implements PageAPI {
 
     @Override
     public PagesCountResponse count() {
-        var count = pageUseCase.countProcessed();
+        var count = pageUseCase.countCrawled();
         return new PagesCountResponse(count);
     }
 }

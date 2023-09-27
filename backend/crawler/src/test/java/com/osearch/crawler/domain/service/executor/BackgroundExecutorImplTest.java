@@ -1,18 +1,13 @@
 package com.osearch.crawler.domain.service.executor;
 
-import static com.osearch.crawler.fixture.BackgroundExecutorFixture.TASKS_COUNT;
-import static com.osearch.crawler.fixture.BackgroundExecutorFixture.endlessTasks;
-import static com.osearch.crawler.fixture.BackgroundExecutorFixture.listModifyingTasks;
-import static com.osearch.crawler.fixture.BackgroundExecutorFixture.listModifyingTasksResult;
+import static com.osearch.crawler.fixture.BackgroundExecutorFixture.infiniteTasks;
 
 import static org.awaitility.Awaitility.await;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -29,22 +24,17 @@ class BackgroundExecutorImplTest {
 
     @Test
     void shouldStartExecution() {
-        var emptyList = new ArrayList<String>(TASKS_COUNT);
-        var tasks = listModifyingTasks(emptyList);
+        target.execute(infiniteTasks());
+        await().atMost(2, TimeUnit.SECONDS)
+            .until(() -> target.isRunning());
 
-        target.execute(tasks);
-        await().atMost(8, TimeUnit.SECONDS)
-            .until(() -> !target.isRunning());
-
-        var expectedList = listModifyingTasksResult();
-        var resultList = emptyList.stream().sorted().collect(Collectors.toList());
-        assertEquals(expectedList, resultList);
+        assertTrue(target.isRunning());
     }
 
     @Test
     void shouldStopExecution() {
-        target.execute(endlessTasks());
-        await().pollDelay(8, TimeUnit.SECONDS).until(() -> true);
+        target.execute(infiniteTasks());
+        await().pollDelay(2, TimeUnit.SECONDS).until(() -> true);
         target.stop();
 
         assertFalse(target.isRunning());

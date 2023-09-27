@@ -17,6 +17,14 @@ public class PageMessageSenderImpl extends BaseMessageSender implements PageMess
     private final PageMapper mapper;
     private final OutMessagingProperties properties;
 
+    /**
+     * Creates a new instance of the PageMessageSenderImpl class.
+     *
+     * @param kafkaTemplate - The KafkaTemplate used for sending Kafka messages.
+     * @param objectMapper - The ObjectMapper used for serializing/deserializing messages.
+     * @param mapper - The PageMapper used for mapping Page objects to Kafka messages.
+     * @param properties - The OutMessagingProperties used for obtaining messaging configuration.
+     */
     public PageMessageSenderImpl(
         KafkaTemplate<String, String> kafkaTemplate,
         ObjectMapper objectMapper,

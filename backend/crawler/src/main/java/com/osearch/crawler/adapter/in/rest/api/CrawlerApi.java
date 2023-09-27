@@ -25,72 +25,80 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * All methods in this interface are designed to be used over HTTP.
  */
 @Validated
-@Api(tags = "Crawler API")
+@Api(tags = "Crawler API", protocols = "http")
 @RequestMapping(path = "/api/crawler", produces = "application/json")
 public interface CrawlerApi {
 
     @PostMapping("/start")
     @ApiOperation(
-        value = "Start crawler",
-        notes = "Start crawler. The process begins from an initial URL list"
-            + " input which is provided inside the StartRequest object."
+        value = "Start this crawler",
+        notes = "This endpoint initiates the web crawling process,"
+            + " beginning from an initial URL list"
+            + " input which is provided inside the StartRequest object"
     )
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Crawler started successfully"),
+        @ApiResponse(code = 200, message = "The crawler started successfully"),
         @ApiResponse(
             code = 400,
             message = "Response in case of invalid StartRequest. "
-                + "The client must modify the request before retrying.",
+                + "The client is expected to modify the request before retrying.",
             response = ErrorResponse.class
         ),
         @ApiResponse(
             code = 417,
-            message = "Response in case if crawler is already running. "
-                + "The client is expected to stop crawler before"
-                + " issuing a new start request.",
+            message = "Response in case if this crawler is already running. "
+                + "The client is expected to stop the crawler before"
+                + " issuing a new start request",
             response = ErrorResponse.class
         ),
         @ApiResponse(
             code = 500,
-            message = "Response in case of an unknown error.",
+            message = "Response in case of an unknown internal error",
             response = ErrorResponse.class
         )
     })
     void start(
-        @ApiParam(value = "Crawler start request entity", required = true)
+        @ApiParam(value = "The request object to start the crawler", required = true)
         @RequestBody @Valid StartRequest request
     );
 
     @DeleteMapping("/stop")
-    @ApiOperation(value = "Stop crawler", notes = "Crawler will stop looking for new pages")
+    @ApiOperation(
+        value = "Stop this crawler",
+        notes = "The crawler will stop looking for new pages"
+    )
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Crawler stopped successfully"),
+        @ApiResponse(code = 200, message = "The crawler stopped successfully"),
         @ApiResponse(
             code = 417,
-            message = "Response in case if crawler is not running. "
-                + "The client is expected to start crawler before"
-                + " issuing a new stop request.",
+            message = "Response in case if the crawler is not running. "
+                + "The client is expected to start the crawler before"
+                + " issuing a new stop request",
             response = ErrorResponse.class
         ),
         @ApiResponse(
             code = 500,
-            message = "Response in case of an unknown error.",
+            message = "Response in case of an unknown internal error",
             response = ErrorResponse.class
         )
     })
     void stop();
 
     @GetMapping("/running")
-    @ApiOperation(value = "Check if crawler is running")
+    @ApiOperation(
+        value = "Check if crawler is running",
+        notes = "This endpoint checks the current running status of the crawler",
+        response = IsRunningResponse.class
+    )
     @ApiResponses(value = {
         @ApiResponse(
             code = 200,
-            message = "Success response.",
+            message = "Successfully retrieved the running status",
             response = IsRunningResponse.class
         ),
         @ApiResponse(
             code = 500,
-            message = "Response in case of an unknown error.",
+            message = "Response in case of an unknown internal error",
             response = ErrorResponse.class
         )
     })

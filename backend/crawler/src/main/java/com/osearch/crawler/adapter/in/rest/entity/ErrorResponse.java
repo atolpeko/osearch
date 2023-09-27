@@ -23,10 +23,16 @@ public class ErrorResponse {
     )
     private final long timestamp;
 
-    @ApiModelProperty(value = "The HTTP status code of the error", example = "400")
+    @ApiModelProperty(
+        value = "The HTTP status code of the error",
+        example = "400"
+    )
     private final int status;
 
-    @ApiModelProperty(value = "Description of the error", example = "Bad Request")
+    @ApiModelProperty(
+        value = "Description of the error",
+        example = "Bad Request"
+    )
     private final String error;
 
     @ApiModelProperty(
