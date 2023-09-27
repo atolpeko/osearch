@@ -3,6 +3,7 @@ package com.osearch.ranker.adapter.in;
 import com.osearch.ranker.adapter.in.mapper.RequestMapper;
 import com.osearch.ranker.adapter.in.properties.InMessagingProperties;
 import com.osearch.ranker.application.usecase.RankerUseCase;
+import com.osearch.ranker.application.usecase.exception.RankerException;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -31,7 +32,7 @@ public class NewPageListener {
             log.debug("Receiving a message from topic {}", properties.getTopic());
             var request = mapper.toRequest(message);
             useCase.process(request.getId());
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | RankerException e) {
             log.error(e.getMessage());
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage());

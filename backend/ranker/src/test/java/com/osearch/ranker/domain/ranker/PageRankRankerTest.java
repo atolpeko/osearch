@@ -1,4 +1,4 @@
-package com.osearch.ranker.domain.service;
+package com.osearch.ranker.domain.ranker;
 
 import static com.osearch.ranker.fixture.PageRankRankerFixture.DAMPING_FACTOR;
 import static com.osearch.ranker.fixture.PageRankRankerFixture.INDEX;

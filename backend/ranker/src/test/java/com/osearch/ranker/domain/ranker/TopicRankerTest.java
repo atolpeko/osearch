@@ -1,4 +1,4 @@
-package com.osearch.ranker.domain.service;
+package com.osearch.ranker.domain.ranker;
 
 import static com.osearch.ranker.fixture.TopicRankerFixture.INDEX;
 import static com.osearch.ranker.fixture.TopicRankerFixture.PAGE_1;

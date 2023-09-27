@@ -1,4 +1,4 @@
-package com.osearch.ranker.domain.service;
+package com.osearch.ranker.domain.ranker;
 
 import static com.osearch.ranker.fixture.FinalRankerFixture.INDEX;
 import static com.osearch.ranker.fixture.FinalRankerFixture.TOPIC_RANK_WEIGHT;

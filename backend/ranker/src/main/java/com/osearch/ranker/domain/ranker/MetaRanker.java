@@ -1,4 +1,4 @@
-package com.osearch.ranker.domain.service;
+package com.osearch.ranker.domain.ranker;
 
 import com.osearch.ranker.domain.entity.Index;
 import com.osearch.ranker.domain.entity.Page;

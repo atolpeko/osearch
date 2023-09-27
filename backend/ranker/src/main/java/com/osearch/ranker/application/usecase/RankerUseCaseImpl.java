@@ -3,9 +3,10 @@ package com.osearch.ranker.application.usecase;
 import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
 import com.osearch.ranker.application.port.exception.DataAccessException;
+import com.osearch.ranker.application.usecase.exception.RankerException;
 import com.osearch.ranker.domain.entity.Index;
 import com.osearch.ranker.domain.entity.Page;
-import com.osearch.ranker.domain.service.Ranker;
+import com.osearch.ranker.domain.ranker.Ranker;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -31,9 +32,11 @@ public class RankerUseCaseImpl implements RankerUseCase {
             log.info("{} indexes processed for page with ID {} in {}",
                 indexesProcessed, pageId, formatDuration(timeElapsed));
         } catch (DataAccessException e) {
-            log.error("Page {} processing error. DB not available. {}", pageId, e.getMessage());
+            var msg = "Page " + pageId + "processing error. DB not available: " + e.getMessage();
+            throw new RankerException(msg, e);
         } catch (Exception e) {
-            log.error("Page {} processing error: {}", pageId, e.getMessage());
+            var msg = "Page " + pageId + "processing error: " + e.getMessage();
+            throw new RankerException(msg, e);
         }
     }
 

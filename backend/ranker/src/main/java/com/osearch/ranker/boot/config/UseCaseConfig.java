@@ -4,7 +4,7 @@ import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
 import com.osearch.ranker.application.usecase.RankerUseCase;
 import com.osearch.ranker.application.usecase.RankerUseCaseImpl;
-import com.osearch.ranker.domain.service.Ranker;
+import com.osearch.ranker.domain.ranker.Ranker;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

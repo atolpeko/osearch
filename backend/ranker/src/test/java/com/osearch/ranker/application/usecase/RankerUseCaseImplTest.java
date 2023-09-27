@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 
 import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
-import com.osearch.ranker.domain.service.Ranker;
+import com.osearch.ranker.domain.ranker.Ranker;
 
 import java.util.Optional;
 
