@@ -2,7 +2,8 @@ package com.osearch.indexer.adapter.in.messaging;
 
 import com.osearch.indexer.adapter.in.messaging.mapper.IndexRequestMapper;
 import com.osearch.indexer.application.usecase.IndexerUseCase;
-import com.osearch.indexer.domain.entity.IndexRequest;
+import com.osearch.indexer.application.usecase.exception.IndexerException;
+import com.osearch.indexer.domain.valueobject.IndexRequest;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,7 +34,9 @@ public class RequestMessageListener {
             var request = mapper.map(message);
             useCase.process(request);
         } catch (IllegalArgumentException e) {
-            log.debug(message + " " + e.getMessage());
+            log.error(message + " " + e.getMessage());
+        } catch (IndexerException e) {
+            log.error(e.getMessage());
         } catch (Exception e) {
             log.error("Error: {}", e.getMessage());
         }

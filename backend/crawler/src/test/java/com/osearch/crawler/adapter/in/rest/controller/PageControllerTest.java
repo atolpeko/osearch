@@ -32,7 +32,7 @@ class PageControllerTest {
 
     @Test
     void shouldReturnUrlsCount() throws Exception {
-        var count = useCase.countProcessed();
+        var count = useCase.countCrawled();
         mvc.perform(get(URL))
             .andDo(print())
             .andExpect(status().isOk())

@@ -1,7 +1,7 @@
 package com.osearch.indexer.adapter.in.rest;
 
 import com.osearch.indexer.adapter.in.rest.entity.ErrorResponse;
-import com.osearch.indexer.application.exception.DataAccessException;
+import com.osearch.indexer.application.usecase.exception.IndexerException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -22,14 +22,19 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+/**
+ * This class is an exception interceptor for handling various
+ * exceptions that may occur during the execution of the application
+ * and sending appropriate REST responses.
+ */
 @Log4j2
 @RestControllerAdvice
 public class ExceptionInterceptor {
 
-    @ExceptionHandler(DataAccessException.class)
+    @ExceptionHandler(IndexerException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleDataAccessException(
-        DataAccessException e,
+    public ErrorResponse handleUseCaseException(
+        IndexerException e,
         HttpServletRequest request
     ) {
         return handleException(e.getMessage(), request, HttpStatus.INTERNAL_SERVER_ERROR);

@@ -5,7 +5,7 @@ import com.osearch.crawler.application.port.PageMessageSender;
 import com.osearch.crawler.application.port.PageRepository;
 import com.osearch.crawler.application.properties.ApplicationProperties;
 import com.osearch.crawler.application.service.Crawler;
-import com.osearch.crawler.application.usecase.exception.CrawlerServiceException;
+import com.osearch.crawler.application.usecase.exception.CrawlerUseCaseException;
 import com.osearch.crawler.domain.entity.Page;
 import com.osearch.crawler.application.usecase.exception.CrawlerAlreadyRunningException;
 import com.osearch.crawler.application.usecase.exception.CrawlerNotRunningException;
@@ -52,10 +52,10 @@ public class CrawlerUseCaseImpl implements CrawlerUseCase {
             pagesToCrawl.addAll(initialUrls);
             var tasks = getTasks();
             executor.execute(tasks);
-        } catch (CrawlerServiceException e) {
+        } catch (CrawlerUseCaseException e) {
             throw e;
         } catch (Exception e) {
-            throw new CrawlerServiceException(e.getMessage(), e);
+            throw new CrawlerUseCaseException(e.getMessage(), e);
         }
     }
 
@@ -64,7 +64,7 @@ public class CrawlerUseCaseImpl implements CrawlerUseCase {
         try {
             return executor.isRunning();
         } catch (Exception e) {
-            throw new CrawlerServiceException(e.getMessage(), e);
+            throw new CrawlerUseCaseException(e.getMessage(), e);
         }
     }
 
@@ -113,10 +113,10 @@ public class CrawlerUseCaseImpl implements CrawlerUseCase {
             executor.stop();
             pagesToSave.clear();
             pagesToCrawl.clear();
-        } catch (CrawlerServiceException e) {
+        } catch (CrawlerUseCaseException e) {
             throw e;
         } catch (Exception e) {
-            throw new CrawlerServiceException(e.getMessage(), e);
+            throw new CrawlerUseCaseException(e.getMessage(), e);
         }
     }
 }

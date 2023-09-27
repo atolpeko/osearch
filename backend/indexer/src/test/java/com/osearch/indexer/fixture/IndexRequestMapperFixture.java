@@ -1,6 +1,6 @@
 package com.osearch.indexer.fixture;
 
-import com.osearch.indexer.domain.entity.IndexRequest;
+import com.osearch.indexer.domain.valueobject.IndexRequest;
 
 public class IndexRequestMapperFixture {
     public static final String URL = "https://host/resource";

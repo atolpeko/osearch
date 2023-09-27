@@ -12,7 +12,7 @@ import static org.mockito.Mockito.when;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import com.osearch.indexer.domain.entity.IndexRequest;
+import com.osearch.indexer.domain.valueobject.IndexRequest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

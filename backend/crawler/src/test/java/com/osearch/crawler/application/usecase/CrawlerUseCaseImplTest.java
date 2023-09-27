@@ -17,7 +17,7 @@ import com.osearch.crawler.application.port.PageRepository;
 import com.osearch.crawler.application.properties.ApplicationProperties;
 import com.osearch.crawler.application.usecase.exception.CrawlerAlreadyRunningException;
 import com.osearch.crawler.application.usecase.exception.CrawlerNotRunningException;
-import com.osearch.crawler.application.usecase.exception.CrawlerServiceException;
+import com.osearch.crawler.application.usecase.exception.CrawlerUseCaseException;
 import com.osearch.crawler.domain.service.executor.BackgroundExecutor;
 import com.osearch.crawler.domain.service.htmlprocessor.HtmlProcessor;
 
@@ -98,7 +98,7 @@ class CrawlerUseCaseImplTest {
     @Test
     void shouldThrowExceptionWhenErrorHappens() {
         doThrow(RuntimeException.class).when(executor).execute(any());
-        assertThrows(CrawlerServiceException.class,
+        assertThrows(CrawlerUseCaseException.class,
             () -> target.start(INITIAL_URLS));
     }
 }

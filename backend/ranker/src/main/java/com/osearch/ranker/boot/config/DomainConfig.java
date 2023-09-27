@@ -1,11 +1,11 @@
 package com.osearch.ranker.boot.config;
 
 import com.osearch.ranker.domain.properties.DomainProperties;
-import com.osearch.ranker.domain.service.FinalRanker;
-import com.osearch.ranker.domain.service.TopicRanker;
-import com.osearch.ranker.domain.service.MetaRanker;
-import com.osearch.ranker.domain.service.PageRankRanker;
-import com.osearch.ranker.domain.service.Ranker;
+import com.osearch.ranker.domain.ranker.FinalRanker;
+import com.osearch.ranker.domain.ranker.TopicRanker;
+import com.osearch.ranker.domain.ranker.MetaRanker;
+import com.osearch.ranker.domain.ranker.PageRankRanker;
+import com.osearch.ranker.domain.ranker.Ranker;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

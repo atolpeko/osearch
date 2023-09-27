@@ -33,14 +33,14 @@ public class RequestValidator {
         var urls = request.getUrls();
         if (urls == null || urls.isEmpty() || urls.stream().anyMatch(String::isBlank)) {
             return Set.of("URLs must be specified.");
-        } else if (urls.stream().anyMatch(this::isInValidURL)) {
+        } else if (urls.stream().anyMatch(this::isInvalidURL)) {
             return Set.of("URLs must be valid.");
         } else {
             return Collections.emptySet();
         }
     }
 
-    private boolean isInValidURL(String url) {
+    private boolean isInvalidURL(String url) {
         try {
             new URL(url);
             return false;

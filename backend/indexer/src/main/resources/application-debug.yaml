@@ -30,5 +30,5 @@ swagger:
   url: /swagger-ui/index.html
   title: Indexer API [DEBUG PROFILE]
   description: This API allows you to work with indexer service
-  version: "2.0"
+  version: "2.2"
   controllersPackage: com.osearch.indexer.adapter.in.rest

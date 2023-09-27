@@ -2,6 +2,7 @@ package com.osearch.crawler.adapter.out.repository.dto;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotBlank;
 
 import lombok.AllArgsConstructor;
@@ -24,6 +25,7 @@ import org.springframework.data.annotation.Id;
 public class PageDto {
 
     @Id
+    @GeneratedValue
     private String id;
 
     @NotBlank(message = "URL hash is required")

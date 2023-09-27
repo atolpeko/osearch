@@ -7,6 +7,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * URLListValidator checks if the given list of URLs contains
+ * any blanks, and returns true if all URLs are valid,
+ * otherwise, it returns false and adds a constraint violation.
+ */
 @Component
 public class URLListValidator implements ConstraintValidator<ValidURLList, List<String>> {
 

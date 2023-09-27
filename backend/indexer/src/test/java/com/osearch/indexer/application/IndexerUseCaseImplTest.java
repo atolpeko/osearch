@@ -7,6 +7,8 @@ import static com.osearch.indexer.fixture.IndexUseCaseFixture.REQUEST;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -14,6 +16,7 @@ import static org.mockito.Mockito.when;
 import com.osearch.indexer.application.port.PageMessageSender;
 import com.osearch.indexer.application.usecase.IndexerUseCaseImpl;
 import com.osearch.indexer.application.port.PageRepository;
+import com.osearch.indexer.application.usecase.exception.IndexerException;
 import com.osearch.indexer.domain.IndexService;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -63,5 +66,11 @@ class IndexerUseCaseImplTest {
     void shouldReturnCount() {
         var count = target.countIndexed();
         assertEquals(PAGES_COUNT, count);
+    }
+
+    @Test
+    void shouldThrowException() {
+        doThrow(RuntimeException.class).when(indexService).index(REQUEST);
+        assertThrows(IndexerException.class, () -> target.process(REQUEST));
     }
 }

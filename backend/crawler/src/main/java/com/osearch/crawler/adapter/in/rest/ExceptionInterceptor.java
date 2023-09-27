@@ -3,7 +3,7 @@ package com.osearch.crawler.adapter.in.rest;
 import com.osearch.crawler.adapter.in.rest.entity.ErrorResponse;
 import com.osearch.crawler.application.usecase.exception.CrawlerAlreadyRunningException;
 import com.osearch.crawler.application.usecase.exception.CrawlerNotRunningException;
-import com.osearch.crawler.application.usecase.exception.ServiceException;
+import com.osearch.crawler.application.usecase.exception.UseCaseException;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -24,6 +24,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+/**
+ * This class is an exception interceptor for handling various
+ * exceptions that may occur during the execution of the application
+ * and sending appropriate REST responses.
+ */
 @Log4j2
 @RestControllerAdvice
 public class ExceptionInterceptor {
@@ -37,7 +42,11 @@ public class ExceptionInterceptor {
         return handleException(e.getMessage(), request, HttpStatus.EXPECTATION_FAILED);
     }
 
-    private ErrorResponse handleException(String msg, HttpServletRequest request, HttpStatus status) {
+    private ErrorResponse handleException(
+        String msg,
+        HttpServletRequest request,
+        HttpStatus status
+    ) {
         var path = request.getServletPath();
         log.error("Request for {} error: {}", path, msg);
         var timestamp = LocalDateTime.now()
@@ -61,10 +70,10 @@ public class ExceptionInterceptor {
         return handleException(e.getMessage(), request, HttpStatus.EXPECTATION_FAILED);
     }
 
-    @ExceptionHandler(ServiceException.class)
+    @ExceptionHandler(UseCaseException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleServiceException(
-        ServiceException e,
+    public ErrorResponse handleUseCaseException(
+        UseCaseException e,
         HttpServletRequest request
     ) {
         return handleException(e.getMessage(), request, HttpStatus.INTERNAL_SERVER_ERROR);

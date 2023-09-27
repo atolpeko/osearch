@@ -1,6 +1,6 @@
 package com.osearch.indexer.application.port;
 
-import com.osearch.indexer.application.exception.MessagingException;
+import com.osearch.indexer.application.port.exception.MessagingException;
 import com.osearch.indexer.domain.entity.Page;
 
 /**

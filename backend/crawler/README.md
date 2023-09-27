@@ -1,7 +1,10 @@
 # Crawler
+This service looks for new web pages and sends them to kafka.
+
 
 ### API
 Swagger documentation available at the root path.
+
 
 ### Kafka
 
@@ -47,6 +50,7 @@ Response examples:
 }
 ```  
 
+
 ## Build and run locally
 
 ```            
@@ -55,6 +59,14 @@ docker compose up
 java -jar -Dspring.profiles.active=local target/crawler-$version.jar
 ```
 > Endpoint: http://localhost:5960/
+
+
+## Run SonarQube
+```  
+docker run -d --name sonarqube -p 9000:9000 sonarqube
+mvn clean verify sonar:sonar -Dsonar.login=... -Dsonar.password=...
+```  
+> Access: http://localhost:9000/dashboard?id=osearch%3Acrawler
 
 
 ## Generate Javadoc

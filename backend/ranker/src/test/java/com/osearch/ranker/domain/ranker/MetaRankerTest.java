@@ -1,4 +1,4 @@
-package com.osearch.ranker.domain.service;
+package com.osearch.ranker.domain.ranker;
 
 import static com.osearch.ranker.fixture.MetaRankerFixture.INDEX;
 import static com.osearch.ranker.fixture.MetaRankerFixture.PAGE_1;

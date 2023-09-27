@@ -15,7 +15,10 @@ import lombok.Data;
  * The StartRequest class represents a crawler start request entity.
  */
 @Data
-@ApiModel(value = "StartRequest", description = "Crawler start request entity")
+@ApiModel(
+    value = "StartRequest",
+    description = "Crawler start request entity"
+)
 public class StartRequest {
 
     @ApiModelProperty(
@@ -27,7 +30,7 @@ public class StartRequest {
             + " https://www.goal.com/es,"
             + " https://www.reddit.com ]"
     )
-    @NotEmpty(message = "List of URLs should not be empty")
+    @NotEmpty(message = "The list of URLs should not be empty")
     @ValidURLList
     private List<String> urls;
 }

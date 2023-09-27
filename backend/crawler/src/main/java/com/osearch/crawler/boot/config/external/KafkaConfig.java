@@ -22,12 +22,16 @@ import org.springframework.kafka.core.ProducerFactory;
 public class KafkaConfig {
 
     @Bean
-    public KafkaTemplate<String, String> kafkaTemplate(KafkaProperties kafkaProperties) {
+    public KafkaTemplate<String, String> kafkaTemplate(
+        KafkaProperties kafkaProperties
+    ) {
         return new KafkaTemplate<>(producerFactory(kafkaProperties));
     }
 
     @Bean
-    public ProducerFactory<String, String> producerFactory(KafkaProperties kafkaProperties) {
+    public ProducerFactory<String, String> producerFactory(
+        KafkaProperties kafkaProperties
+    ) {
         var configProps = new HashMap<String, Object>();
         configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProperties.getUrl());
         configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);

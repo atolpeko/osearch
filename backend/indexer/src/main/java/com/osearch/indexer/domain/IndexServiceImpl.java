@@ -1,9 +1,9 @@
 package com.osearch.indexer.domain;
 
 import com.osearch.indexer.domain.analyzer.ContentAnalyzer;
-import com.osearch.indexer.domain.entity.IndexRequest;
+import com.osearch.indexer.domain.valueobject.IndexRequest;
 import com.osearch.indexer.domain.entity.Page;
-import com.osearch.indexer.domain.entity.AnalyzerContext;
+import com.osearch.indexer.domain.valueobject.AnalyzerContext;
 import com.osearch.indexer.domain.entity.Topic;
 import com.osearch.indexer.domain.exception.UnsupportedLocaleException;
 import com.osearch.indexer.domain.valueobject.Significance;
@@ -51,7 +51,8 @@ public class IndexServiceImpl implements IndexService {
         var locale = getLocale(document);
         var notSupported = supportedLocales.get().stream()
             .map(Locale::toLanguageTag)
-            .noneMatch((l -> l.equals(locale.toLanguageTag())));
+            .map(String::toLowerCase)
+            .noneMatch((l -> l.equals(locale.toLanguageTag().toLowerCase())));
         if (locale == null || notSupported) {
             var mg = locale + " is not a supported locale. Locales available: "
                 + Arrays.toString(supportedLocales.get().toArray());
@@ -62,7 +63,7 @@ public class IndexServiceImpl implements IndexService {
     private Locale getLocale(Document document) {
         var localeInHtml = Optional.ofNullable(document.selectFirst("html"))
             .map(element -> element.attr("lang"))
-            .map(Locale::new);
+            .map(Locale::forLanguageTag);
         if (localeInHtml.isPresent()) {
             return localeInHtml.get();
         }

@@ -54,43 +54,43 @@ public class PageRepositoryImpl implements PageRepository {
         }
     }
 
-    private Optional<Page> mapResult(Record record) {
-        var page = mapPage(record);
+    private Optional<Page> mapResult(Record dataRecord) {
+        var page = mapPage(dataRecord);
         if (page == null) {
             return Optional.empty();
         }
 
-        var referred = record.get("referred").asList(Value::asNode).stream()
+        var referred = dataRecord.get("referred").asList(Value::asNode).stream()
             .map(this::mapReferredPage)
             .filter(Objects::nonNull)
             .collect(Collectors.toSet());
-        var topics = mapTopics(record);
+        var topics = mapTopics(dataRecord);
 
         page.setTopics(topics);
         page.setReferredPages(new HashSet<>(referred));
         return Optional.of(page);
     }
 
-    private Page mapPage(Record record) {
-        var isIndexed = record.get("page").get("isIndexed").asBoolean();
+    private Page mapPage(Record dataRecord) {
+        var isIndexed = dataRecord.get("page").get("isIndexed").asBoolean();
         if (!isIndexed) {
             return null;
         }
 
-        var loadTime = Duration.ofNanos(record.get("page").asNode()
+        var loadTime = Duration.ofNanos(dataRecord.get("page").asNode()
             .get("loadTime").asIsoDuration().nanoseconds());
         return Page.builder()
-            .sourceId(record.get("page_id").asLong())
-            .url(record.get("page").asNode().get("url").asString())
-            .title(record.get("page").asNode().get("title").asString())
+            .sourceId(dataRecord.get("page_id").asLong())
+            .url(dataRecord.get("page").asNode().get("url").asString())
+            .title(dataRecord.get("page").asNode().get("title").asString())
             .loadTime(loadTime)
             .isIndexed(true)
             .build();
     }
 
-    private Set<Topic> mapTopics(Record record) {
-        var topicNames = record.get("topics").asList(Value::asString);
-        var topicSignificances = record.get("significances")
+    private Set<Topic> mapTopics(Record dataRecord) {
+        var topicNames = dataRecord.get("topics").asList(Value::asString);
+        var topicSignificances = dataRecord.get("significances")
             .asList(Value::asDouble)
             .stream()
             .map(Significance::new)

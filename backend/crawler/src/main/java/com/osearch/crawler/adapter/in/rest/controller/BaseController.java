@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import springfox.documentation.annotations.ApiIgnore;
 
+/**
+ * The BaseController class handles the base URL ("/") endpoints.
+ * This class redirects the user to the Swagger UI when accessing the base URL.
+ */
 @Controller
 @ApiIgnore
 @RequestMapping("/")

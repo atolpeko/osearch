@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.osearch.indexer.adapter.out.messaging.mapper.PageMapper;
 import com.osearch.indexer.adapter.out.messaging.properties.OutMessagingProperties;
-import com.osearch.indexer.application.exception.MessagingException;
+import com.osearch.indexer.application.port.exception.MessagingException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;

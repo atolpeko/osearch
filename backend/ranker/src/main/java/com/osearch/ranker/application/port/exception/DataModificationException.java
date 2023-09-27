@@ -6,38 +6,35 @@ package com.osearch.ranker.application.port.exception;
 public class DataModificationException extends RuntimeException {
 
     /**
-     * This class represents an exception that is thrown when there is an error
-     * during data modification.
-     *
-     * @since 1.0
+     * Constructs a new DataModificationException.
      */
     public DataModificationException() {
         super();
     }
 
     /**
-     * Exception thrown when an error occurs while modifying repository data.
+     * Constructs a new DataModificationException with the specified message.
      *
-     * @param message the detail message.
+     * @param message the detail message
      */
     public DataModificationException(String message) {
         super(message);
     }
 
     /**
-     * Exception thrown when an error occurs while modifying repository data.
+     * Constructs a new DataModificationException with the specified message and cause.
      *
-     * @param message the detail message.
-     * @param cause the cause of the exception.
+     * @param message the detail message
+     * @param cause the cause of the exception
      */
     public DataModificationException(String message, Throwable cause) {
         super(message, cause);
     }
 
     /**
-     * Exception thrown when an error occurs while modifying repository data.
+     * Constructs a new DataModificationException with the specified cause.
      *
-     * @param cause the cause of the exception.
+     * @param cause the cause of the exception
      */
     public DataModificationException(Throwable cause) {
         super(cause);

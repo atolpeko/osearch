@@ -11,10 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import com.osearch.indexer.domain.analyzer.ContentAnalyzer;
-import com.osearch.indexer.domain.entity.AnalyzerContext;
+import com.osearch.indexer.domain.exception.AnalyzerException;
+import com.osearch.indexer.domain.valueobject.AnalyzerContext;
 import com.osearch.indexer.domain.exception.UnsupportedLocaleException;
 import com.osearch.indexer.domain.valueobject.SupportedLocales;
 
@@ -58,8 +60,15 @@ class IndexServiceImplTest {
     }
 
     @Test
-    void shouldIndexWhenLocaleIsNotSupported() {
+    void shouldThrowExceptionWhenLocaleIsNotSupported() {
         assertThrows(UnsupportedLocaleException.class,
             () -> target.index(REQUEST_UNSUPPORTED_LOCALE));
+    }
+
+    @Test
+    void shouldThrowExceptionWhenAnalyzerFails() {
+        doThrow(AnalyzerException.class).when(analyzer).analyze(any());
+        assertThrows(AnalyzerException.class,
+            () -> target.index(REQUEST));
     }
 }

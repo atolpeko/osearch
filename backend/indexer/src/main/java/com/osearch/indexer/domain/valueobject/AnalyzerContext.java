@@ -1,4 +1,6 @@
-package com.osearch.indexer.domain.entity;
+package com.osearch.indexer.domain.valueobject;
+
+import com.osearch.indexer.domain.entity.Topic;
 
 import edu.stanford.nlp.pipeline.CoreDocument;
 

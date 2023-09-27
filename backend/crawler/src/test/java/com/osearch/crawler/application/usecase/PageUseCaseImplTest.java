@@ -9,7 +9,7 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 import com.osearch.crawler.application.port.PageRepository;
-import com.osearch.crawler.application.usecase.exception.PageServiceException;
+import com.osearch.crawler.application.usecase.exception.PageUseCaseException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -37,13 +37,13 @@ class PageUseCaseImplTest {
     void shouldReturnCount() {
         when(repository.count()).thenReturn(COUNT);
 
-        var count = target.countProcessed();
+        var count = target.countCrawled();
         assertEquals(COUNT, count);
     }
 
     @Test
     void shouldThrowExceptionWhenErrorHappens() {
         doThrow(RuntimeException.class).when(repository).count();
-        assertThrows(PageServiceException.class, () -> target.countProcessed());
+        assertThrows(PageUseCaseException.class, () -> target.countCrawled());
     }
 }

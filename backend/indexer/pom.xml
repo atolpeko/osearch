@@ -5,7 +5,7 @@
 
     <groupId>osearch</groupId>
     <artifactId>indexer</artifactId>
-    <version>2.1</version>
+    <version>2.2</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -21,6 +21,10 @@
         <swagger.version>3.0.0</swagger.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
         <jsoup.version>1.15.4</jsoup.version>
+
+        <maven-javadoc-plugin.version>3.6.0</maven-javadoc-plugin.version>
+        <sonar-plugin.version>3.9.0.2155</sonar-plugin.version>
+        <jacoco-lugin.version>0.8.6</jacoco-lugin.version>
     </properties>
 
     <dependencies>
@@ -204,6 +208,36 @@
             </plugin>
 
 
+            <!-- Sonar -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${sonar-plugin.version}</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-lugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                        <phase>test-compile</phase>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                        <phase>test</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+
             <!-- Run -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -211,4 +245,13 @@
             </plugin>
         </plugins>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
