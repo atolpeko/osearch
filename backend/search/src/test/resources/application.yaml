@@ -1,0 +1,31 @@
+server:
+  port: 0
+h2:
+  console:
+    enabled: true
+  sql:
+    init:
+      platform: h2
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: always
+logging:
+  level:
+    com.osearch.search: DEBUG
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+swagger:
+  url: /swagger-ui/index.html
+  title: Search API [TEST PROFILE]
+  description: description
+  version: "1.0"
+  controllersPackage: com.osearch.search.adapter.in
