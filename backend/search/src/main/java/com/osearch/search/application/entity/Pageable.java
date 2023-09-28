@@ -1,14 +1,15 @@
 package com.osearch.search.application.entity;
 
 import java.util.List;
-import lombok.Getter;
+
+import lombok.Data;
 
 /**
  * A class representing a pageable list.
  *
  * @param <T> the type of the value contained in the Pageable list
  */
-@Getter
+@Data
 public class Pageable<T> {
     private final List<T> values;
     private final boolean hasNextPage;
