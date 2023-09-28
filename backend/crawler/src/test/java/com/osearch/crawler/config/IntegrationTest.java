@@ -7,6 +7,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 import org.springframework.kafka.test.context.EmbeddedKafka;
@@ -16,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 @Target(ElementType.TYPE)
 @SpringBootTest(classes = CrawlerApplication.class)
 @ActiveProfiles("test")
+@AutoConfigureMockMvc
 @EmbeddedKafka(partitions = 1, topics = "request")
 @EnableMongoRepositories(basePackages = "com.osearch.crawler.adapter.out.repository")
 public @interface IntegrationTest {
