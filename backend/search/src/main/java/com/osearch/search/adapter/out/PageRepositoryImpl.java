@@ -31,7 +31,7 @@ public class PageRepositoryImpl implements PageRepository {
             var query = "SELECT p.url, p.title "
                 + "FROM indexes i "
                 + "LEFT JOIN pages p ON p.index_key = i.id "
-                + "WHERE i.topic = ? "
+                + "WHERE LOWER(i.topic) = LOWER(?) "
                 + "ORDER BY p.page_rank DESC "
                 + "LIMIT ? OFFSET ?";
 
