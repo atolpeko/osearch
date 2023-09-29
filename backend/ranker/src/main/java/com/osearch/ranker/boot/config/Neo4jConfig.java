@@ -9,7 +9,9 @@ import org.neo4j.driver.GraphDatabase;
 import org.springframework.boot.autoconfigure.neo4j.Neo4jAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
+@Profile({"debug, local", "prod"})
 @Configuration
 public class Neo4jConfig extends Neo4jAutoConfiguration {
 
