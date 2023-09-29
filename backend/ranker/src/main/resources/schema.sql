@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS indexes
     topic     VARCHAR(255)  NOT NULL,
 
     PRIMARY KEY (id),
-    CONSTRAINT UNIQUE (topic)
+    UNIQUE (topic)
 );
 
 CREATE TABLE IF NOT EXISTS pages
@@ -18,6 +18,6 @@ CREATE TABLE IF NOT EXISTS pages
 
     PRIMARY KEY (id),
     FOREIGN KEY (index_key) REFERENCES indexes (id) ON DELETE CASCADE,
-    CONSTRAINT UNIQUE (url, index_key)
+    UNIQUE (url, index_key)
 );
 
