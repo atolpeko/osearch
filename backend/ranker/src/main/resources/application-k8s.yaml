@@ -6,7 +6,9 @@ spring:
       auto-offset-reset: latest
 logging:
   level:
-    com.osearch.indexer: INFO
+    com.osearch.ranker: INFO
+    org.springframework.data.neo4j.cypher: ERROR
+    org.apache.kafka: ERROR
 management:
   endpoint:
     health:
