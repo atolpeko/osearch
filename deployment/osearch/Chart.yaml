@@ -1,0 +1,14 @@
+apiVersion: v2
+name: osearch
+description: An umbrella chart for aggregating osearch services
+type: application
+version: 1.0.0
+dependencies:
+  - name: crawler
+    version: 1.0.0
+  - name: indexer
+    version: 1.0.0
+  - name: ranker
+    version: 1.0.0
+  - name: search
+    version: 1.0.0
