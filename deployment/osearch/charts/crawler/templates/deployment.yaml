@@ -1,0 +1,110 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "crawler.fullname" . }}
+  labels:
+    {{- include "crawler.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "crawler.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "crawler.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "crawler.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.port }}
+          livenessProbe:
+            httpGet:
+              port: {{ .Values.port }}
+              path: {{ .Values.livenessProbe.path }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds}}
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.port }}
+              path: {{ .Values.readinessProbe.path }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.env.profile  }}
+            - name: SERVER_PORT
+              value: {{ .Values.port | quote}}
+
+            - name: SPRING_DATA_MONGODB_HOST
+              value: {{ .Values.env.mongo.host }}
+            - name: SPRING_DATA_MONGODB_PORT
+              value: {{ .Values.env.mongo.port | quote}}
+            - name: SPRING_DATA_MONGODB_DATABASE
+              value: {{ .Values.env.mongo.database }}
+
+            - name: KAFKA_URL
+              value: {{ .Values.env.kafka.url }}
+            - name: KAFKA_REQUESTTOPIC
+              value: {{ .Values.env.kafka.requestTopic }}
+            - name: KAFKA_RESPONSETOPIC
+              value: {{ .Values.env.kafka.responseTopic }}
+            - name: KAFKA_PAGETOPIC
+              value: {{ .Values.env.kafka.pageTopic }}
+            - name: KAFKA_GROUPID
+              value: {{ .Values.env.kafka.groupId }}
+
+            - name: SERVICE_CRAWLERTHREADSCOUNT
+              value: {{ .Values.env.service.crawlerThreadsCount | quote}}
+            - name: SERVICE_PROCESSORTHREADSCOUNT
+              value: {{ .Values.env.service.processorThreadsCount | quote}}
+            - name: SERVICE_EXTERNALURLREGEX
+              value: {{ .Values.env.service.externalUrlRegex }}
+            - name: SERVICE_INVALIDURLREGEX
+              value: {{ .Values.env.service.invalidUrlRegex }}
+            - name: SERVICE_PAGESTOKEEP
+              value: {{ .Values.env.service.pagesToKeep | quote}}
+
+            - name: REST_TIMEOUT
+              value: {{ .Values.env.rest.timeout | quote}}
+            - name: REST_MAXREDIRECTS
+              value: {{ .Values.env.rest.maxRedirects | quote}}
+            - name: REST_USERAGENT
+              value: {{ .Values.env.rest.userAgent | quote}}
+
+            - name: SWAGGER_TITLE
+              value: {{ .Values.env.swagger.title }}
+            - name: SWAGGER_DESCRIPTION
+              value: {{ .Values.env.swagger.description }}
+            - name: SWAGGER_VERSION
+              value: {{ .Values.env.swagger.version | quote}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
