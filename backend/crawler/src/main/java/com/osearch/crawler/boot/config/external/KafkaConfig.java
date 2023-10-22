@@ -18,7 +18,7 @@ import org.springframework.kafka.core.ProducerFactory;
 
 @Configuration
 @RequiredArgsConstructor
-@Profile({"debug", "local", "prod"})
+@Profile({"debug", "local", "k8s"})
 public class KafkaConfig {
 
     @Bean

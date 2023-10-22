@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ranker.fullname" . }}
+  labels:
+    {{- include "ranker.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "ranker.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "ranker.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "ranker.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.port }}
+          livenessProbe:
+            httpGet:
+              port: {{ .Values.port }}
+              path: {{ .Values.livenessProbe.path }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds}}
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.port }}
+              path: {{ .Values.readinessProbe.path }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.env.profile  }}
+            - name: SERVER_PORT
+              value: {{ .Values.port | quote}}
+
+            - name: SPRING_DATASOURCE_URL
+              value: {{ .Values.env.spring.datasource.url }}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{ .Values.env.spring.datasource.username }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: {{ .Values.env.spring.datasource.password }}
+
+            - name: NEO4J_URL
+              value: {{ .Values.env.neo4j.url }}
+            - name: NEO4J_USERNAME
+              value: {{ .Values.env.neo4j.username }}
+            - name: NEO4J_PASSWORD
+              value: {{ .Values.env.neo4j.password }}
+
+            - name: KAFKA_URL
+              value: {{ .Values.env.kafka.url }}
+            - name: KAFKA_TOPIC
+              value: {{ .Values.env.kafka.topic }}
+            - name: KAFKA_GROUPID
+              value: {{ .Values.env.kafka.groupId }}
+
+            - name: RANK_PAGERANKITERATIONS
+              value: {{ .Values.env.rank.pageRankIterations | quote }}
+            - name: RANK_PAGERANKDAMPINGFACTOR
+              value: {{ .Values.env.rank.pageRankDampingFactor | quote }}
+            - name: RANK_TOPICRANKWEIGHT
+              value: {{ .Values.env.rank.topicRankWeight | quote }}
+            - name: RANK_PAGERANKWEIGHT
+              value: {{ .Values.env.rank.pageRankWeight | quote }}
+            - name: RANK_METARANKWEIGHT
+              value: {{ .Values.env.rank.metaRankWeight | quote }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
