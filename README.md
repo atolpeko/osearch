@@ -1,8 +1,22 @@
-# Open Seearch 
+# Open Search 
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-Sample search engine using Java and Spring Boot.
+Sample search engine using Java and Spring Boot organized
+under one source repository for convince.
+
+## Run with Helm
+You can spin up the Kubernetes deployment locally using Minikube.
+
+```
+minikube start
+minikube addons enable ingress
+```
+
+Then install the helm chart
+```
+helm install osearch osearch/ -f config/configuration.local.yaml 
+```
 
 ## Workflow
 
