@@ -1,0 +1,42 @@
+server:
+  port: 0
+h2:
+  console:
+    enabled: true
+  sql:
+    init:
+      platform: h2
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb;DATABASE_TO_LOWER=TRUE;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  sql:
+    init:
+      mode: always
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+neo4j:
+  url: url
+  username: username
+  password: password
+kafka:
+  url: url
+  topic: topic
+  groupId: groupid
+rank:
+  pageRankIterations: 20
+  pageRankDampingFactor: 0.85
+  topicRankWeight: 0.6
+  pageRankWeight: 0.2
+  metaRankWeight: 0.1
+logging:
+  level:
+    com.osearch.ranker: DEBUG
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true

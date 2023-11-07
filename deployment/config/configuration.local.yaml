@@ -1,0 +1,121 @@
+rabbitmq:
+  enabled: false
+mysql:
+  enabled: false
+mongo:
+  enabled: false
+neo4j:
+  enabled: false
+
+crawler:
+  ingress:
+    enabled: true
+    host: osearch.com.crawler
+    paths:
+      - path: /
+        service:
+          name: osearch-crawler
+          port: 80
+  env:
+    profile: k8s
+    mongo:
+      host: host.docker.internal
+      port: 27017
+      database: crawler-db
+    kafka:
+      url: host.docker.internal:9092
+      requestTopic: crawler.request
+      responseTopic: crawler.response
+      pageTopic: crawler.pages
+      groupId: crawler.group
+    service:
+      crawlerThreadsCount: 6
+      processorThreadsCount: 6
+      pagesToKeep: 50000
+      externalUrlRegex: "((http|https)://[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)"
+      invalidUrlRegex: ".*\\.(js|txt|json|csv|pdf|xml|mp3|mp4|avi|mov|zip|rar|exe|jpg|jpeg|gif|png|svg)$"
+    rest:
+      timeout: 10000
+      maxRedirects: 10
+      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
+    swagger:
+      title: Crawler API
+      description: This API allows you to work with crawler service
+      version: 1.5
+
+indexer:
+  ingress:
+    enabled: true
+    host: osearch.com.indexer
+    paths:
+      - path: /
+        service:
+          name: osearch-indexer
+          port: 80
+  env:
+    profile: k8s
+    neo4j:
+      url: bolt://host.docker.internal/pageindex
+      username: neo4j
+      password: localneo
+    kafka:
+      url: host.docker.internal:9092
+      in:
+        topic: crawler.pages
+        groupId: indexer.group
+      out:
+        topic: indexer.pages
+    domain:
+      supportedLocales: en, en-usa, en-gb, en-ca, en-au, en-nz, en-in, en-ie, en-za, en-jm, en-bz,
+        en-tt, en-sg, en-my
+    swagger:
+      url: /swagger-ui/index.html
+      title: Indexer API
+      description: This API allows you to work with indexer service
+      version: "2.2"
+
+ranker:
+  env:
+    profile: k8s
+    spring:
+      datasource:
+        url: jdbc:mysql://host.docker.internal/indexes?createDatabaseIfNotExist=true
+        username: root
+        password: localmy
+    neo4j:
+      url: bolt://host.docker.internal/pageindex
+      username: neo4j
+      password: localneo
+    kafka:
+      url: host.docker.internal:9092
+      topic: indexer.pages
+      groupId: ranker.group
+    rank:
+      pageRankIterations: 20
+      pageRankDampingFactor: 0.85
+      topicRankWeight: 0.6
+      pageRankWeight: 0.2
+      metaRankWeight: 0.1
+
+search:
+  ingress:
+    enabled: true
+    host: osearch.com.search
+    paths:
+      - path: /
+        service:
+          name: osearch
+          port: 80
+  env:
+    profile: k8s
+    spring:
+      datasource:
+        url: jdbc:mysql://host.docker.internal/indexes?createDatabaseIfNotExist=true
+        username: root
+        password: localmy
+    swagger:
+      url: /swagger-ui/index.html
+      title: Search API
+      description: This API allows you to search for web pages
+      version: "1.0"
+      subDomain: "/search"

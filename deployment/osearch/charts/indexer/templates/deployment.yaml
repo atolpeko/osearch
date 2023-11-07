@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "indexer.fullname" . }}
+  labels:
+    {{- include "indexer.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "indexer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "indexer.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "indexer.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.port }}
+          livenessProbe:
+            httpGet:
+              port: {{ .Values.port }}
+              path: {{ .Values.livenessProbe.path }}
+            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
+            periodSeconds: {{ .Values.livenessProbe.periodSeconds}}
+          readinessProbe:
+            httpGet:
+              port: {{ .Values.port }}
+              path: {{ .Values.readinessProbe.path }}
+            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: {{ .Values.env.profile  }}
+            - name: SERVER_PORT
+              value: {{ .Values.port | quote}}
+
+            - name: NEO4J_URL
+              value: {{ .Values.env.neo4j.url }}
+            - name: NEO4J_USERNAME
+              value: {{ .Values.env.neo4j.username }}
+            - name: NEO4J_PASSWORD
+              value: {{ .Values.env.neo4j.password }}
+
+            - name: KAFKA_URL
+              value: {{ .Values.env.kafka.url }}
+            - name: KAFKA_IN_TOPIC
+              value: {{ .Values.env.kafka.in.topic }}
+            - name: KAFKA_IN_GROUPID
+              value: {{ .Values.env.kafka.in.groupId }}
+            - name: KAFKA_OUT_TOPIC
+              value: {{ .Values.env.kafka.out.topic }}
+
+            - name: DOMAIN_SUPPORTEDLOCALES
+              value: {{ .Values.env.domain.supportedLocales }}
+
+            - name: SWAGGER_TITLE
+              value: {{ .Values.env.swagger.title }}
+            - name: SWAGGER_DESCRIPTION
+              value: {{ .Values.env.swagger.description }}
+            - name: SWAGGER_VERSION
+              value: {{ .Values.env.swagger.version | quote }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -1,0 +1,25 @@
+{{- if .Values.ingress.enabled -}}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingress.name }}
+  labels:
+    {{- include "crawler.labels" . | nindent 4 }}
+  annotations:
+    {{- toYaml .Values.ingress.annotations | nindent 4 }}
+spec:
+  ingressClassName: {{ .Values.ingress.className }}
+  rules:
+    - host: {{ .Values.ingress.host }}
+      http:
+        paths:
+          {{- range $i, $value := .Values.ingress.paths }}
+          - pathType: Prefix
+            path: {{ $value.path }}
+            backend:
+              service:
+                name: {{ $value.service.name }}
+                port:
+                  number: {{ $value.service.port }}
+          {{- end }}
+{{- end }}

@@ -1,0 +1,43 @@
+server:
+  port: 0
+spring:
+  data:
+    mongodb:
+      host: localhost
+      port: 60906
+      database: database
+      embedded: true
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+kafka:
+  url: url
+  pageTopic: topic
+  requestTopic: request
+  responseTopic: response
+  groupId: group
+  maxMessageSize: 10485760
+logging:
+  level:
+    com.osearch.crawler: DEBUG
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+service:
+  crawlerThreadsCount: 1
+  processorThreadsCount: 1
+  pagesToKeep: 2000
+  externalUrlRegex: ((http|https)://[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)
+  invalidUrlRegex: .*\\.(js|txt|json|csv|pdf|xml|mp3|mp4|avi|mov|zip|rar|exe|jpg|jpeg|gif|png|svg)$
+rest:
+  timeout: 10000
+  maxRedirects: 5
+  userAgent: Crawler
+swagger:
+  url: /swagger-ui/index.html
+  title: Crawler API [TEST PROFILE]
+  description: Crawler API [TEST PROFILE]
+  version: "0.0.1"
+  controllersPackage: com.osearch.crawler.inout.web

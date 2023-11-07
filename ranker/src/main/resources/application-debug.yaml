@@ -1,0 +1,36 @@
+server:
+  port: 6000
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/indexes?createDatabaseIfNotExist=true
+    username: root
+    password: localmy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  sql:
+    init:
+      mode: always
+  kafka:
+    consumer:
+      auto-offset-reset: latest
+neo4j:
+  url: bolt://localhost:7687/pageindex
+  username: neo4j
+  password: localneo
+kafka:
+  url: localhost:9092
+  topic: indexer.pages
+  groupId: ranker.group
+rank:
+  pageRankIterations: 20
+  pageRankDampingFactor: 0.85
+  topicRankWeight: 0.6
+  pageRankWeight: 0.2
+  metaRankWeight: 0.1
+logging:
+  level:
+    com.osearch.ranker: DEBUG
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
