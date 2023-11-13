@@ -1,7 +1,7 @@
 package com.osearch.crawler.adapter.out.repository;
 
 import com.osearch.crawler.adapter.out.repository.jpa.PageDtoJpaRepository;
-import com.osearch.crawler.adapter.out.repository.mapper.PageMapper;
+import com.osearch.crawler.adapter.out.repository.mapper.PageJpaMapper;
 import com.osearch.crawler.application.port.PageRepository;
 import com.osearch.crawler.application.port.exception.DataAccessException;
 import com.osearch.crawler.domain.entity.Page;
@@ -11,9 +11,9 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class PageRepositoryImpl implements PageRepository {
+public class PageMongoRepository implements PageRepository {
     private final PageDtoJpaRepository jpaRepository;
-    private final PageMapper mapper;
+    private final PageJpaMapper mapper;
 
     @Override
     public Optional<Page> findByUrlHash(String hash) {
