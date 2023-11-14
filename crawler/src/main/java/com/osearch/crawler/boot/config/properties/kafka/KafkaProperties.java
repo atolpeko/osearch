@@ -1,4 +1,4 @@
-package com.osearch.crawler.boot.config.properties;
+package com.osearch.crawler.boot.config.properties.kafka;
 
 import com.osearch.crawler.adapter.in.messaging.properties.InMessagingProperties;
 import com.osearch.crawler.adapter.out.messaging.properties.OutMessagingProperties;
@@ -12,8 +12,7 @@ import org.springframework.stereotype.Component;
 public class KafkaProperties implements InMessagingProperties, OutMessagingProperties {
 
     @Getter
-    @Value("${kafka.url}")
-    private String url;
+    private final String brokers;
 
     @Getter
     @Value("${kafka.maxMessageSize}")
@@ -30,6 +29,10 @@ public class KafkaProperties implements InMessagingProperties, OutMessagingPrope
 
     @Value("${kafka.responseTopic}")
     private String responseTopic;
+
+    public KafkaProperties(KafkaBrokers brokers) {
+        this.brokers = String.join(",", brokers.getBrokers());
+    }
 
     @Override
     public String getTopic() {

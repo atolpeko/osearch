@@ -11,7 +11,8 @@ spring:
     consumer:
       auto-offset-reset: earliest
 kafka:
-  url: url
+  brokers:
+    - broker
   pageTopic: topic
   requestTopic: request
   responseTopic: response

@@ -10,7 +10,8 @@ spring:
     consumer:
       auto-offset-reset: latest
 kafka:
-  url: localhost:9092
+  brokers:
+    - localhost:9092
   requestTopic: crawler.request
   responseTopic: crawler.response
   pageTopic: crawler.pages
@@ -38,5 +39,5 @@ swagger:
   url: /swagger-ui/index.html
   title: Crawler API [DEBUG PROFILE]
   description: This API allows you to work with crawler service
-  version: "1.5"
+  version: "1.6.0"
   controllersPackage: com.osearch.crawler.adapter.in.rest
