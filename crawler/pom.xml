@@ -5,7 +5,7 @@
 
     <groupId>osearch</groupId>
     <artifactId>crawler</artifactId>
-    <version>1.5.1</version>
+    <version>1.6.0</version>
     <packaging>jar</packaging>
 
     <parent>
@@ -16,6 +16,11 @@
 
     <properties>
         <java.version>11</java.version>
+        <awsadk.core.version>1.11.662</awsadk.core.version>
+        <awssdk.iam.version>1.0.0</awssdk.iam.version>
+        <awssdk.kafka-wersion>2.21.21</awssdk.kafka-wersion>
+        <awssdk.dynamodb.version>2.21.17</awssdk.dynamodb.version>
+        <awssdk.sts.version>2.16.24</awssdk.sts.version>
         <mongo-connector.version>3.12.13</mongo-connector.version>
         <swagger.version>3.0.0</swagger.version>
         <mapstruct.version>1.5.3.Final</mapstruct.version>
@@ -62,6 +67,39 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+
+        <!--AWS-->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-core</artifactId>
+            <version>${awsadk.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.msk</groupId>
+            <artifactId>aws-msk-iam-auth</artifactId>
+            <version>${awssdk.iam.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>kafka</artifactId>
+            <version>${awssdk.kafka-wersion}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>dynamodb</artifactId>
+            <version>${awssdk.dynamodb.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>sts</artifactId>
+            <version>${awssdk.sts.version}</version>
         </dependency>
 
 

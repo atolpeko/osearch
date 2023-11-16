@@ -5,6 +5,7 @@ import com.osearch.crawler.adapter.out.messaging.properties.OutMessagingProperti
 
 import lombok.Getter;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +31,7 @@ public class KafkaProperties implements InMessagingProperties, OutMessagingPrope
     @Value("${kafka.responseTopic}")
     private String responseTopic;
 
+    @Autowired
     public KafkaProperties(KafkaBrokers brokers) {
         this.brokers = String.join(",", brokers.getBrokers());
     }
