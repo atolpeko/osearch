@@ -48,19 +48,24 @@ spec:
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: {{ .Values.env.profile  }}
+              value: {{ .Values.env.profile }}
             - name: SERVER_PORT
-              value: {{ .Values.port | quote}}
+              value: {{ .Values.port | quote }}
+            - name: SERVER_SERVLET_CONTEXT-PATH
+              value: {{ .Values.contextPath }}
+
+            - name: DYNAMODB_TABLENAME
+              value: {{ (.Values.env.dynamodb).tableName | default "" }}
 
             - name: SPRING_DATA_MONGODB_HOST
-              value: {{ .Values.env.mongo.host }}
+              value: {{ (.Values.env.mongo).host | default "" }}
             - name: SPRING_DATA_MONGODB_PORT
-              value: {{ .Values.env.mongo.port | quote}}
+              value: {{ (.Values.env.mongo).port | quote | default "" }}
             - name: SPRING_DATA_MONGODB_DATABASE
-              value: {{ .Values.env.mongo.database }}
+              value: {{ (.Values.env.mongo).database | default "" }}
 
-            - name: KAFKA_URL
-              value: {{ .Values.env.kafka.url }}
+            - name: KAFKA_BROKERS
+              value: "{{- toYaml .Values.env.kafka.brokers | nindent 12 }}"
             - name: KAFKA_REQUESTTOPIC
               value: {{ .Values.env.kafka.requestTopic }}
             - name: KAFKA_RESPONSETOPIC
