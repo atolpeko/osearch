@@ -1,0 +1,46 @@
+crawler:
+  env:
+    profile: aws
+    dynamodb:
+      tableName: crawlerPages
+    kafka:
+      brokers:
+        - b-1.osearchcluster.x5zpp9.c3.kafka.us-east-1.amazonaws.com:9098
+        - b-2.osearchcluster.x5zpp9.c3.kafka.us-east-1.amazonaws.com:9098
+      requestTopic: crawler.request
+      responseTopic: crawler.response
+      pageTopic: crawler.pages
+      groupId: crawler.group
+    service:
+      crawlerThreadsCount: 6
+      processorThreadsCount: 6
+      pagesToKeep: 50000
+      externalUrlRegex: "((http|https)://[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)"
+      invalidUrlRegex: ".*\\.(js|txt|json|csv|pdf|xml|mp3|mp4|avi|mov|zip|rar|exe|jpg|jpeg|gif|png|svg)$"
+    rest:
+      timeout: 10000
+      maxRedirects: 10
+      userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
+    swagger:
+      host: /crawler
+      title: Crawler API
+      description: This API allows you to work with crawler service
+      version: 1.6.0
+
+  securityContext:
+    fsGroup: 65534
+
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::464825733390:role/crawlerRole
+      
+  ingress:
+    host: osearch.com
+
+
+indexer:
+  enabled: false
+ranker:
+  enabled: false
+search:
+  enabled: false
