@@ -1,29 +1,13 @@
-rabbitmq:
-  enabled: false
-mysql:
-  enabled: false
-mongo:
-  enabled: false
-neo4j:
-  enabled: false
-
 crawler:
-  ingress:
-    enabled: true
-    host: osearch.com.crawler
-    paths:
-      - path: /
-        service:
-          name: osearch-crawler
-          port: 80
   env:
-    profile: k8s
+    profile: prod
     mongo:
       host: host.docker.internal
       port: 27017
       database: crawler-db
     kafka:
-      url: host.docker.internal:9092
+      brokers:
+        - host.docker.internal:9092
       requestTopic: crawler.request
       responseTopic: crawler.response
       pageTopic: crawler.pages
@@ -39,9 +23,14 @@ crawler:
       maxRedirects: 10
       userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
     swagger:
+      host: /crawler
       title: Crawler API
       description: This API allows you to work with crawler service
-      version: 1.5
+      version: 1.6.0
+
+  ingress:
+    host: localhost
+
 
 indexer:
   ingress:
