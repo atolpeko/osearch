@@ -1,0 +1,9 @@
+crawler:
+  enabled: true
+indexer:
+  enabled: true
+ranker:
+  enabled: false
+search:
+  enabled: false
+  
