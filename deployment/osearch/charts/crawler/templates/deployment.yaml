@@ -54,18 +54,22 @@ spec:
             - name: SERVER_SERVLET_CONTEXT-PATH
               value: {{ .Values.contextPath }}
 
+            {{- if .Values.env.dynamodb }}
             - name: DYNAMODB_TABLENAME
-              value: {{ (.Values.env.dynamodb).tableName | default "" }}
+              value: {{ .Values.env.dynamodb.tableName }}
+            {{- end }}
 
+            {{- if .Values.env.mongo }}
             - name: SPRING_DATA_MONGODB_HOST
-              value: {{ (.Values.env.mongo).host | default "" }}
+              value: {{ .Values.env.mongo.host }}
             - name: SPRING_DATA_MONGODB_PORT
-              value: {{ (.Values.env.mongo).port | quote | default "" }}
+              value: {{ .Values.env.mongo.port | quote }}
             - name: SPRING_DATA_MONGODB_DATABASE
-              value: {{ (.Values.env.mongo).database | default "" }}
+              value: {{ .Values.env.mongo.database }}
+            {{- end }}
 
             - name: KAFKA_BROKERS
-              value: "{{- toYaml .Values.env.kafka.brokers | nindent 12 }}"
+              value: "{{- toYaml .Values.env.kafka.brokers | indent 12 }}"
             - name: KAFKA_REQUESTTOPIC
               value: {{ .Values.env.kafka.requestTopic }}
             - name: KAFKA_RESPONSETOPIC
