@@ -25,13 +25,18 @@ Swagger documentation available at the root path.
 
 
 ## Build and run locally
+### Prerequisites:
+Run the environment locally with Docker compose
+```
+docker-compose up
+```  
 
+### Build and run a JAR
 ```            
 mvn clean install
-docker compose up
 java -jar -Dspring.profiles.active=local target/indexer-$version.jar
 ```
-> Endpoint: http://localhost:5970/
+> Endpoint: http://localhost:5970/indexer
 
 
 ## Run SonarQube
@@ -47,3 +52,4 @@ mvn clean verify sonar:sonar -Dsonar.login=... -Dsonar.password=...
 mvn clean site
 ```
 > Access: target/site/index.html 
+> 
