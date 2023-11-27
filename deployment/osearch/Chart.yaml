@@ -8,7 +8,7 @@ dependencies:
     version: 1.1.0
     condition: crawler.enabled
   - name: indexer
-    version: 1.0.0
+    version: 1.1.0
     condition: indexer.enabled
   - name: ranker
     version: 1.0.0
