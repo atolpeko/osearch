@@ -72,7 +72,35 @@ indexer:
 
 
 ranker:
-  enabled: false
+  env:
+    profile: aws
+    aws:
+      secretName: osearch-mysql-secret
+      region: us-east-1
+    neptune:
+      readEndpoint: bolt://db-neptune-1.cluster-cyah5uvjzcom.us-east-1.neptune.amazonaws.com:8182/pageindex
+    kafka:
+      brokers:
+        - b-1.osearchcluster.x5zpp9.c3.kafka.us-east-1.amazonaws.com:9098
+        - b-2.osearchcluster.x5zpp9.c3.kafka.us-east-1.amazonaws.com:9098
+      topic: indexer.pages
+      groupId: ranker.group
+    rank:
+      pageRankIterations: 20
+      pageRankDampingFactor: 0.85
+      topicRankWeight: 0.6
+      pageRankWeight: 0.2
+      metaRankWeight: 0.1
+
+  securityContext:
+    fsGroup: 65534
+
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::464825733390:role/rankerRole
+
+  ingress:
+    host: osearch.com
 
 
 search:
