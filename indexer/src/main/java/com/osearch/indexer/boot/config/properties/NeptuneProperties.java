@@ -8,15 +8,12 @@ import org.springframework.stereotype.Component;
 
 @Getter
 @Component
-@Profile({"test", "debug", "local", "prod"})
-public class NeoProperties {
+@Profile("aws")
+public class NeptuneProperties {
 
-    @Value("${neo4j.url}")
-    private String url;
+    @Value("${neptune.readEndpoint}")
+    private String readEndpoint;
 
-    @Value("${neo4j.username}")
-    private String username;
-
-    @Value("${neo4j.password}")
-    private String password;
+    @Value("${neptune.writeEndpoint}")
+    private String writeEndpoint;
 }
