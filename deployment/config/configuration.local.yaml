@@ -60,7 +60,7 @@ indexer:
 
 ranker:
   env:
-    profile: k8s
+    profile: prod
     spring:
       datasource:
         url: jdbc:mysql://host.docker.internal/indexes?createDatabaseIfNotExist=true
@@ -71,7 +71,8 @@ ranker:
       username: neo4j
       password: localneo
     kafka:
-      url: host.docker.internal:9092
+      brokers:
+        - host.docker.internal:9092
       topic: indexer.pages
       groupId: ranker.group
     rank:
