@@ -23,7 +23,6 @@ crawler:
       maxRedirects: 10
       userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36"
     swagger:
-      host: /crawler
       title: Crawler API
       description: This API allows you to work with crawler service
       version: 1.6.0
@@ -33,22 +32,15 @@ crawler:
 
 
 indexer:
-  ingress:
-    enabled: true
-    host: osearch.com.indexer
-    paths:
-      - path: /
-        service:
-          name: osearch-indexer
-          port: 80
   env:
-    profile: k8s
+    profile: prod
     neo4j:
       url: bolt://host.docker.internal/pageindex
       username: neo4j
       password: localneo
     kafka:
-      url: host.docker.internal:9092
+      brokers:
+        - host.docker.internal:9092
       in:
         topic: crawler.pages
         groupId: indexer.group
@@ -58,10 +50,13 @@ indexer:
       supportedLocales: en, en-usa, en-gb, en-ca, en-au, en-nz, en-in, en-ie, en-za, en-jm, en-bz,
         en-tt, en-sg, en-my
     swagger:
-      url: /swagger-ui/index.html
       title: Indexer API
       description: This API allows you to work with indexer service
-      version: "2.2"
+      version: 2.3.0
+
+  ingress:
+    host: localhost
+
 
 ranker:
   env:
