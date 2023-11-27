@@ -3,7 +3,7 @@ crawler:
 indexer:
   enabled: true
 ranker:
-  enabled: false
+  enabled: true
 search:
   enabled: true
   
