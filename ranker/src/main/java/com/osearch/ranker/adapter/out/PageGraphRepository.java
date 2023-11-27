@@ -23,9 +23,12 @@ import org.neo4j.driver.Value;
 import org.neo4j.driver.Values;
 import org.neo4j.driver.types.Node;
 
+/**
+ * Implements the PageRepository that works with a graph database using Bolt driver.
+ */
 @Log4j2
 @RequiredArgsConstructor
-public class PageRepositoryImpl implements PageRepository {
+public class PageGraphRepository implements PageRepository {
     private final Driver driver;
 
     @Override
