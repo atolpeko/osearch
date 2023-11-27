@@ -50,17 +50,26 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.env.profile  }}
             - name: SERVER_PORT
-              value: {{ .Values.port | quote}}
+              value: {{ .Values.port | quote }}
+            - name: SERVER_SERVLET_CONTEXT-PATH
+              value: {{ .Values.contextPath }}
 
+            {{- if .Values.env.aws }}
+            - name: AWS_SECRETNAME
+              value: {{ .Values.env.aws.secretName }}
+            - name: AWS_REGION
+              value: {{ .Values.env.aws.region }}
+            {{- end }}
+
+            {{- if .Values.env.spring }}
             - name: SPRING_DATASOURCE_URL
               value: {{ .Values.env.spring.datasource.url }}
             - name: SPRING_DATASOURCE_USERNAME
               value: {{ .Values.env.spring.datasource.username }}
             - name: SPRING_DATASOURCE_PASSWORD
               value: {{ .Values.env.spring.datasource.password }}
+            {{- end }}
 
-            - name: SWAGGER_URL
-              value: {{ .Values.env.swagger.url }}
             - name: SWAGGER_TITLE
               value: {{ .Values.env.swagger.title }}
             - name: SWAGGER_DESCRIPTION

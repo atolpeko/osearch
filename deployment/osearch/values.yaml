@@ -5,5 +5,5 @@ indexer:
 ranker:
   enabled: false
 search:
-  enabled: false
+  enabled: true
   
