@@ -73,5 +73,25 @@ indexer:
 
 ranker:
   enabled: false
+
+
 search:
-  enabled: false
+  env:
+    profile: aws
+    aws:
+      secretName: osearch-mysql-secret
+      region: us-east-1
+    swagger:
+      title: Search API
+      description: This API allows you to search for web pages
+      version: 1.1.0
+  
+  securityContext:
+    fsGroup: 65534
+
+  serviceAccount:
+    annotations:
+      eks.amazonaws.com/role-arn: arn:aws:iam::464825733390:role/searchRole
+  
+  ingress:
+    host: localhost
