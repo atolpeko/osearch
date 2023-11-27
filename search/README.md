@@ -16,7 +16,6 @@ docker-compose up
 ### Build and run a JAR
 ```            
 mvn clean install
-docker compose up
 java -jar -Dspring.profiles.active=local target/search-$version.jar
 ```
 > Endpoint: http://localhost:5980/search
