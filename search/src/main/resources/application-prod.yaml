@@ -1,0 +1,13 @@
+logging:
+  level:
+    com.osearch.search: INFO
+    edu.stanford.nlp.pipeline.StanfordCoreNLP: INFO
+    edu.stanford.nlp: ERROR
+management:
+  endpoint:
+    health:
+      probes:
+        enabled: true
+swagger:
+  url: /swagger-ui/index.html
+  controllersPackage: com.osearch.search.adapter.in
