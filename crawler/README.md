@@ -64,7 +64,7 @@ docker-compose up
 mvn clean install
 java -jar -Dspring.profiles.active=local target/crawler-$version.jar
 ```
-> Endpoint: http://localhost:5960/crawler
+> Endpoint: http://localhost:5960
 
 
 ## Run SonarQube
