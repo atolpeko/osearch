@@ -14,10 +14,15 @@ Rank request example:
 
 
 ## Build and run locally
+### Prerequisites:
+Run the environment locally with Docker compose
+```
+docker-compose up
+```  
 
+### Build and run a JAR
 ```            
 mvn clean install
-docker compose up
 java -jar -Dspring.profiles.active=local target/ranker-$version.jar
 ```
 

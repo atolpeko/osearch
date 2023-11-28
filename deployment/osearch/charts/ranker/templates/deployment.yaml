@@ -50,24 +50,42 @@ spec:
             - name: SPRING_PROFILES_ACTIVE
               value: {{ .Values.env.profile  }}
             - name: SERVER_PORT
-              value: {{ .Values.port | quote}}
+              value: {{ .Values.port | quote }}
+            - name: SERVER_SERVLET_CONTEXT-PATH
+              value: {{ .Values.contextPath }}
 
-            - name: SPRING_DATASOURCE_URL
-              value: {{ .Values.env.spring.datasource.url }}
-            - name: SPRING_DATASOURCE_USERNAME
-              value: {{ .Values.env.spring.datasource.username }}
-            - name: SPRING_DATASOURCE_PASSWORD
-              value: {{ .Values.env.spring.datasource.password }}
+            {{- if .Values.env.neptune }}
+            - name: NEPTUNE_READENDPOINT
+              value: {{ .Values.env.neptune.readEndpoint }}
+            {{- end }}
 
+            {{- if .Values.env.neo4j }}
             - name: NEO4J_URL
               value: {{ .Values.env.neo4j.url }}
             - name: NEO4J_USERNAME
               value: {{ .Values.env.neo4j.username }}
             - name: NEO4J_PASSWORD
               value: {{ .Values.env.neo4j.password }}
+            {{- end }}
 
-            - name: KAFKA_URL
-              value: {{ .Values.env.kafka.url }}
+            {{- if .Values.env.aws }}
+            - name: AWS_SECRETNAME
+              value: {{ .Values.env.aws.secretName }}
+            - name: AWS_REGION
+              value: {{ .Values.env.aws.region }}
+            {{- end }}
+
+            {{- if .Values.env.spring }}
+            - name: SPRING_DATASOURCE_URL
+              value: {{ .Values.env.spring.datasource.url }}
+            - name: SPRING_DATASOURCE_USERNAME
+              value: {{ .Values.env.spring.datasource.username }}
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: {{ .Values.env.spring.datasource.password }}
+            {{- end }}
+
+            - name: KAFKA_BROKERS
+              value: "{{- toYaml .Values.env.kafka.brokers | indent 12 }}"
             - name: KAFKA_TOPIC
               value: {{ .Values.env.kafka.topic }}
             - name: KAFKA_GROUPID

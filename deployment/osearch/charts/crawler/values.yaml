@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: atolpeko/crawler
-  tag: 1.5.1
+  tag: 1.6.0
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -17,34 +17,27 @@ strategy:
   type: Recreate
 
 port: 8080
+contextPath: /crawler
 
 livenessProbe:
-  port: 3070
-  path: /actuator/health/liveness
+  path: /crawler/actuator/health/liveness
   initialDelaySeconds: 400
   periodSeconds: 10
 
 readinessProbe:
-  path: /actuator/health/readiness
-  initialDelaySeconds: 60
+  path: /crawler/actuator/health/readiness
+  initialDelaySeconds: 25
 
 serviceAccount:
   create: true
+  name: osearch-crawler.service-account
   annotations: {}
-  name: ""
 
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
   type: ClusterIP
@@ -52,11 +45,16 @@ service:
   protocol: TCP
 
 ingress:
-  enabled: false
-  name: crawler-ingress
+  enabled: true
+  name: osearch-crawler-ingress
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
+  paths:
+    - path: /crawler
+      service:
+        name: osearch-crawler
+        port: 80  
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

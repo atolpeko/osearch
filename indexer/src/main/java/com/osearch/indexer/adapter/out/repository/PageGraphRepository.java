@@ -1,7 +1,7 @@
 package com.osearch.indexer.adapter.out.repository;
 
-import com.osearch.indexer.application.port.exception.DataAccessException;
 import com.osearch.indexer.application.port.PageRepository;
+import com.osearch.indexer.application.port.exception.DataAccessException;
 import com.osearch.indexer.domain.entity.Page;
 import com.osearch.indexer.domain.entity.Topic;
 
@@ -16,16 +16,17 @@ import org.neo4j.driver.Transaction;
 import org.neo4j.driver.Values;
 
 /**
- * Implements the PageRepository that works with neo4j database.
+ * Implements the PageRepository that works with a graph database using Bolt driver.
  */
 @Log4j2
 @RequiredArgsConstructor
-public class PageRepositoryImpl implements PageRepository {
-    private final Driver driver;
+public abstract class PageGraphRepository implements PageRepository {
+    private final Driver readDriver;
+    private final Driver writeDriver;
 
     @Override
     public Long save(Page page) {
-        try (var session = driver.session()) {
+        try (var session = writeDriver.session()) {
             var savedId = session.writeTransaction(transaction -> {
                 var id = savePage(transaction, page);
                 saveTopics(transaction, id, page.getTopics());
@@ -92,7 +93,7 @@ public class PageRepositoryImpl implements PageRepository {
 
     @Override
     public int countIndexed() {
-        try (var session = driver.session()) {
+        try (var session = readDriver.session()) {
             return session.readTransaction(transaction -> {
                 var query = "MATCH(p:Page) "
                     + "WHERE p.isIndexed = True "

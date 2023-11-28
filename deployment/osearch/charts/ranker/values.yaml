@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: atolpeko/ranker
-  tag: 1.3.1
+  tag: 1.4.0
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -17,38 +17,28 @@ strategy:
   type: Recreate
 
 port: 8080
+contextPath: /ranker
 
 livenessProbe:
   port: 3070
-  path: /actuator/health/liveness
+  path: /ranker/actuator/health/liveness
   initialDelaySeconds: 400
   periodSeconds: 10
 
 readinessProbe:
-  path: /actuator/health/readiness
-  initialDelaySeconds: 60
+  path: /ranker/actuator/health/readiness
+  initialDelaySeconds: 20
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
+  name: osearch-ranker.service-account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
 
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
-
+ 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
   type: ClusterIP
@@ -57,12 +47,15 @@ service:
 
 ingress:
   enabled: false
-  name: ranker-ingress
+  name: osearch-indexer-ingress
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
-    nginx.ingress.kubernetes.io/use-regex: "true"
-    nginx.ingress.kubernetes.io/secure-backends: "true"
+  paths:
+    - path: /ranker
+      service:
+        name: osearch-ranker
+        port: 80
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.osearch.crawler.adapter.in.messaging.mapper.RequestMapper;
 import com.osearch.crawler.adapter.in.messaging.validator.RequestValidator;
+import com.osearch.crawler.adapter.out.repository.mapper.PageDynamoDbMapper;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,5 +18,10 @@ public class MapperConfig {
         RequestValidator validator
     ) {
         return new RequestMapper(mapper, validator);
+    }
+
+    @Bean
+    public PageDynamoDbMapper pageDynamoMapper() {
+        return new PageDynamoDbMapper();
     }
 }

@@ -1,29 +1,13 @@
-rabbitmq:
-  enabled: false
-mysql:
-  enabled: false
-mongo:
-  enabled: false
-neo4j:
-  enabled: false
-
 crawler:
-  ingress:
-    enabled: true
-    host: osearch.com.crawler
-    paths:
-      - path: /
-        service:
-          name: osearch-crawler
-          port: 80
   env:
-    profile: k8s
+    profile: prod
     mongo:
       host: host.docker.internal
       port: 27017
       database: crawler-db
     kafka:
-      url: host.docker.internal:9092
+      brokers:
+        - host.docker.internal:9092
       requestTopic: crawler.request
       responseTopic: crawler.response
       pageTopic: crawler.pages
@@ -41,25 +25,22 @@ crawler:
     swagger:
       title: Crawler API
       description: This API allows you to work with crawler service
-      version: 1.5
+      version: 1.6.0
+
+  ingress:
+    host: localhost
+
 
 indexer:
-  ingress:
-    enabled: true
-    host: osearch.com.indexer
-    paths:
-      - path: /
-        service:
-          name: osearch-indexer
-          port: 80
   env:
-    profile: k8s
+    profile: prod
     neo4j:
       url: bolt://host.docker.internal/pageindex
       username: neo4j
       password: localneo
     kafka:
-      url: host.docker.internal:9092
+      brokers:
+        - host.docker.internal:9092
       in:
         topic: crawler.pages
         groupId: indexer.group
@@ -69,14 +50,17 @@ indexer:
       supportedLocales: en, en-usa, en-gb, en-ca, en-au, en-nz, en-in, en-ie, en-za, en-jm, en-bz,
         en-tt, en-sg, en-my
     swagger:
-      url: /swagger-ui/index.html
       title: Indexer API
       description: This API allows you to work with indexer service
-      version: "2.2"
+      version: 2.3.0
+
+  ingress:
+    host: localhost
+
 
 ranker:
   env:
-    profile: k8s
+    profile: prod
     spring:
       datasource:
         url: jdbc:mysql://host.docker.internal/indexes?createDatabaseIfNotExist=true
@@ -87,7 +71,8 @@ ranker:
       username: neo4j
       password: localneo
     kafka:
-      url: host.docker.internal:9092
+      brokers:
+        - host.docker.internal:9092
       topic: indexer.pages
       groupId: ranker.group
     rank:
@@ -97,25 +82,19 @@ ranker:
       pageRankWeight: 0.2
       metaRankWeight: 0.1
 
+
 search:
-  ingress:
-    enabled: true
-    host: osearch.com.search
-    paths:
-      - path: /
-        service:
-          name: osearch
-          port: 80
   env:
-    profile: k8s
+    profile: prod
     spring:
       datasource:
         url: jdbc:mysql://host.docker.internal/indexes?createDatabaseIfNotExist=true
         username: root
         password: localmy
     swagger:
-      url: /swagger-ui/index.html
       title: Search API
       description: This API allows you to search for web pages
-      version: "1.0"
-      subDomain: "/search"
+      version: 1.1.0
+      
+  ingress:
+    host: localhost

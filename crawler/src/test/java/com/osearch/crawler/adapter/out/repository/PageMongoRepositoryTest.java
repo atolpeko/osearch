@@ -1,11 +1,11 @@
 package com.osearch.crawler.adapter.out.repository;
 
-import static com.osearch.crawler.fixture.PageRepositoryFixture.PAGE;
-import static com.osearch.crawler.fixture.PageRepositoryFixture.PAGES_NUMBER;
-import static com.osearch.crawler.fixture.PageRepositoryFixture.PAGE_DTO;
-import static com.osearch.crawler.fixture.PageRepositoryFixture.UPDATED_PAGE;
-import static com.osearch.crawler.fixture.PageRepositoryFixture.UPDATED_PAGE_DTO;
-import static com.osearch.crawler.fixture.PageRepositoryFixture.URL_HASH;
+import static com.osearch.crawler.fixture.PageMongoRepositoryFixture.PAGE;
+import static com.osearch.crawler.fixture.PageMongoRepositoryFixture.PAGES_NUMBER;
+import static com.osearch.crawler.fixture.PageMongoRepositoryFixture.PAGE_DTO;
+import static com.osearch.crawler.fixture.PageMongoRepositoryFixture.UPDATED_PAGE;
+import static com.osearch.crawler.fixture.PageMongoRepositoryFixture.UPDATED_PAGE_DTO;
+import static com.osearch.crawler.fixture.PageMongoRepositoryFixture.URL_HASH;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,9 +17,9 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.osearch.crawler.adapter.out.repository.jpa.PageDtoJpaRepository;
-import com.osearch.crawler.adapter.out.repository.mapper.PageMapper;
-
+import com.osearch.crawler.adapter.out.repository.mapper.PageJpaMapper;
 import com.osearch.crawler.application.port.exception.DataAccessException;
+
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,16 +31,16 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 @Tag("category.UnitTest")
-class PageRepositoryImplTest {
+class PageMongoRepositoryTest {
 
     @InjectMocks
-    PageRepositoryImpl target;
+    PageMongoRepository target;
 
     @Mock
     PageDtoJpaRepository jpaRepository;
 
     @Mock
-    PageMapper mapper;
+    PageJpaMapper mapper;
 
     @BeforeEach
     void setUp() {
@@ -55,7 +55,7 @@ class PageRepositoryImplTest {
         when(jpaRepository.findByUrlHash(URL_HASH)).thenReturn(Optional.of(PAGE_DTO));
 
         var saved = target.findByUrlHash(URL_HASH);
-        assertTrue(saved.isPresent());
+        assertEquals(PAGE, saved.get());
     }
 
     @Test

@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
  * </p>
  *
  * The Processor is a class that processes crawled web pages.
- * It uses 'pages' blocking deque to process pages that have been crawled by
+ * It uses 'pages' blocking deque to process pages that have been crawled by the
  * Crawler.
  */
 @Log4j2
@@ -34,7 +34,7 @@ public class Processor implements Runnable {
      * Executes the processor in a separate thread. While the thread is not interrupted,
      * it continuously takes a page from the `pages` blocking queue and
      * processes it. If the thread is interrupted, it breaks
-     * the execution loop and stops the crawler.
+     * the execution loop and stops the processor.
      */
     @Override
     public void run() {
@@ -42,9 +42,7 @@ public class Processor implements Runnable {
         while (!Thread.currentThread().isInterrupted()) {
             try {
                 var page = pages.take();
-                log.debug("Processing page {}", page.getUrl());
                 process(page);
-                log.info("Page {} crawled", page.getUrl());
             } catch (InterruptedException e) {
                 log.debug("Processor {} interrupted", id);
                 Thread.currentThread().interrupt();
@@ -57,12 +55,13 @@ public class Processor implements Runnable {
 
     private void process(Page page) {
         try {
+            log.debug("Processing page {}", page.getUrl());
             if (notProcessed(page)) {
                 messagePage(page);
                 savePage(page);
-                log.debug("Page {} processed. {} left", page.getUrl(), getPagesLeft());
+                log.info("Page {} processed. {} left", page.getUrl(), getPagesLeft());
             } else {
-                log.debug("Page {} is already processed. Pages left for processing: {}",
+                log.info("Page {} is already processed. {} left",
                     page.getUrl(), getPagesLeft());
             }
         } catch (Exception e) {
@@ -70,7 +69,7 @@ public class Processor implements Runnable {
         }
     }
 
-    private boolean notProcessed(Page page) {
+    private synchronized boolean notProcessed(Page page) {
         var saved = repository.findByUrlHash(page.getUrlHash());
         if (saved.isEmpty()) {
             return true;

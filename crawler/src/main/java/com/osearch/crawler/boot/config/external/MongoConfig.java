@@ -19,8 +19,8 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@Profile({"debug", "local", "prod"})
 @EnableTransactionManagement
-@Profile({"debug", "local", "k8s"})
 @EnableMongoRepositories(basePackages = "com.osearch.crawler.adapter.out.repository")
 public class MongoConfig extends AbstractMongoClientConfiguration {
 

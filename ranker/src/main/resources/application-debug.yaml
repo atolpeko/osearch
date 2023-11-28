@@ -17,7 +17,8 @@ neo4j:
   username: neo4j
   password: localneo
 kafka:
-  url: localhost:9092
+  brokers:
+    - localhost:9092
   topic: indexer.pages
   groupId: ranker.group
 rank:

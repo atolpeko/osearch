@@ -48,19 +48,30 @@ spec:
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
           env:
             - name: SPRING_PROFILES_ACTIVE
-              value: {{ .Values.env.profile  }}
+              value: {{ .Values.env.profile }}
             - name: SERVER_PORT
-              value: {{ .Values.port | quote}}
+              value: {{ .Values.port | quote }}
+            - name: SERVER_SERVLET_CONTEXT-PATH
+              value: {{ .Values.contextPath }}
 
+            {{- if .Values.env.neptune }}
+            - name: NEPTUNE_READENDPOINT
+              value: {{ .Values.env.neptune.readEndpoint }}
+            - name: NEPTUNE_WRITEENDPOINT
+              value: {{ .Values.env.neptune.writeEndpoint }}
+            {{- end }}
+
+            {{- if .Values.env.neo4j }}
             - name: NEO4J_URL
               value: {{ .Values.env.neo4j.url }}
             - name: NEO4J_USERNAME
               value: {{ .Values.env.neo4j.username }}
             - name: NEO4J_PASSWORD
               value: {{ .Values.env.neo4j.password }}
+            {{- end }}
 
-            - name: KAFKA_URL
-              value: {{ .Values.env.kafka.url }}
+            - name: KAFKA_BROKERS
+              value: "{{- toYaml .Values.env.kafka.brokers | indent 12 }}"
             - name: KAFKA_IN_TOPIC
               value: {{ .Values.env.kafka.in.topic }}
             - name: KAFKA_IN_GROUPID

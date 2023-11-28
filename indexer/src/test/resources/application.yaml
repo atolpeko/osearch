@@ -9,7 +9,8 @@ neo4j:
   username: username
   password: password
 kafka:
-  url: url
+  brokers:
+    - broker
   in:
     topic: topic
     groupId: groupId

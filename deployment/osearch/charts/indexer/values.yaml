@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: atolpeko/indexer
-  tag: 2.2.1
+  tag: 2.3.0
   pullPolicy: Always
 
 imagePullSecrets: []
@@ -17,38 +17,28 @@ strategy:
   type: Recreate
 
 port: 8080
+contextPath: /indexer
 
 livenessProbe:
   port: 3070
-  path: /actuator/health/liveness
+  path: /indexer/actuator/health/liveness
   initialDelaySeconds: 400
   periodSeconds: 10
 
 readinessProbe:
-  path: /actuator/health/readiness
-  initialDelaySeconds: 60
+  path: /indexer/actuator/health/readiness
+  initialDelaySeconds: 35
 
 serviceAccount:
-  # Specifies whether a service account should be created
   create: true
-  # Annotations to add to the service account
+  name: osearch-indexer.service-account
   annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
 
 podAnnotations: {}
 
 podSecurityContext: {}
-  # fsGroup: 2000
 
 securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
 
 service:
   type: ClusterIP
@@ -56,11 +46,16 @@ service:
   protocol: TCP
 
 ingress:
-  enabled: false
-  name: indexer-ingress
+  enabled: true
+  name: osearch-indexer-ingress
   className: nginx
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: HTTP
+  paths:
+    - path: /indexer
+      service:
+        name: osearch-indexer
+        port: 80
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious

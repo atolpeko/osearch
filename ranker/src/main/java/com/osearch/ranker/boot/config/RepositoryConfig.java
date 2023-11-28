@@ -1,7 +1,7 @@
 package com.osearch.ranker.boot.config;
 
 import com.osearch.ranker.adapter.out.IndexRepositoryImpl;
-import com.osearch.ranker.adapter.out.PageRepositoryImpl;
+import com.osearch.ranker.adapter.out.PageGraphRepository;
 import com.osearch.ranker.application.port.IndexRepository;
 import com.osearch.ranker.application.port.PageRepository;
 
@@ -16,7 +16,7 @@ public class RepositoryConfig {
 
     @Bean
     public PageRepository pageRepository(Driver driver) {
-        return new PageRepositoryImpl(driver);
+        return new PageGraphRepository(driver);
     }
 
     @Bean

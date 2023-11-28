@@ -17,6 +17,7 @@ public class CoreNlpConfig {
             "annotators",
             "tokenize,ssplit,pos,lemma,ner,depparse,coref,quote"
         );
+
         return new StanfordCoreNLP(props);
     }
 }

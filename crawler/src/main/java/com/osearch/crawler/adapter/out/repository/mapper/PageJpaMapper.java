@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
  * The PageMapper interface is responsible for mapping between Page and PageDto objects.
  */
 @Mapper(componentModel = "spring", implementationName = "RepositoryPageMapper")
-public interface PageMapper {
+public interface PageJpaMapper {
 
     /**
      * Converts a Page object to a PageDto object.
@@ -18,7 +18,6 @@ public interface PageMapper {
      * @param page the Page object to convert.
      * @return the converted PageDto object.
      */
-    @Mapping(target = "id", ignore = true)
     PageDto toDto(Page page);
 
     /**
