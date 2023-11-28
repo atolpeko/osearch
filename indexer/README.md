@@ -36,7 +36,7 @@ docker-compose up
 mvn clean install
 java -jar -Dspring.profiles.active=local target/indexer-$version.jar
 ```
-> Endpoint: http://localhost:5970/indexer
+> Endpoint: http://localhost:5970
 
 
 ## Run SonarQube
