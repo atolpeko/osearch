@@ -41,8 +41,8 @@ public class Crawler implements Runnable {
 
     /**
      * Executes the crawler in a separate thread. While the thread is not interrupted,
-     * it continuously takes a page to crawl from the `pagesToCrawl` blocking queue and
-     * processes it. If the thread is interrupted, it breaks
+     * it continuously takes a page  from the `pagesToCrawl` blocking queue and
+     * looks for nested pages on it. If the thread is interrupted, it breaks
      * the execution loop and stops the crawler.
      */
     @Override
