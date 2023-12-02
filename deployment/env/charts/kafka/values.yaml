@@ -1,0 +1,74 @@
+# Default values for kafka.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: confluentinc/cp-kafka
+  pullPolicy: IfNotPresent
+  tag: 7.3.2
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+port: 9092
+
+service:
+  type: ClusterIP
+  port: 9092
+
+env:
+  brokerId: 1
+  zookeeper: env-zookeeper.osearch-env.svc.cluster.local:2181
+  advertisedListeners: PLAINTEXT://:29092,PLAINTEXT_INTERNAL://env-kafka.osearch-env.svc.cluster.local:9092
+  securityProtocolMap: PLAINTEXT:PLAINTEXT,PLAINTEXT_INTERNAL:PLAINTEXT
+  replicationFactor: 1
+  maxMessageSize: "10485760"
+  maxRequestSize: "10485760"
+
+serviceAccount:
+  create: false
+  automount: true
+  annotations: {}
+  name: ""
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+volumeClaim:
+  size: 5Gi
+  accessModes:
+    - ReadWriteOnce
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes:
+  - name: env-kafka-volume-claim
+    persistentVolumeClaim:
+      claimName: env-kafka
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

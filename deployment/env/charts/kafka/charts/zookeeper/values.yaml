@@ -1,0 +1,60 @@
+# Default values for zookeeper.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: confluentinc/cp-zookeeper
+  pullPolicy: IfNotPresent
+  tag: 3.3.2
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+port: 2181
+
+service:
+  type: ClusterIP
+  port: 2181
+
+env:
+  tickTime: 2000
+
+serviceAccount:
+  create: false
+  automount: true
+  annotations: {}
+  name: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  tls: []
+
+resources: {}
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+
+volumes: []
+
+volumeMounts: []
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
