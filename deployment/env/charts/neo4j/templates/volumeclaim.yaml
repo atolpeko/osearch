@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "neo4j.fullname" . }}
+  labels:
+    {{- include "neo4j.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    {{- toYaml .Values.volumeClaim.accessModes | nindent 4 }}
+  resources:
+    requests:
+      storage: {{ .Values.volumeClaim.size }}
