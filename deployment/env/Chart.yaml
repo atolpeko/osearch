@@ -1,0 +1,18 @@
+apiVersion: v2
+name: env
+description: An umbrella chart for aggregating osearch environment
+type: application
+version: 1.0.0
+dependencies:
+  - name: mongodb
+    version: 1.0.0
+    condition: mongodb.enabled
+  - name: kafka
+    version: 1.0.0
+    condition: kafka.enabled
+  - name: neo4j
+    version: 1.0.0
+    condition: neo4j.enabled
+  - name: mysql
+    version: 1.0.0
+    condition: mysql.enabled

@@ -1,0 +1,8 @@
+mongodb:
+  enabled: true
+kafka:
+  enabled: true
+neo4j:
+  enabled: true
+mysql:
+  enabled: true
