@@ -122,4 +122,4 @@ search:
       eks.amazonaws.com/role-arn: arn:aws:iam::464825733390:role/searchRole
   
   ingress:
-    host: localhost
+    host: osearch.com

@@ -9,11 +9,6 @@ The project is configured to be deployed to either a local cluster or AWS EKS wi
 
 ## Run locally with Helm
 ### Prerequisites:
-Run the environment locally with Docker compose
-```
-docker-compose up
-```
-
 Spin up a Kubernetes cluster locally using Minikube
 ```
 minikube start
@@ -21,10 +16,25 @@ minikube addons enable ingress
 minikube tunnel
 ```
 
+Run the environment locally
+```
+helm install env deployment/env --namespace osearch-env --create-namespace  
+```
+
+Wait until all deployments are ready
+```
+kubectl get deployment --namespace osearch-env
+```
+
 ### Run:
 Install the helm chart providing local configuration
 ```
 helm install osearch deployment/osearch -f deployment/config/configuration.local.yaml 
+```
+
+Wait until all deployments are ready
+```
+kubectl get deployment
 ```
 
 ### Access
