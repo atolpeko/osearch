@@ -2,12 +2,12 @@ crawler:
   env:
     profile: prod
     mongo:
-      host: host.docker.internal
+      host: env-mongodb.osearch-env.svc.cluster.local
       port: 27017
       database: crawler-db
     kafka:
       brokers:
-        - host.docker.internal:9092
+        - env-kafka.osearch-env.svc.cluster.local:9092
       requestTopic: crawler.request
       responseTopic: crawler.response
       pageTopic: crawler.pages
@@ -35,12 +35,12 @@ indexer:
   env:
     profile: prod
     neo4j:
-      url: bolt://host.docker.internal/pageindex
+      url: bolt://env-neo4j.osearch-env.svc.cluster.local:7687/pageindex
       username: neo4j
       password: localneo
     kafka:
       brokers:
-        - host.docker.internal:9092
+        - env-kafka.osearch-env.svc.cluster.local:9092
       in:
         topic: crawler.pages
         groupId: indexer.group
@@ -63,16 +63,16 @@ ranker:
     profile: prod
     spring:
       datasource:
-        url: jdbc:mysql://host.docker.internal/indexes?createDatabaseIfNotExist=true
+        url: jdbc:mysql://env-mysql.osearch-env.svc.cluster.local/indexes?createDatabaseIfNotExist=true
         username: root
         password: localmy
     neo4j:
-      url: bolt://host.docker.internal/pageindex
+      url: bolt://env-neo4j.osearch-env.svc.cluster.local:7687/pageindex
       username: neo4j
       password: localneo
     kafka:
       brokers:
-        - host.docker.internal:9092
+        - env-kafka.osearch-env.svc.cluster.local:9092
       topic: indexer.pages
       groupId: ranker.group
     rank:
@@ -88,7 +88,7 @@ search:
     profile: prod
     spring:
       datasource:
-        url: jdbc:mysql://host.docker.internal/indexes?createDatabaseIfNotExist=true
+        url: jdbc:mysql://env-mysql.osearch-env.svc.cluster.local/indexes?createDatabaseIfNotExist=true
         username: root
         password: localmy
     swagger:
